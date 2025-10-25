@@ -1,0 +1,50 @@
+research_task:
+  description: >
+    Conduct a thorough research on the latest trending, high-volume, low-competition keywords for mobile apps
+    on Google Play Store. Use the SerperDevTool to browse the web for available platforms and tools to complete
+    the research.
+  expected_output: >
+    A list with 10 bullet points of the most relevant keywords for mobile apps on Google Play Store.
+  agent: researcher
+
+analysis_task:
+  description: >
+    Do a thorough analysis of the keywords provided by the researcher, select the best ones and turn them into a
+    mobile app concept. To select the best keywords, consider the following factors:
+    - The keyword is trending
+    - The keyword has a high volume
+    - The keyword has a low competition
+    - The keyword is consistent with the business profile which is:
+    "We are a small company that above all wants to be righteous and give a good impression to our customers by
+    keeping a professional and formal image. Avoiding any immoral or offensive topics."
+  expected_output: >
+    A fully fledged report on the mobile app concept. Include the following sections:
+    - Title
+    - Introduction (Why you selected that app idea)
+    - Features (What features the app will have)
+    - Target Audience (Who is the app for)
+    - Business Model (How the app will make money)
+    - Marketing Strategy (How you will market the app)
+    - Roadmap (What features will be added in the future)
+    - Competitive Analysis (How the app will compare to the competition)
+    - Technical Requirements (What technology will be used)
+    - Conclusion (Summarize the app idea)
+  agent: business_analyst
+
+design_task:
+  description: >
+    Make a written design of the user experience and user interface of the
+    mobile app suggested by the business_analyst. Make sure to include color
+    palettes, style of the buttons, transitions, layout and all the details
+    the mobile_developer needs to develop the app. To design the app consider
+    the recommendations from the business_analyst such as target audience and
+    features.
+  expected_output: >
+    A complete written design document of how the mobile app should look and work.
+    On the document you should include the following sections:
+    - Visuals (Colors, layout, elements, etc.)
+    - Features (How the app should work; how to move from one screen to
+    the other, how to log in, how to remove elements, etc.)
+
+    Format the report as markdown without '```'
+  agent: uxui_designer
