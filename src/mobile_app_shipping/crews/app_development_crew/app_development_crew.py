@@ -1,13 +1,21 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
+from crewai.tasks.conditional_task import ConditionalTask
+from crewai.tasks.task_output import TaskOutput
 from typing import List
 from crewai_tools import FileReadTool
+from mobile_app_shipping.tools.write_file_tool import write_file
+from mobile_app_shipping.tools.zip_project_tool import zip_project
+from pathlib import Path
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
-file_read_tool = FileReadTool(file_path='../../app_design.md')
+def get_project_file_path(filename: str) -> str:
+    return str(Path(__file__).resolve().parents[3] / filename)
+
+file_read_tool = FileReadTool(file_path=get_project_file_path('app_design.md'))
 
 gemini_llm = LLM(
     model="gemini/gemini-2.0-flash",
@@ -18,6 +26,11 @@ anthropic_llm = LLM(
     model="anthropic/claude-opus-4-1-20250805",
     temperature=0.7,
 )
+
+def qa_found_issues(output: TaskOutput) -> bool:
+    content = output.output.lower()
+    return any(keyword in content for keyword in ["bug", "issue", "improvement"])
+
 
 @CrewBase
 class AppDevelopmentCrew():
@@ -38,7 +51,8 @@ class AppDevelopmentCrew():
             config=self.agents_config['mobile_developer'], # type: ignore[index]
             verbose=True,
             tools=[file_read_tool],
-            llm=gemini_llm
+            llm=gemini_llm,
+            allow_delegation=True,
         )
 
     @agent
@@ -46,7 +60,15 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['qa_engineer'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm
+            llm=gemini_llm,
+        )
+
+    @agent
+    def document_specialist(self) -> Agent:
+        return Agent(
+            config=self.agents_config['document_specialist'], # type: ignore[index]
+            verbose=True,
+            llm=gemini_llm,
         )
 
     # To learn more about structured task outputs,
@@ -56,7 +78,6 @@ class AppDevelopmentCrew():
     def development_task(self) -> Task:
         return Task(
             config=self.tasks_config['development_task'], # type: ignore[index]
-            #output_file='app_code.txt',
         )
 
     @task
@@ -66,11 +87,25 @@ class AppDevelopmentCrew():
         )
 
     @task
-    def packaging_task(self) -> Task:
+    def refactoring_task(self) -> ConditionalTask:
         return Task(
-            config=self.tasks_config['packaging_task'], # type: ignore[index]
-            output_file='requirements.txt'
+            config=self.tasks_config['refactoring_task'], # type: ignore[index]
+            condition=qa_found_issues
         )
+
+    @task
+    def document_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['document_task'], # type: ignore[index]
+            output_file='app_code.md',
+        )
+
+    # @task
+    # def packaging_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['packaging_task'], # type: ignore[index]
+    #         output_file='requirements.txt'
+    #     )
 
     @crew
     def crew(self) -> Crew:
