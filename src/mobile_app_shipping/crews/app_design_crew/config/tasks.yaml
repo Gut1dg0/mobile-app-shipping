@@ -40,14 +40,14 @@ design_task:
 
 image_mockup_task:
   description: >
-    Use the 'stable_diffusion_generate' tool to generate a Dall-e image of a mockup
-    of what the first screen of the mobile app would look like.
+    Use the 'stable_diffusion_gallery' tool to generate realistic mockups
+    for each screen and save them under the 'static' folder.
     Be as concise as possible by following the design you suggest on the written design.
 
     Use a prompt describing the app’s design clearly, such as:
     “A modern mobile app interface for [concept name], featuring a sleek layout and intuitive design.”
 
-    Save the image as 'app_mockup.png'
+    Save the images as 'app_mockup_[screen number].png'
   expected_output: >
-    A png image of the mockup first screen of the mobile app.
+    Several mockup images of the screens of the mobile app design.
   agent: uxui_designer
