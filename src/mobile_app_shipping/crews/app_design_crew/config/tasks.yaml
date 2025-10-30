@@ -37,3 +37,17 @@ design_task:
 
     Format the report as markdown without '```'
   agent: uxui_designer
+
+image_mockup_task:
+  description: >
+    Use the 'stable_diffusion_generate' tool to generate a Dall-e image of a mockup
+    of what the first screen of the mobile app would look like.
+    Be as concise as possible by following the design you suggest on the written design.
+
+    Use a prompt describing the app’s design clearly, such as:
+    “A modern mobile app interface for [concept name], featuring a sleek layout and intuitive design.”
+
+    Save the image as 'app_mockup.png'
+  expected_output: >
+    A png image of the mockup first screen of the mobile app.
+  agent: uxui_designer

@@ -1,82 +1,79 @@
-# Healthy Recipe & Meal Planner App Design Document
+# Mindful Meal Planner App Design Document
+
+## Introduction
+The Mindful Meal Planner app is designed to assist users in planning healthy meals and promoting mindful eating. This document outlines the UI/UX design, including visuals, features, and user interactions.
 
 ## Visuals
 
 ### Color Palette
-- **Primary Color**: Fresh Green (#4CAF50) - Represents health, vitality, and freshness.
-- **Secondary Color**: Soft Yellow (#FFEB3B) - Adds warmth and positivity, stimulating a happy cooking experience.
-- **Accent Color**: Light Coral (#FF6F61) - To highlight important buttons and notifications, providing a vibrant touch.
-- **Background Color**: Soft White (#FFFFFF) - Clean and minimalistic to ensure readability and a soothing experience.
-- **Text Color**: Dark Slate Gray (#2F4F4F) - For primary text, ensuring high contrast for readability.
-
+- **Primary Colors:**
+  - Light Green: `#A8DAB5` (for backgrounds and highlights)
+  - Dark Green: `#5B9B3A` (for buttons and accents)
+  
+- **Secondary Colors:**
+  - Soft Yellow: `#FCEBAF` (for notifications and accents)
+  - Cool Gray: `#D1D3D4` (for backgrounds and borders)
+  
 ### Typography
-- **Headings**: 'Montserrat', Bold, 24px for main headings.
-- **Body Text**: 'Open Sans', Regular, 16px for general text with good legibility.
-- **Button Text**: 'Roboto', Medium, 18px, ensuring it stands out.
+- **Heading Font:** Montserrat Bold (for headers)
+- **Body Font:** Arial Regular (for content)
 
 ### Layout
-- **Home Screen**: 
-  - Top Header with logo and search bar.
-  - Quick access buttons (Meal Planner, Recipes, Grocery List) displayed in a horizontal scrollable list.
-  - Featured Recipes carousel below with appetizing images.
-- **Recipe Screen**: 
-  - Large recipe image at the top.
-  - Title, dietary info, serving size, and preparation time.
-  - Ingredients list and preparation steps below with clear formatting.
-  - “Save to Meal Plan” and “Add to Grocery List” buttons displayed prominently.
-- **Meal Planner Screen**:
-  - Weekly view where users can drag and drop recipes into days.
-  - “Add New Meal” button at the bottom for adding a recipe manually.
-- **Grocery List Screen**:
-  - Categorized ingredients for easy shopping (fruits, vegetables, dairy, etc.).
-  - Option for users to check off items as they shop.
-
+- **Navigation Bar:** Located at the bottom with icons for Home, Recipes, Grocery List, Progress, and Profile.
+- **Home Screen:**
+  - Top Bar: Contains the app logo and a profile icon.
+  - Main Content Area: Features a personalized greeting, featured recipes, and quick access buttons for meal planning and mindful prompts.
+  
 ### Elements
-- **Buttons**: 
-  - Rounded corners, with primary actions in Fresh Green and secondary actions in Soft Yellow. 
-  - Subtle shadows for depth. 
-  - Hover and active states will darken the button color slightly.
-- **Icons**: 
-  - Simple, line-style icons matching the color palette. 
-  - Include icons for meal types, dietary preferences, and notifications. 
+- **Buttons:**
+  - Rounded corners, filled with `#5B9B3A`. Text in white.
+  - Hover/press state changes the shade to a darker green (`#4C7A2F`).
+
+- **Cards:**
+  - Used for recipe previews and meal suggestions. White background, soft shadow, and rounded corners.
 
 ### Transitions
-- Smooth transitions between screens with a fade-in effect for screens and slide transition from left to right for moving back to previous screens.
-- Buttons should have a subtle scaling transition on press.
+- **Screen Transitions:** Smooth fade transitions when navigating between different sections of the app.
+- **Element Transitions:** Buttons slightly enlarge on press, and cards ripple out upon selection.
 
 ## Features
 
-### User Navigation
-1. **Login/Registration**: 
-   - Users can register via email or social media accounts (Google, Facebook).
-   - “Forgot Password” functionality on the login screen.
-2. **Home Screen Navigation**: 
-   - Tapping buttons for Meal Planner, Recipes, and Grocery List should immediately transition to respective screens with visual feedback (button highlight).
-3. **Recipe Exploration**: 
-   - Users tap on a recipe thumbnail to view detailed information. 
-   - Back button should take users back to the previous screen with a slide animation.
+### Main Features
+1. **User Authentication:**
+   - Simple login and sign-up screens.
+   - Options for Google, Facebook, and Apple sign-in for convenience.
+   - Forgot password functionality.
 
-### Creating Meal Plans
-- Users can drag recipes into the weekly planner. 
-- Long-press on existing meals will prompt a menu with “Edit,” “Delete,” or “Swap” options.
+2. **Personalized Meal Recommendations:**
+   - Users can input dietary preferences and restrictions.
+   - The app suggests meals tailored to individual profiles.
 
-### Grocery List Generation
-- Upon finalizing the meal plan, users can click “Generate Grocery List.” 
-- The list is automatically categorized; users can remove items by swiping left to delete.
+3. **Recipe Library:**
+   - Comprehensive filter features (e.g., dietary restrictions, cooking time).
+   - Each recipe card shows a photo, title, brief description, and a "Save to Meal Plan" button.
 
-### Nutritional Tracking
-- **Profile Setup**: Customizable fields asking for dietary restrictions, preferences, and health goals.
-- Daily tracking dashboard showing total calories consumed and nutritional breakdown.
+4. **Smart Grocery List:**
+   - Automatically generated from selected meals.
+   - Users can add additional items manually with a simple “+” button.
 
-### Community Forum
-- Access via a dedicated tab on the bottom bar.
-- Users can create posts, comment on threads, and upvote useful tips.
+5. **Progress Tracking:**
+   - A dedicated Progress page displaying user achievements (calories consumed, meals logged).
+   - Visualization through charts and graphs.
 
-### Push Notifications
-- Settings screen to toggle notifications for meal prep, new recipes, and community updates.
-- Alerts for meal prep timings should allow user adjustments for convenience.
+6. **Mindful Eating Prompts:**
+   - Light reminders or notifications which users can opt to configure through settings.
+   - Audio-guided meditation timers before meals.
+
+7. **Community Features:**
+   - A section for users to share recipes and experiences with other users.
+   - Discussion boards categorized by topics (e.g., vegetarian recipes, mindful eating).
+
+### Navigation Flow
+- **Home Screen:** Users start here to see daily objectives, featured recipes, and quick links.
+- **Recipes Screen:** Accessible from the nav bar, leads to a categorized recipe collection.
+- **Grocery List:** Automatically generated upon meal selection. Users can edit and check off items.
+- **Progress Screen:** Allows tracking and visual representation of goals reached.
+- **Profile:** Users can manage their settings, access their saved recipes, and view progress history.
 
 ## Conclusion
-The design of the Healthy Recipe & Meal Planner App aims to create an engaging, user-friendly experience that encourages healthy eating habits through ease of use and accessibility. The integration of vibrant visuals with practical features fosters a nurturing community for wellness enthusiasts, ultimately contributing to sustaining long-term user relationships and health-focused lifestyle changes. 
-
-This document serves as a comprehensive guide for developers to bring the concept of the Healthy Recipe & Meal Planner App to life, ensuring every detail enhances user interaction and satisfaction.
+This design document serves as a guideline for the development of the Mindful Meal Planner app, aiming to deliver a unique and user-friendly experience focused on health and wellness. By providing clear visuals and functionalities, this app is set to attract and engage users looking for a structured yet mindful eating journey.
