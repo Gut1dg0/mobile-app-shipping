@@ -17,9 +17,9 @@
     <h1>Choose the Best App Concept</h1>
     <form method="POST" action="/select">
       {% for concept in concepts %}
-        <div>
+        <div style="margin-bottom:15px;">
           <input type="radio" name="concept" value="{{ loop.index0 }}" required>
-          <label>{{ concept }}</label>
+          <label><strong>{{ loop.index }}.</strong> {{ concept }}</label>
         </div>
       {% endfor %}
       <button type="submit">Submit Selection</button>

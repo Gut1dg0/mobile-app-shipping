@@ -9,14 +9,27 @@ research_task:
 
 app_ideas_task:
   description: >
-    Do a thorough analysis of the keywords provided by the researcher, select the best ones and turn them into three
-    possible mobile app concepts. To select the best keywords, consider the following factors:
-    - The keyword is trending
-    - The keyword has a high volume
-    - The keyword has a low competition
-    - The keyword is consistent with the business profile which is:
-    "We are a small company that above all wants to be righteous and give a good impression to our customers by
-    keeping a professional and formal image. Avoiding any immoral or offensive topics."
+    Analyze the list of researched keywords provided by the researcher, select the best ones, and turn them into exactly three
+    possible mobile app concepts. Each concept should have a short, clear title and one-sentence description.
+
+    Selection criteria:
+    - The keyword is trending.
+    - The keyword has high search volume.
+    - The keyword has low competition.
+    - The keyword fits the company's professional and moral profile.
+
   expected_output: >
-    A list of three mobile app concepts.
+    Return ONLY valid JSON.
+    Do NOT include markdown, code fences, explanations, or any text before or after the JSON.
+
+    The JSON MUST strictly follow this structure:
+
+    {
+      "concepts": [
+        "AppName – short one-line description.",
+        "AppName – short one-line description.",
+        "AppName – short one-line description."
+      ]
+    }
+
   agent: business_analyst

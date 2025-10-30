@@ -12,14 +12,18 @@ analysis_task:
     - Competitive Analysis (How the app will compare to the competition)
     - Technical Requirements (What technology will be used)
     - Conclusion (Summarize the app idea)
+
+    Your final answer MUST be the report in valid HTML (with <html>, <head>, <body> tags)
+    and must be saved into a file named "app_roadmap.html".
   expected_output: >
-    A report on the roadmap and business strategy for a mobile app.
+    A report both in JSON format for the uxui_designer and in HTML format for later presentation
+    on the web.
   agent: business_analyst
 
 design_task:
   description: >
     Make a written design of the user experience and user interface of the
-    mobile app suggested by the business_analyst. Make sure to include color
+    mobile app suggested by the business_analyst on the report. Make sure to include color
     palettes, style of the buttons, transitions, layout and all the details
     the mobile_developer needs to develop the app. To design the app consider
     the recommendations from the business_analyst such as target audience and
