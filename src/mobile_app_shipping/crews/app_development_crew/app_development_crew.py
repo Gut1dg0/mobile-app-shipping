@@ -51,7 +51,7 @@ class AppDevelopmentCrew():
             config=self.agents_config['mobile_developer'], # type: ignore[index]
             verbose=True,
             tools=[file_read_tool],
-            llm=gemini_llm,
+            # llm=gemini_llm,
             allow_delegation=True,
         )
 
@@ -60,7 +60,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['qa_engineer'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            # llm=gemini_llm,
         )
 
     @agent
@@ -99,13 +99,6 @@ class AppDevelopmentCrew():
             config=self.tasks_config['document_task'], # type: ignore[index]
             output_file='app_code.md',
         )
-
-    # @task
-    # def packaging_task(self) -> Task:
-    #     return Task(
-    #         config=self.tasks_config['packaging_task'], # type: ignore[index]
-    #         output_file='requirements.txt'
-    #     )
 
     @crew
     def crew(self) -> Crew:

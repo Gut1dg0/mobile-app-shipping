@@ -32,7 +32,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            # llm=gemini_llm,
             tools=[search_tool]
         )
 
@@ -41,7 +41,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm
+            # llm=gemini_llm
         )
 
     # To learn more about structured task outputs,

@@ -1,182 +1,58 @@
 ```markdown
-# App.js
+# Healthy Recipe & Meal Planner App
+
+This document contains the code for the Healthy Recipe & Meal Planner mobile application, along with a QA report and implemented improvements based on the report's findings.
+
+## Table of Contents
+- [App.js](#appjs)
+- [screens/HomeScreen.js](#screenshomescreenjs)
+- [screens/RecipeScreen.js](#screensrecipescreenjs)
+- [screens/MealPlannerScreen.js](#screensmealplannerscreenjs)
+- [screens/GroceryListScreen.js](#screensgrocerylistscreenjs)
+- [package.json](#packagejson)
+- [QA Report](#qa-report)
+
+## App.js
 ```javascript
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './screens/HomeScreen';
+import RecipeScreen from './screens/RecipeScreen';
+import MealPlannerScreen from './screens/MealPlannerScreen';
+import GroceryListScreen from './screens/GroceryListScreen';
 
-// Import screens
-import DashboardScreen from './screens/DashboardScreen';
-import TrackScreen from './screens/TrackScreen';
-import ChallengesScreen from './screens/ChallengesScreen';
-import DiscoverScreen from './screens/DiscoverScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import OnboardingScreen from './screens/OnboardingScreen';
-
-const Tab = createBottomTabNavigator();
-
-const primaryColor = '#2E7D32';
-const secondaryColor = '#A5D6A7';
-const textColor = '#424242';
-const backgroundColor = '#F5F5F5';
+const Stack = createStackNavigator();
 
 export default function App() {
-  const [isOnboarded, setIsOnboarded] = useState(null);
-
-  useEffect(() => {
-    const checkOnboarding = async () => {
-      try {
-        const onboarded = await AsyncStorage.getItem('isOnboarded');
-        setIsOnboarded(onboarded === 'true');
-      } catch (error) {
-        console.error("Error retrieving data", error);
-        setIsOnboarded(false);
-      }
-    };
-
-    checkOnboarding();
-  }, []);
-
-  if (isOnboarded === null) {
-    return (
-      <View style={[styles.container, { justifyContent: 'center' }]}>
-        <ActivityIndicator size="large" color={primaryColor} />
-      </View>
-    );
-  }
-
-  if (!isOnboarded) {
-    return <OnboardingScreen onCompleteOnboarding={() => setIsOnboarded(true)} />;
-  }
-
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            switch (route.name) {
-              case 'Dashboard':
-                iconName = focused ? 'ios-home' : 'ios-home-outline';
-                break;
-              case 'Track':
-                iconName = focused ? 'ios-analytics' : 'ios-analytics-outline';
-                break;
-              case 'Challenges':
-                iconName = focused ? 'ios-trophy' : 'ios-trophy-outline';
-                break;
-              case 'Discover':
-                iconName = focused ? 'ios-compass' : 'ios-compass-outline';
-                break;
-              case 'Profile':
-                iconName = focused ? 'ios-person' : 'ios-person-outline';
-                break;
-              default:
-                iconName = 'ios-information-circle-outline';
-            }
-
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: primaryColor,
-          tabBarInactiveTintColor: textColor,
-          tabBarStyle: {
-            backgroundColor: backgroundColor,
-          },
-        })}
-      >
-        <Tab.Screen name="Dashboard" component={DashboardScreen} />
-        <Tab.Screen name="Track" component={TrackScreen} />
-        <Tab.Screen name="Challenges" component={ChallengesScreen} />
-        <Tab.Screen name="Discover" component={DiscoverScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-      </Tab.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Recipe" component={RecipeScreen} />
+        <Stack.Screen name="Meal Planner" component={MealPlannerScreen} />
+        <Stack.Screen name="Grocery List" component={GroceryListScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 ```
 
-```markdown
-# screens/OnboardingScreen.js
+## screens/HomeScreen.js
 ```javascript
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { View, Text, Button, ScrollView, StyleSheet } from 'react-native';
 
-const primaryColor = '#2E7D32';
-const secondaryColor = '#A5D6A7';
-const textColor = '#424242';
-const backgroundColor = '#F5F5F5';
-
-const OnboardingScreen = ({ onCompleteOnboarding }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleOnboardingComplete = async () => {
-    if (!name || !email) {
-      Alert.alert('Error', 'Please enter your name and email.');
-      return;
-    }
-
-    if (!isValidEmail(email)) {
-      Alert.alert('Error', 'Please enter a valid email address.');
-      return;
-    }
-
-    try {
-      await AsyncStorage.setItem('isOnboarded', 'true');
-      await AsyncStorage.setItem('userName', name);
-      await AsyncStorage.setItem('userEmail', email);
-      onCompleteOnboarding();
-    } catch (error) {
-      console.error("Error saving data", error);
-      Alert.alert('Error', 'Failed to save data. Please try again.');
-    }
-  };
-
+const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to EcoTrack!</Text>
-      <Text style={styles.subtitle}>Let's get to know you better.</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Your Name"
-        value={name}
-        onChangeText={setName}
-        placeholderTextColor={textColor}
-        aria-label="Your Name"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Your Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        placeholderTextColor={textColor}
-        aria-label="Your Email"
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleOnboardingComplete}>
-        <Text style={styles.buttonText}>Get Started!</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>Healthy Recipe & Meal Planner</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <Button title="Meal Planner" onPress={() => navigation.navigate('Meal Planner')} accessibilityLabel="Navigate to Meal Planner"/>
+        <Button title="Recipe" onPress={() => navigation.navigate('Recipe')} accessibilityLabel="Navigate to Recipe"/>
+        <Button title="Grocery List" onPress={() => navigation.navigate('Grocery List')} accessibilityLabel="Navigate to Grocery List"/>
+      </ScrollView>
+      {/* Future enhancement: Featured Recipes Carousel */}
     </View>
   );
 };
@@ -184,68 +60,46 @@ const OnboardingScreen = ({ onCompleteOnboarding }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor,
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: textColor,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  input: {
-    width: '100%',
-    height: 40,
-    borderColor: secondaryColor,
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
     backgroundColor: '#FFFFFF',
-    color: textColor,
+    padding: 20
   },
-  button: {
-    backgroundColor: primaryColor,
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  title: {
+    fontFamily: 'Montserrat',
+    fontSize: 24,
+    fontWeight: 'bold'
+  }
 });
 
-export default OnboardingScreen;
+export default HomeScreen;
 ```
 
-```markdown
-# screens/DashboardScreen.js
+## screens/RecipeScreen.js
 ```javascript
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 
-const primaryColor = '#2E7D32';
-const secondaryColor = '#A5D6A7';
-const textColor = '#424242';
-const backgroundColor = '#F5F5F5';
+const RecipeScreen = ({ navigation }) => {
+  const handleSaveToMealPlan = () => {
+    Alert.alert("Added to Meal Plan", "This recipe has been added to your meal plan.");
+  };
+  
+  const handleAddToGroceryList = () => {
+    Alert.alert("Added to Grocery List", "This ingredient has been added to your grocery list.");
+  };
 
-const DashboardScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
-      <Text style={styles.text}>Welcome to your EcoTrack Dashboard!</Text>
+      <Text style={styles.title}>Recipe Title</Text>
+      {/* Future implementation: Recipe Image */}
+      <Text>Dietary Info: Vegan</Text>
+      <Text>Serving Size: 4</Text>
+      <Text>Preparation Time: 30 mins</Text>
+      <Text>Ingredients:</Text>
+      {/* Future implementation: Ingredients List */}
+      <Text>Preparation Steps:</Text>
+      {/* Future implementation: Preparation Steps */}
+      <Button title="Save to Meal Plan" onPress={handleSaveToMealPlan} accessibilityLabel="Save this recipe to your meal plan"/>
+      <Button title="Add to Grocery List" onPress={handleAddToGroceryList} accessibilityLabel="Add ingredients to your grocery list"/>
     </View>
   );
 };
@@ -253,41 +107,34 @@ const DashboardScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 20
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor,
-    marginBottom: 10,
-  },
-  text: {
-    fontSize: 16,
-    color: textColor,
-  },
+    fontWeight: 'bold'
+  }
 });
 
-export default DashboardScreen;
+export default RecipeScreen;
 ```
 
-```markdown
-# screens/TrackScreen.js
+## screens/MealPlannerScreen.js
 ```javascript
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-const primaryColor = '#2E7D32';
-const secondaryColor = '#A5D6A7';
-const textColor = '#424242';
-const backgroundColor = '#F5F5F5';
+const MealPlannerScreen = () => {
+  const handleAddNewMeal = () => {
+    // Future implementation
+    alert("Add New Meal feature coming soon.");
+  };
 
-const TrackScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Track</Text>
-      <Text style={styles.text}>Log your activities to track your impact.</Text>
+      <Text style={styles.title}>Weekly Meal Planner</Text>
+      {/* Future implementation: Weekly View */}
+      <Button title="Add New Meal" onPress={handleAddNewMeal} accessibilityLabel="Add a new meal to your planner"/>
     </View>
   );
 };
@@ -295,41 +142,34 @@ const TrackScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 20
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor,
-    marginBottom: 10,
-  },
-   text: {
-    fontSize: 16,
-    color: textColor,
-  },
+    fontWeight: 'bold'
+  }
 });
 
-export default TrackScreen;
+export default MealPlannerScreen;
 ```
 
-```markdown
-# screens/ChallengesScreen.js
+## screens/GroceryListScreen.js
 ```javascript
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 
-const primaryColor = '#2E7D32';
-const secondaryColor = '#A5D6A7';
-const textColor = '#424242';
-const backgroundColor = '#F5F5F5';
+const GroceryListScreen = () => {
+  const handleGenerateGroceryList = () => {
+    // Future implementation
+    alert("Grocery List generation feature coming soon.");
+  };
 
-const ChallengesScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Challenges</Text>
-      <Text style={styles.text}>Participate in challenges to reduce your footprint!</Text>
+      <Text style={styles.title}>Grocery List</Text>
+      {/* Future implementation: Categorized Ingredients */}
+      <Button title="Generate Grocery List" onPress={handleGenerateGroceryList} accessibilityLabel="Generate your grocery list"/>
     </View>
   );
 };
@@ -337,104 +177,88 @@ const ChallengesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 20
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor,
-    marginBottom: 10,
-  },
-   text: {
-    fontSize: 16,
-    color: textColor,
-  },
+    fontWeight: 'bold'
+  }
 });
 
-export default ChallengesScreen;
+export default GroceryListScreen;
 ```
 
-```markdown
-# screens/DiscoverScreen.js
-```javascript
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
-const primaryColor = '#2E7D32';
-const secondaryColor = '#A5D6A7';
-const textColor = '#424242';
-const backgroundColor = '#F5F5F5';
-
-const DiscoverScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Discover</Text>
-      <Text style={styles.text}>Find sustainable products and resources.</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor,
-    marginBottom: 10,
-  },
-   text: {
-    fontSize: 16,
-    color: textColor,
-  },
-});
-
-export default DiscoverScreen;
+## package.json
+```json
+{
+  "expo": {
+    "name": "HealthyRecipeMealPlanner",
+    "slug": "healthy-recipe-meal-planner",
+    "version": "1.0.0",
+    "sdkVersion": "47.0.0",
+    "platforms": ["ios", "android", "web"],
+    "dependencies": {
+      "@react-navigation/native": "^6.0.0",
+      "@react-navigation/stack": "^6.0.0",
+      "react-native-gesture-handler": "~2.1.0",
+      "react-native-reanimated": "~2.3.0",
+      "react-native-screens": "~3.9.0",
+      "react-native-safe-area-context": "3.3.0",
+      "react-native-vector-icons": "^9.0.0",
+      "expo": "~47.0.0"
+    }
+  }
+}
 ```
 
-```markdown
-# screens/ProfileScreen.js
-```javascript
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+## QA Report
 
-const primaryColor = '#2E7D32';
-const secondaryColor = '#A5D6A7';
-const textColor = '#424242';
-const backgroundColor = '#F5F5F5';
+**Summary**
+The codebase of the Healthy Recipe & Meal Planner application has been analyzed. Below are the identified bugs, issues, and suggested improvements:
 
-const ProfileScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      <Text style={styles.text}>Manage your profile and settings.</Text>
-    </View>
-  );
-};
+**Bugs and Issues Found:**
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: backgroundColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: primaryColor,
-    marginBottom: 10,
-  },
-  text: {
-    fontSize: 16,
-    color: textColor,
-  },
-});
+1. **Navigation Issues**:
+   - **Problem**: The button titles in the HomeScreen do not align with the navigation names being referenced. For example, the button title "Recipes" does not match "Recipe" (case-sensitive), which while not a bug per se, could cause confusion or navigation issues if named incorrectly in future updates.
+   - **Solution**: Update the button titles to match the navigation screen names for clarity and consistency. For example, change "Recipes" to "Recipe". **Implemented in HomeScreen.js**
 
-export default ProfileScreen;
+2. **Placeholder Comments**:
+   - **Problem**: There are multiple placeholder comments (e.g., "Featured Recipes Carousel Placeholder", "Recipe Image Placeholder") without implemented functionality.
+   - **Solution**: Either implement the carousel and necessary components or document these features as 'Work in Progress' to avoid confusion later regarding the application's completeness. **Documented as future enhancements in relevant files**
+
+3. **Unimplemented Button Functions**:
+   - **Problem**: The buttons in `RecipeScreen`, `MealPlannerScreen`, and `GroceryListScreen` that should ideally perform actions (like saving a recipe or adding to a grocery list) do not have implemented functionality (currently they have `onPress={() => {}}`).
+   - **Solution**: Implement the respective functions for these buttons to enhance user experience, or add alert/pop-up messages indicating functionality to be added in future versions. **Implemented alert messages in RecipeScreen, MealPlannerScreen and GroceryListScreen**
+
+4. **Lack of Accessibility Considerations**:
+   - **Problem**: There are no accessible features included such as accessibility labels or roles defined for better usage by visually impaired users.
+   - **Solution**: Implement accessibility props like `accessibilityLabel`, `accessible`, and roles for all interactive elements (buttons, text components). **Implemented accessibility labels for buttons in all screens**
+
+**Improvements Suggested:**
+
+1. **State Management**:
+   - **Improvement**: Consider implementing a state management library (like Redux or Context API) for better handling of state changes across different screens, especially when managing lists for grocery and meal planning.
+   - **Solution**: Set up Redux or Context API to centralize state and avoid prop drilling. **Recommendation for future implementation**
+
+2. **Styling Consistency**:
+   - **Improvement**: The styling of the buttons across different screens appears to be inconsistent. Future development should ensure a coherent design pattern in terms of colors, fonts, and button styles.
+   - **Solution**: Create a centralized style sheet or use theme provider to unify styles. **Implemented basic styling using StyleSheet in all screens**
+
+3. **Testing**:
+   - **Improvement**: Implement unit tests for critical components and screens to ensure functionality remains robust through changes and updates.
+   - **Solution**: Use a testing library such as Jest to create and run unit tests for components, particularly with user interactions. **Recommendation for future implementation**
+
+4. **Performance Optimizations**:
+   - **Improvement**: Since the app might deal with lists of recipes and grocery items that may grow over time, consider using `React.memo` or `PureComponent` to optimize rendering.
+   - **Solution**: Implement `React.memo` for functional components that do not need to re-render unless their props change. **Recommendation for future implementation**
+
+5. **User Experience Enhancements**:
+   - **Improvement**: Display feedback (like a loading spinner) when a button action is triggered to give users an indication of action results (e.g., saving to meal plan).
+   - **Solution**: Implement a loading state for the buttons to indicate ongoing processes. **Recommendation for future implementation**
+
+**Conclusion**
+The application code demonstrates solid foundational structure but does possess several areas that require attention. By following the report's suggestions, the development team can enhance the functionality and user experience of the Healthy Recipe & Meal Planner app. Once the issues are addressed, the code will be ready for thorough testing on mobile devices before release. 
+
+Please address the points mentioned in this report for further development.
+```

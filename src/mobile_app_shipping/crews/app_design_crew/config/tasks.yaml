@@ -1,6 +1,6 @@
 analysis_task:
   description: >
-    Select one of the three provided mobile app concepts and based on what seems to be more successful and
+    Based on the following app idea '{selected_concept}',
     create a fully fledged report on the mobile app concept. Include the following sections:
     - Title
     - Introduction (Why you selected that app idea)

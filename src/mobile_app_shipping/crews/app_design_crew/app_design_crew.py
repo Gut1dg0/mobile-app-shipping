@@ -29,7 +29,7 @@ class AppDesignCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm
+            # llm=gemini_llm
         )
 
     @agent
@@ -37,7 +37,7 @@ class AppDesignCrew():
         return Agent(
             config=self.agents_config['uxui_designer'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm
+            # llm=gemini_llm
         )
 
     # To learn more about structured task outputs,

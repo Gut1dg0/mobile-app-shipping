@@ -1,157 +1,82 @@
-# EcoTrack: Mobile App Design Document
+# Healthy Recipe & Meal Planner App Design Document
 
-## 1. Visuals
+## Visuals
 
-### 1.1. Color Palette
+### Color Palette
+- **Primary Color**: Fresh Green (#4CAF50) - Represents health, vitality, and freshness.
+- **Secondary Color**: Soft Yellow (#FFEB3B) - Adds warmth and positivity, stimulating a happy cooking experience.
+- **Accent Color**: Light Coral (#FF6F61) - To highlight important buttons and notifications, providing a vibrant touch.
+- **Background Color**: Soft White (#FFFFFF) - Clean and minimalistic to ensure readability and a soothing experience.
+- **Text Color**: Dark Slate Gray (#2F4F4F) - For primary text, ensuring high contrast for readability.
 
-*   **Primary:** `#2E7D32` (Dark Green) - Represents nature, growth, and sustainability. Used for primary buttons, key actions, and the app's overall branding.
-*   **Secondary:** `#A5D6A7` (Light Green) - Used for accents, secondary buttons, and to provide a softer, more approachable feel.
-*   **Accent:** `#FDD835` (Yellow) - Represents energy and optimism. Used sparingly for highlights, rewards, and gamification elements.
-*   **Neutral (Background):** `#F5F5F5` (Light Gray) - Provides a clean and modern backdrop for content.
-*   **Neutral (Text):** `#424242` (Dark Gray) - Ensures readability and contrast.
-*   **Error:** `#D32F2F` (Red) - To indicate errors or warnings.
+### Typography
+- **Headings**: 'Montserrat', Bold, 24px for main headings.
+- **Body Text**: 'Open Sans', Regular, 16px for general text with good legibility.
+- **Button Text**: 'Roboto', Medium, 18px, ensuring it stands out.
 
-### 1.2. Layout
+### Layout
+- **Home Screen**: 
+  - Top Header with logo and search bar.
+  - Quick access buttons (Meal Planner, Recipes, Grocery List) displayed in a horizontal scrollable list.
+  - Featured Recipes carousel below with appetizing images.
+- **Recipe Screen**: 
+  - Large recipe image at the top.
+  - Title, dietary info, serving size, and preparation time.
+  - Ingredients list and preparation steps below with clear formatting.
+  - “Save to Meal Plan” and “Add to Grocery List” buttons displayed prominently.
+- **Meal Planner Screen**:
+  - Weekly view where users can drag and drop recipes into days.
+  - “Add New Meal” button at the bottom for adding a recipe manually.
+- **Grocery List Screen**:
+  - Categorized ingredients for easy shopping (fruits, vegetables, dairy, etc.).
+  - Option for users to check off items as they shop.
 
-*   **General Structure:** A bottom navigation bar for primary sections (Dashboard, Track, Challenges, Discover, Profile). Consistent use of padding and margins to maintain visual balance.
-*   **Typography:**
-    *   **Headings:** Montserrat (Bold) - Clear and modern font for titles and section headers.
-    *   **Body Text:** Open Sans (Regular) - Readable and versatile font for body copy and labels.
-*   **Iconography:** Use a consistent icon set (e.g., Material Icons, Font Awesome) with a minimalist and modern style. The icons should be easily recognizable and intuitive.
+### Elements
+- **Buttons**: 
+  - Rounded corners, with primary actions in Fresh Green and secondary actions in Soft Yellow. 
+  - Subtle shadows for depth. 
+  - Hover and active states will darken the button color slightly.
+- **Icons**: 
+  - Simple, line-style icons matching the color palette. 
+  - Include icons for meal types, dietary preferences, and notifications. 
 
-### 1.3. Elements
+### Transitions
+- Smooth transitions between screens with a fade-in effect for screens and slide transition from left to right for moving back to previous screens.
+- Buttons should have a subtle scaling transition on press.
 
-*   **Buttons:**
-    *   **Primary Buttons:** Rounded rectangular shape with the primary color (`#2E7D32`). White text. On press, a subtle darkening effect.
-    *   **Secondary Buttons:** Outlined rounded rectangular shape with the secondary color (`#A5D6A7`). Dark gray text. On press, the background fills with the secondary color.
-    *   **Small Action Buttons:** Circular icons with a light gray background. On press, a subtle color change.
-*   **Input Fields:**
-    *   Rounded rectangular shape with a light gray border. Clear labels and placeholders. Use appropriate keyboard types for different input types (e.g., number pad for numerical input).
-*   **Cards:**
-    *   Used to display information in a structured and visually appealing way. White background with subtle shadows. Rounded corners.
-*   **Charts & Graphs:**
-    *   Use clear and informative charts and graphs to visualize data. Line charts for trends, bar charts for comparisons, and pie charts for proportions. Use the accent color (`#FDD835`) to highlight key data points.
-*   **Progress Bars:**
-    *   Rounded progress bars to indicate progress towards goals. Use the primary color (`#2E7D32`) to fill the bar.
-*   **Alerts & Notifications:**
-    *   Use clear and concise alerts and notifications to inform users of important events or updates. Display error messages in red.
+## Features
 
-### 1.4. Transitions
+### User Navigation
+1. **Login/Registration**: 
+   - Users can register via email or social media accounts (Google, Facebook).
+   - “Forgot Password” functionality on the login screen.
+2. **Home Screen Navigation**: 
+   - Tapping buttons for Meal Planner, Recipes, and Grocery List should immediately transition to respective screens with visual feedback (button highlight).
+3. **Recipe Exploration**: 
+   - Users tap on a recipe thumbnail to view detailed information. 
+   - Back button should take users back to the previous screen with a slide animation.
 
-*   **Screen Transitions:** Use subtle slide-in animations for screen transitions. Avoid overly complex or distracting animations.
-*   **Element Transitions:** Use fade-in/fade-out animations for elements appearing or disappearing. Use smooth transitions for changes in values (e.g., progress bar updates).
+### Creating Meal Plans
+- Users can drag recipes into the weekly planner. 
+- Long-press on existing meals will prompt a menu with “Edit,” “Delete,” or “Swap” options.
 
-## 2. Features
+### Grocery List Generation
+- Upon finalizing the meal plan, users can click “Generate Grocery List.” 
+- The list is automatically categorized; users can remove items by swiping left to delete.
 
-### 2.1. Onboarding
+### Nutritional Tracking
+- **Profile Setup**: Customizable fields asking for dietary restrictions, preferences, and health goals.
+- Daily tracking dashboard showing total calories consumed and nutritional breakdown.
 
-1.  **Welcome Screen:** Introduction to EcoTrack's mission and value proposition. Visually appealing graphics or animations.
-2.  **Feature Highlights:** Showcase key features with short descriptions and screenshots.
-3.  **Account Creation/Login:** Options to sign up with email, Google, or Facebook. Clear instructions for password creation.
-4.  **Personalization:** Ask users about their lifestyle (e.g., diet, transportation habits) to provide personalized recommendations.
+### Community Forum
+- Access via a dedicated tab on the bottom bar.
+- Users can create posts, comment on threads, and upvote useful tips.
 
-### 2.2. Dashboard
+### Push Notifications
+- Settings screen to toggle notifications for meal prep, new recipes, and community updates.
+- Alerts for meal prep timings should allow user adjustments for convenience.
 
-*   **Overview:** Display a summary of the user's carbon footprint score, progress towards goals, and recent activity.
-*   **Quick Actions:** Buttons for quickly logging common activities (e.g., "Log Commute," "Log Meal").
-*   **Insights:** Display personalized insights and recommendations.
-*   **Upcoming Challenges:** Highlight upcoming challenges and events.
-*   **Visualizations:** Display carbon footprint data using graphs and charts.
+## Conclusion
+The design of the Healthy Recipe & Meal Planner App aims to create an engaging, user-friendly experience that encourages healthy eating habits through ease of use and accessibility. The integration of vibrant visuals with practical features fosters a nurturing community for wellness enthusiasts, ultimately contributing to sustaining long-term user relationships and health-focused lifestyle changes. 
 
-### 2.3. Track
-
-*   **Activity Logging:**
-    *   Categorize activities (Transportation, Home Energy, Diet, Shopping, Waste).
-    *   Use clear and intuitive input fields for each activity.
-    *   Provide helpful tips and suggestions for reducing impact.
-*   **Carbon Footprint Calculation:**
-    *   Calculate carbon footprint score based on user input.
-    *   Display the score in a clear and understandable format.
-    *   Provide a breakdown of the score by category.
-*   **History:**
-    *   Allow users to view and edit their past activity logs.
-    *   Display a timeline of their carbon footprint scores over time.
-
-### 2.4. Challenges
-
-*   **Challenge List:**
-    *   Display a list of available challenges (individual and community-based).
-    *   Provide a description of each challenge, its duration, and its rewards.
-*   **Challenge Details:**
-    *   Display detailed information about a challenge, including its rules, progress tracking, and leaderboard.
-*   **Participation:**
-    *   Allow users to join challenges and track their progress.
-    *   Provide visual feedback on their performance.
-*   **Rewards:**
-    *   Award badges, points, or virtual currency for completing challenges.
-    *   Allow users to redeem rewards for discounts on sustainable products or services.
-
-### 2.5. Discover
-
-*   **Sustainable Product Directory:**
-    *   Categorize products and services (e.g., Clothing, Food, Energy).
-    *   Provide user reviews and ratings.
-    *   Offer exclusive discounts and promotions.
-*   **Educational Resources:**
-    *   Library of articles, videos, and infographics on sustainability topics.
-    *   Quizzes and interactive learning modules.
-*   **Community Forum:**
-    *   Platform for users to connect, share tips, and discuss sustainability issues.
-    *   Moderated discussions to ensure a positive environment.
-
-### 2.6. Profile
-
-*   **User Information:**
-    *   Display user's name, profile picture, and other relevant information.
-    *   Allow users to edit their profile.
-*   **Settings:**
-    *   Allow users to customize their app settings (e.g., notifications, units of measurement).
-*   **Goals:**
-    *   Allow users to set personalized sustainability goals.
-    *   Provide visual progress tracking tools.
-*   **Carbon Offset:**
-    *   Option for users to offset their remaining carbon footprint.
-    *   Transparent reporting on the impact of offset contributions.
-*   **Logout:**
-    *   Allow users to securely log out of their account.
-
-### 2.7. Navigation
-
-*   **Bottom Navigation Bar:** Consistent across all screens. Highlights the currently selected section.
-*   **Back Buttons:** Clear back buttons in the top left corner of each screen.
-*   **Search:** Search functionality available in the Discover section.
-*   **Notifications:** Notification icon in the top right corner of the screen.
-
-### 2.8. Gamification Details
-
-*   **Points System:** Award points for logging activities, completing challenges, and achieving goals.
-*   **Badges:** Award badges for specific achievements (e.g., "Meatless Monday," "Zero Waste Week").
-*   **Leaderboards:** Display leaderboards to foster friendly competition.
-*   **Virtual Currency:** Allow users to earn virtual currency that can be redeemed for rewards.
-
-### 2.9. Data Visualization Examples
-
-*   **Line Chart:** Display carbon footprint trends over time (e.g., weekly, monthly, yearly).
-*   **Bar Chart:** Compare carbon footprint scores across different categories (e.g., Transportation, Home Energy, Diet).
-*   **Pie Chart:** Show the proportion of carbon footprint contributed by each category.
-*   **Progress Bar:** Indicate progress towards sustainability goals.
-*   **Comparative Data:** Show how the user's footprint compares to the average and to their past performance.
-
-### 2.10. Geolocation Features
-
-*   **Nearby Resources:** Use the map to display nearby recycling centers, farmers' markets, and other sustainable resources.
-*   **Public Transportation:** Suggest public transportation options based on the user's location.
-*   **Walking/Biking Routes:** Suggest walking/biking routes.
-
-## 3. Technical Details and Considerations
-
-*   **Platform:** Native iOS and Android development for optimal performance.
-*   **Data Storage:** Secure cloud-based database to store user data and activity logs.
-*   **API:** RESTful API for communication between the mobile app and the backend services.
-*   **Security:** Implement robust security measures to protect user data and privacy.
-*   **Scalability:** Design the app and backend infrastructure to handle a large number of users and data.
-*   **Accessibility:** Ensure the app is accessible to users with disabilities.
-*   **Performance:** Optimize the app for performance to ensure a smooth and responsive user experience.
-*   **Offline Mode:** Implement offline mode to allow users to access some features even when they are not connected to the internet.
-
-This document provides a comprehensive design for the EcoTrack mobile app, covering both visual and functional aspects. It should serve as a guide for the mobile developers to create a user-friendly and engaging application that empowers individuals to reduce their carbon footprint and live more sustainably.
+This document serves as a comprehensive guide for developers to bring the concept of the Healthy Recipe & Meal Planner App to life, ensuring every detail enhances user interaction and satisfaction.
