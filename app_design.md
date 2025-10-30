@@ -1,213 +1,157 @@
-# Clarity Finance: Mobile App Design Document
+# EcoTrack: Mobile App Design Document
 
-## I. Visuals
+## 1. Visuals
 
-### A. Color Palette
+### 1.1. Color Palette
 
-*   **Primary Color:** `#2E94B9` (A calming, trustworthy blue, conveying stability and clarity.)
-*   **Secondary Color:** `#F2BE22` (A warm yellow, signifying optimism and financial opportunity. Used sparingly for accents.)
-*   **Accent Color:** `#E76F51` (An energetic orange, used for calls to action and important notifications.)
-*   **Success Color:** `#2A9D8F` (A vibrant green, indicating positive financial progress and achievements.)
-*   **Error Color:** `#D62828` (A strong red, highlighting errors, warnings, and potential overspending.)
-*   **Neutral Colors:**
-    *   `#FFFFFF` (White): Background, text contrast.
-    *   `#F4F4F4` (Light Gray): Secondary background, card backgrounds.
-    *   `#9CA3AF` (Medium Gray): Subtitles, placeholder text, inactive elements.
-    *   `#111827` (Dark Gray): Primary text, headings.
+*   **Primary:** `#2E7D32` (Dark Green) - Represents nature, growth, and sustainability. Used for primary buttons, key actions, and the app's overall branding.
+*   **Secondary:** `#A5D6A7` (Light Green) - Used for accents, secondary buttons, and to provide a softer, more approachable feel.
+*   **Accent:** `#FDD835` (Yellow) - Represents energy and optimism. Used sparingly for highlights, rewards, and gamification elements.
+*   **Neutral (Background):** `#F5F5F5` (Light Gray) - Provides a clean and modern backdrop for content.
+*   **Neutral (Text):** `#424242` (Dark Gray) - Ensures readability and contrast.
+*   **Error:** `#D32F2F` (Red) - To indicate errors or warnings.
 
-### B. Typography
+### 1.2. Layout
 
-*   **Primary Font:** "Roboto" (Sans-serif, clean and modern, for readability.)
-    *   Headings: Roboto Bold, varying sizes (24pt, 20pt, 16pt).
-    *   Body Text: Roboto Regular, 14pt.
-    *   Subtitles/Captions: Roboto Medium, 12pt.
-*   **Secondary Font:** (Optional) "Open Sans" (Similar to Roboto, can be used for specific UI elements if needed, ensuring consistency).
+*   **General Structure:** A bottom navigation bar for primary sections (Dashboard, Track, Challenges, Discover, Profile). Consistent use of padding and margins to maintain visual balance.
+*   **Typography:**
+    *   **Headings:** Montserrat (Bold) - Clear and modern font for titles and section headers.
+    *   **Body Text:** Open Sans (Regular) - Readable and versatile font for body copy and labels.
+*   **Iconography:** Use a consistent icon set (e.g., Material Icons, Font Awesome) with a minimalist and modern style. The icons should be easily recognizable and intuitive.
 
-### C. Layout
-
-*   **Overall Structure:** Tab-based navigation for main sections (Dashboard, Budgets, Transactions, Goals, Profile). Bottom navigation bar is preferred for ease of access.
-*   **Card-Based Design:** Information is presented in visually distinct cards with rounded corners (radius: 8dp) and subtle shadows to create a sense of depth. This improves content organization and scannability.
-*   **Whitespace:** Ample whitespace is used to avoid clutter and improve readability.
-*   **Grid System:** An 8dp or 12dp grid system is used for consistent spacing and alignment.
-
-### D. Elements
+### 1.3. Elements
 
 *   **Buttons:**
-    *   **Primary Buttons:** Filled buttons with the primary color (`#2E94B9`), white text, rounded corners (radius: 8dp). On press, a slight darkening of the blue.
-    *   **Secondary Buttons:** Outline buttons with the primary color border, primary color text, rounded corners (radius: 8dp). On press, the button fills with a light version of the primary color.
-    *   **Text Buttons:** Simple text links with the primary color.
-    *   **Floating Action Button (FAB):** Circular button, primary color, located in the bottom right corner for quick actions (e.g., adding a transaction). Uses a "+" icon.
-*   **Icons:**
-    *   Material Design Icons (or similar): Use consistent style, filled icons for active states, outlined icons for inactive states.
-    *   Color: Use the primary color, accent color, or neutral grays depending on context.
-    *   Size: 24dp for most icons.
+    *   **Primary Buttons:** Rounded rectangular shape with the primary color (`#2E7D32`). White text. On press, a subtle darkening effect.
+    *   **Secondary Buttons:** Outlined rounded rectangular shape with the secondary color (`#A5D6A7`). Dark gray text. On press, the background fills with the secondary color.
+    *   **Small Action Buttons:** Circular icons with a light gray background. On press, a subtle color change.
 *   **Input Fields:**
-    *   Rounded corners (radius: 8dp), light gray background (`#F4F4F4`), dark gray text.
-    *   Clear labels above the input field.
-    *   Use appropriate keyboard types (e.g., number pad for amounts, email for email addresses).
-    *   Validation: Real-time validation with appropriate error messages using the error color (`#D62828`).
-*   **Charts and Graphs:**
-    *   Simple and clean design.
-    *   Use color-coding to represent different categories (consistent with budget categories).
-    *   Tooltips to display detailed information on hover/tap.
-    *   Types: Bar charts, pie charts, line graphs.
-*   **Alerts and Notifications:**
-    *   Use the accent color (`#E76F51`) for important notifications.
-    *   Use the success color (`#2A9D8F`) for positive feedback.
-    *   Use the error color (`#D62828`) for warnings and errors.
-    *   Types: Pop-up alerts, banners, in-app notifications.
-*   **Loading Indicators:**
-    *   Circular progress indicators or progress bars.
-    *   Use the primary color.
-*   **Avatars:**
-    *   Circular avatars for user profiles.
-    *   Use initials or a default avatar if the user hasn't uploaded a profile picture.
+    *   Rounded rectangular shape with a light gray border. Clear labels and placeholders. Use appropriate keyboard types for different input types (e.g., number pad for numerical input).
+*   **Cards:**
+    *   Used to display information in a structured and visually appealing way. White background with subtle shadows. Rounded corners.
+*   **Charts & Graphs:**
+    *   Use clear and informative charts and graphs to visualize data. Line charts for trends, bar charts for comparisons, and pie charts for proportions. Use the accent color (`#FDD835`) to highlight key data points.
+*   **Progress Bars:**
+    *   Rounded progress bars to indicate progress towards goals. Use the primary color (`#2E7D32`) to fill the bar.
+*   **Alerts & Notifications:**
+    *   Use clear and concise alerts and notifications to inform users of important events or updates. Display error messages in red.
 
-## II. Features
+### 1.4. Transitions
 
-### A. Onboarding
+*   **Screen Transitions:** Use subtle slide-in animations for screen transitions. Avoid overly complex or distracting animations.
+*   **Element Transitions:** Use fade-in/fade-out animations for elements appearing or disappearing. Use smooth transitions for changes in values (e.g., progress bar updates).
 
-1.  **Welcome Screen:**
-    *   App logo and tagline.
-    *   Brief description of the app's benefits.
-    *   "Get Started" button.
-2.  **Account Creation/Login:**
-    *   Options: Email/Password, Google Sign-In, Apple Sign-In.
-    *   Clear error messages for invalid input.
-    *   "Forgot Password" option.
-3.  **Personalization:**
-    *   Ask users about their financial goals (e.g., saving for a house, paying off debt).
-    *   Suggest initial budget categories based on their goals.
-4.  **Tutorial/Walkthrough:**
-    *   Highlight key features and explain how to use them.
-    *   Option to skip the tutorial.
+## 2. Features
 
-### B. Dashboard
+### 2.1. Onboarding
 
-1.  **Summary:**
-    *   Current balance (net worth).
-    *   Spending this month.
-    *   Income this month.
-    *   Savings this month.
-2.  **Budget Overview:**
-    *   Visual representation of budget progress (e.g., a progress bar for each category).
-    *   Spending vs. budget for each category.
-3.  **Recent Transactions:**
-    *   List of recent transactions with date, description, and amount.
-    *   Option to view all transactions.
-4.  **Upcoming Bills:**
-    *   List of upcoming bills with due dates and amounts.
-5.  **Quick Actions:**
-    *   Buttons for adding a transaction, creating a budget, or setting a goal.
+1.  **Welcome Screen:** Introduction to EcoTrack's mission and value proposition. Visually appealing graphics or animations.
+2.  **Feature Highlights:** Showcase key features with short descriptions and screenshots.
+3.  **Account Creation/Login:** Options to sign up with email, Google, or Facebook. Clear instructions for password creation.
+4.  **Personalization:** Ask users about their lifestyle (e.g., diet, transportation habits) to provide personalized recommendations.
 
-### C. Budgets
+### 2.2. Dashboard
 
-1.  **Budget List:**
-    *   List of all budgets with name, time period, and status (e.g., "Active", "Completed").
-2.  **Budget Creation:**
-    *   Name the budget.
-    *   Select the time period (weekly, monthly, yearly).
-    *   Add categories (income and expenses).
-    *   Set spending limits for each category.
-    *   Option to roll over unused budget amounts.
-3.  **Budget Details:**
-    *   Spending vs. budget for each category.
-    *   Transaction list for each category.
-    *   Edit budget option.
-    *   Delete budget option.
+*   **Overview:** Display a summary of the user's carbon footprint score, progress towards goals, and recent activity.
+*   **Quick Actions:** Buttons for quickly logging common activities (e.g., "Log Commute," "Log Meal").
+*   **Insights:** Display personalized insights and recommendations.
+*   **Upcoming Challenges:** Highlight upcoming challenges and events.
+*   **Visualizations:** Display carbon footprint data using graphs and charts.
 
-### D. Transactions
+### 2.3. Track
 
-1.  **Transaction List:**
-    *   List of all transactions with date, description, amount, and category.
-    *   Filters: Date range, category, amount.
-    *   Search: Search by description or amount.
-2.  **Add Transaction:**
-    *   Manual entry: Date, description, amount, category, account.
-    *   Automatic import (if enabled): Transactions are automatically imported from linked bank accounts.
-    *   Receipt scanning: Users can scan receipts using their phone's camera, and the app will automatically extract the relevant information.
-3.  **Transaction Details:**
-    *   View all transaction details.
-    *   Edit transaction details.
-    *   Delete transaction option.
+*   **Activity Logging:**
+    *   Categorize activities (Transportation, Home Energy, Diet, Shopping, Waste).
+    *   Use clear and intuitive input fields for each activity.
+    *   Provide helpful tips and suggestions for reducing impact.
+*   **Carbon Footprint Calculation:**
+    *   Calculate carbon footprint score based on user input.
+    *   Display the score in a clear and understandable format.
+    *   Provide a breakdown of the score by category.
+*   **History:**
+    *   Allow users to view and edit their past activity logs.
+    *   Display a timeline of their carbon footprint scores over time.
 
-### E. Goals
+### 2.4. Challenges
 
-1.  **Goal List:**
-    *   List of all goals with name, target amount, and progress.
-2.  **Goal Creation:**
-    *   Name the goal.
-    *   Set the target amount.
-    *   Set the target date (optional).
-    *   Select a category (e.g., saving for a house, paying off debt).
-3.  **Goal Details:**
-    *   Progress tracking (visual representation).
-    *   Contribution history.
-    *   Edit goal option.
-    *   Delete goal option.
+*   **Challenge List:**
+    *   Display a list of available challenges (individual and community-based).
+    *   Provide a description of each challenge, its duration, and its rewards.
+*   **Challenge Details:**
+    *   Display detailed information about a challenge, including its rules, progress tracking, and leaderboard.
+*   **Participation:**
+    *   Allow users to join challenges and track their progress.
+    *   Provide visual feedback on their performance.
+*   **Rewards:**
+    *   Award badges, points, or virtual currency for completing challenges.
+    *   Allow users to redeem rewards for discounts on sustainable products or services.
 
-### F. Profile
+### 2.5. Discover
 
-1.  **Account Information:**
-    *   Name, email address, password.
-    *   Option to change password.
-2.  **Linked Accounts:**
-    *   List of linked bank accounts and credit cards.
-    *   Option to add or remove accounts.
-3.  **Notifications:**
-    *   Settings for bill reminders, budget alerts, and other notifications.
-4.  **Subscription:**
-    *   Information about the current subscription plan.
-    *   Option to upgrade to premium.
-5.  **Settings:**
-    *   Currency settings.
-    *   Language settings.
-    *   Theme settings (light/dark mode).
-6.  **Help & Support:**
-    *   FAQ.
-    *   Contact support.
-7.  **Logout:**
-    *   Option to log out of the app.
+*   **Sustainable Product Directory:**
+    *   Categorize products and services (e.g., Clothing, Food, Energy).
+    *   Provide user reviews and ratings.
+    *   Offer exclusive discounts and promotions.
+*   **Educational Resources:**
+    *   Library of articles, videos, and infographics on sustainability topics.
+    *   Quizzes and interactive learning modules.
+*   **Community Forum:**
+    *   Platform for users to connect, share tips, and discuss sustainability issues.
+    *   Moderated discussions to ensure a positive environment.
 
-### G. Navigation
+### 2.6. Profile
 
-*   **Bottom Navigation Bar:**
-    *   Dashboard, Budgets, Transactions, Goals, Profile.
-    *   Use filled icons for the active tab, outlined icons for inactive tabs.
-*   **Back Button:**
-    *   In the top left corner of each screen (except the Dashboard).
-*   **Hamburger Menu (Optional):**
-    *   For less frequently used features (e.g., Settings, Help & Support).
+*   **User Information:**
+    *   Display user's name, profile picture, and other relevant information.
+    *   Allow users to edit their profile.
+*   **Settings:**
+    *   Allow users to customize their app settings (e.g., notifications, units of measurement).
+*   **Goals:**
+    *   Allow users to set personalized sustainability goals.
+    *   Provide visual progress tracking tools.
+*   **Carbon Offset:**
+    *   Option for users to offset their remaining carbon footprint.
+    *   Transparent reporting on the impact of offset contributions.
+*   **Logout:**
+    *   Allow users to securely log out of their account.
 
-### H. Transitions
+### 2.7. Navigation
 
-*   **Screen Transitions:** Slide-in animations for navigating between screens.
-*   **Element Transitions:** Fade-in/fade-out animations for displaying and hiding elements.
-*   **Use subtle animations to provide visual feedback and enhance the user experience.**
+*   **Bottom Navigation Bar:** Consistent across all screens. Highlights the currently selected section.
+*   **Back Buttons:** Clear back buttons in the top left corner of each screen.
+*   **Search:** Search functionality available in the Discover section.
+*   **Notifications:** Notification icon in the top right corner of the screen.
 
-## III. Accessibility
+### 2.8. Gamification Details
 
-*   **Color Contrast:** Ensure sufficient color contrast between text and background for readability.
-*   **Font Size:** Allow users to adjust the font size.
-*   **Alternative Text:** Provide alternative text for images and icons for screen readers.
-*   **Keyboard Navigation:** Ensure that the app can be navigated using a keyboard.
-*   **VoiceOver Support:** Ensure that the app is compatible with screen readers like VoiceOver.
+*   **Points System:** Award points for logging activities, completing challenges, and achieving goals.
+*   **Badges:** Award badges for specific achievements (e.g., "Meatless Monday," "Zero Waste Week").
+*   **Leaderboards:** Display leaderboards to foster friendly competition.
+*   **Virtual Currency:** Allow users to earn virtual currency that can be redeemed for rewards.
 
-## IV. Security
+### 2.9. Data Visualization Examples
 
-*   **Data Encryption:** Use bank-level encryption to protect user data.
-*   **Two-Factor Authentication:** Offer two-factor authentication for added security.
-*   **Biometric Login:** Allow users to log in using fingerprint or facial recognition.
-*   **Regular Security Audits:** Conduct regular security audits to identify and address vulnerabilities.
-*   **Privacy Policy:** Be transparent about how user data is used and do not sell user data to third parties.
+*   **Line Chart:** Display carbon footprint trends over time (e.g., weekly, monthly, yearly).
+*   **Bar Chart:** Compare carbon footprint scores across different categories (e.g., Transportation, Home Energy, Diet).
+*   **Pie Chart:** Show the proportion of carbon footprint contributed by each category.
+*   **Progress Bar:** Indicate progress towards sustainability goals.
+*   **Comparative Data:** Show how the user's footprint compares to the average and to their past performance.
 
-## V. Future Considerations
+### 2.10. Geolocation Features
 
-*   **Personalized Financial Advice:** Offer personalized financial advice based on user data.
-*   **Investment Tracking:** Allow users to track their investments.
-*   **Retirement Planning Tools:** Provide tools for retirement planning.
-*   **Integration with Other Financial Apps:** Integrate with other financial apps to provide a more comprehensive financial picture.
-*   **Gamification:** Incorporate gamification elements to motivate users to achieve their financial goals.
-*   **AI-Powered Features:** Use AI to provide insights and recommendations.
+*   **Nearby Resources:** Use the map to display nearby recycling centers, farmers' markets, and other sustainable resources.
+*   **Public Transportation:** Suggest public transportation options based on the user's location.
+*   **Walking/Biking Routes:** Suggest walking/biking routes.
 
-This design document provides a comprehensive overview of the user experience and user interface for the Clarity Finance mobile app. By following these guidelines, the mobile developer can create a user-friendly, secure, and engaging app that helps users take control of their finances.
+## 3. Technical Details and Considerations
+
+*   **Platform:** Native iOS and Android development for optimal performance.
+*   **Data Storage:** Secure cloud-based database to store user data and activity logs.
+*   **API:** RESTful API for communication between the mobile app and the backend services.
+*   **Security:** Implement robust security measures to protect user data and privacy.
+*   **Scalability:** Design the app and backend infrastructure to handle a large number of users and data.
+*   **Accessibility:** Ensure the app is accessible to users with disabilities.
+*   **Performance:** Optimize the app for performance to ensure a smooth and responsive user experience.
+*   **Offline Mode:** Implement offline mode to allow users to access some features even when they are not connected to the internet.
+
+This document provides a comprehensive design for the EcoTrack mobile app, covering both visual and functional aspects. It should serve as a guide for the mobile developers to create a user-friendly and engaging application that empowers individuals to reduce their carbon footprint and live more sustainably.

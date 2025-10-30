@@ -2,7 +2,6 @@ from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
-from crewai_tools import SerperDevTool
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
@@ -12,11 +11,9 @@ gemini_llm = LLM(
     temperature=0.7,
 )
 
-search_tool = SerperDevTool()
-
 @CrewBase
-class AppIdeaCrew():
-    """AppIdeaCrew crew"""
+class AppDesignCrew():
+    """AppDesignCrew crew"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -28,18 +25,17 @@ class AppIdeaCrew():
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def researcher(self) -> Agent:
-        return Agent(
-            config=self.agents_config['researcher'], # type: ignore[index]
-            verbose=True,
-            llm=gemini_llm,
-            tools=[search_tool]
-        )
-
-    @agent
     def business_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
+            verbose=True,
+            llm=gemini_llm
+        )
+
+    @agent
+    def uxui_designer(self) -> Agent:
+        return Agent(
+            config=self.agents_config['uxui_designer'], # type: ignore[index]
             verbose=True,
             llm=gemini_llm
         )
@@ -48,20 +44,22 @@ class AppIdeaCrew():
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def research_task(self) -> Task:
+    def analysis_task(self) -> Task:
         return Task(
-            config=self.tasks_config['research_task'], # type: ignore[index]
+            config=self.tasks_config['analysis_task'], # type: ignore[index]
+            #output_file='app_report.md'
         )
 
     @task
-    def app_ideas_task(self) -> Task:
+    def design_task(self) -> Task:
         return Task(
-            config=self.tasks_config['app_ideas_task'], # type: ignore[index]
+            config=self.tasks_config['design_task'], # type: ignore[index]
+            output_file='app_design.md'
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the AppIdeaCrew crew"""
+        """Creates the AppDesignCrew crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

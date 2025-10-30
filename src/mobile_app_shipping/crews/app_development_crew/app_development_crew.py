@@ -15,7 +15,7 @@ from pathlib import Path
 def get_project_file_path(filename: str) -> str:
     return str(Path(__file__).resolve().parents[3] / filename)
 
-file_read_tool = FileReadTool(file_path=get_project_file_path('app_design.md'))
+file_read_tool = FileReadTool(file_path='/Users/agustincompean/Desktop/CrewAI/Flows/mobile_app_shipping/app_design.md')
 
 gemini_llm = LLM(
     model="gemini/gemini-2.0-flash",

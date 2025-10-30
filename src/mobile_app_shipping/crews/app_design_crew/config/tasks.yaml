@@ -1,0 +1,35 @@
+analysis_task:
+  description: >
+    Select one of the three provided mobile app concepts and based on what seems to be more successful and
+    create a fully fledged report on the mobile app concept. Include the following sections:
+    - Title
+    - Introduction (Why you selected that app idea)
+    - Features (What features the app will have)
+    - Target Audience (Who is the app for)
+    - Business Model (How the app will make money)
+    - Marketing Strategy (How you will market the app)
+    - Roadmap (What features will be added in the future)
+    - Competitive Analysis (How the app will compare to the competition)
+    - Technical Requirements (What technology will be used)
+    - Conclusion (Summarize the app idea)
+  expected_output: >
+    A report on the roadmap and business strategy for a mobile app.
+  agent: business_analyst
+
+design_task:
+  description: >
+    Make a written design of the user experience and user interface of the
+    mobile app suggested by the business_analyst. Make sure to include color
+    palettes, style of the buttons, transitions, layout and all the details
+    the mobile_developer needs to develop the app. To design the app consider
+    the recommendations from the business_analyst such as target audience and
+    features.
+  expected_output: >
+    A complete written design document of how the mobile app should look and work.
+    On the document you should include the following sections:
+    - Visuals (Colors, layout, elements, etc.)
+    - Features (How the app should work; how to move from one screen to
+    the other, how to log in, how to remove elements, etc.)
+
+    Format the report as markdown without '```'
+  agent: uxui_designer
