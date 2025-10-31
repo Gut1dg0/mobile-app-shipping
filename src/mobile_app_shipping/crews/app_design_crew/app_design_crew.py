@@ -49,7 +49,7 @@ class AppDesignCrew():
     def analysis_task(self) -> Task:
         return Task(
             config=self.tasks_config['analysis_task'], # type: ignore[index]
-            output_file='app_roadmap.html'
+            output_file='app_roadmap.md'
         )
 
     @task

@@ -1,3 +1,4 @@
+import os
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
@@ -11,10 +12,12 @@ from pathlib import Path
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
-def get_project_file_path(filename: str) -> str:
-    return str(Path(__file__).resolve().parents[3] / filename)
+file_path = os.path.join(os.getcwd(), 'app_design.md')
+assert os.path.exists(file_path), "File not found!"
 
-file_read_tool = FileReadTool(file_path='/Users/agustincompean/Desktop/CrewAI/Flows/mobile_app_shipping/app_design.md')
+file_read_tool = FileReadTool(file_path=file_path)
+
+#file_read_tool = FileReadTool(file_path='/Users/agustincompean/Desktop/CrewAI/Flows/mobile_app_shipping/app_design.md')
 
 gemini_llm = LLM(
     model="gemini/gemini-2.0-flash",
@@ -50,7 +53,7 @@ class AppDevelopmentCrew():
             config=self.agents_config['mobile_developer'], # type: ignore[index]
             verbose=True,
             tools=[file_read_tool],
-            # llm=gemini_llm,
+            llm=anthropic_llm,
             allow_delegation=True,
         )
 
@@ -59,7 +62,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['qa_engineer'], # type: ignore[index]
             verbose=True,
-            # llm=gemini_llm,
+            llm=anthropic_llm,
         )
 
     @agent

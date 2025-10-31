@@ -5,8 +5,9 @@ import threading
 import webbrowser
 import re
 import json
+import ast
 from typing import List
-from flask import Flask, render_template, request
+from flask import Flask, render_template, send_from_directory, request
 from pydantic import BaseModel, Field
 from crewai.flow import Flow, listen, start
 from crewai.project import after_kickoff
@@ -48,21 +49,27 @@ class MobileAppFlow(Flow[MobileAppConcepts]):
         raw_result = result.raw_output if hasattr(result, "raw_output") else str(result)
         print("🧾 Raw LLM output from Crew 1:\n", raw_result[:500])
 
-        # remove markdown fences
-        cleaned = re.sub(r"```(?:json)?", "", raw_result).strip()
-
         parsed_concepts: List[str] = []
         try:
-            data = json.loads(cleaned)
+            # Try to extract JSON block
+            match = re.search(r"\{[\s\S]*?\}", raw_result)
+            if not match:
+                raise ValueError("No JSON object found in output")
+
+            json_block = match.group(0)
+            data = json.loads(json_block)
+
             if isinstance(data, dict) and "concepts" in data:
                 parsed_concepts = data["concepts"]
             else:
                 raise ValueError("JSON missing 'concepts' key")
-        except Exception as e:
-            print(f"⚠️ JSON parse failed: {e}\nFalling back to text parsing.")
-            lines = [re.sub(r"^[\s\-•\*\d\.\)]+", "", l).strip() for l in raw_result.splitlines()]
-            parsed_concepts = [l for l in lines if l][:3]
 
+        except Exception as e:
+            print(f"⚠️ JSON parse failed: {e}\nFalling back to line-by-line concept parsing.")
+            lines = [re.sub(r"^[\s\-•\*\d\.\)]+", "", l).strip() for l in raw_result.splitlines()]
+            parsed_concepts = [l for l in lines if len(l) > 10][:3]  # crude filter for quality
+
+        # Store parsed concepts
         self.state.concepts = parsed_concepts
         print(f"✅ Parsed {len(parsed_concepts)} concepts for web display.")
         return self.state
@@ -117,9 +124,21 @@ def select():
     return render_template(
         "result.html",
         concept=selected_concept,
-        design_result=design_result,
-        dev_result=dev_result,
     )
+
+# Serve images from ./src/static
+@app.route('/images/<path:filename>')
+def serve_image(filename):
+    return send_from_directory('src/static', filename)
+
+# Absolute path to project root (go 2 levels up from current file)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+
+# Serve markdown files from project root
+@app.route('/downloads/<path:filename>')
+def serve_download(filename):
+    print(f"📥 Download requested: {filename}")  # Optional debug
+    return send_from_directory(PROJECT_ROOT, filename, as_attachment=True)
 
 
 # ======================================

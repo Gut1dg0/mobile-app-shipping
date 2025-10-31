@@ -12,12 +12,8 @@ analysis_task:
     - Competitive Analysis (How the app will compare to the competition)
     - Technical Requirements (What technology will be used)
     - Conclusion (Summarize the app idea)
-
-    Your final answer MUST be the report in valid HTML (with <html>, <head>, <body> tags)
-    and must be saved into a file named "app_roadmap.html".
   expected_output: >
-    A report both in JSON format for the uxui_designer and in HTML format for later presentation
-    on the web.
+    A report both in JSON and markdown format.
   agent: business_analyst
 
 design_task:
