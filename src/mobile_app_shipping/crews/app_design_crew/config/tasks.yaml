@@ -24,6 +24,12 @@ design_task:
     the mobile_developer needs to develop the app. To design the app consider
     the recommendations from the business_analyst such as target audience and
     features.
+
+    Make sure the design includes what the following screens of the app will look like:
+    - Home screen
+    - Login screen
+    - Profile screen
+    - Settings screen
   expected_output: >
     A complete written design document of how the mobile app should look and work.
     On the document you should include the following sections:

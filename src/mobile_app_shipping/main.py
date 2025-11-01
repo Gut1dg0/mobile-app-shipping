@@ -126,10 +126,13 @@ def select():
         concept=selected_concept,
     )
 
+# Get absolute path to the real static folder
+STATIC_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../static'))
+
 # Serve images from ./src/static
 @app.route('/images/<path:filename>')
 def serve_image(filename):
-    return send_from_directory('src/static', filename)
+    return send_from_directory(STATIC_FOLDER, filename)
 
 # Absolute path to project root (go 2 levels up from current file)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))

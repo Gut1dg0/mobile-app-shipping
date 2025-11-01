@@ -62,7 +62,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['qa_engineer'], # type: ignore[index]
             verbose=True,
-            llm=anthropic_llm,
+            llm=gemini_llm,
         )
 
     @agent
