@@ -16,7 +16,7 @@ def stable_diffusion_gallery(prompt: str) -> str:
     if not HUGGINGFACE_API_KEY:
         return "❌ Missing HUGGINGFACE_API_KEY environment variable."
 
-    static_dir = Path(__file__).resolve().parents[2] / "static"
+    static_dir = Path(__file__).resolve().parents[1] / "static"
     os.makedirs(static_dir, exist_ok=True)
 
     screens = ["Home", "Profile", "Settings", "Login"]

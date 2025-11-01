@@ -48,8 +48,6 @@ image_mockup_task:
 
     Use a prompt describing the app’s design clearly, such as:
     “A modern mobile app interface for [concept name], featuring a sleek layout and intuitive design.”
-
-    Save the images as 'app_mockup_[screen number].png'
   expected_output: >
     Several mockup images of the screens of the mobile app design.
   agent: uxui_designer
