@@ -21,6 +21,7 @@ build-backend = "hatchling.build"
 
 [tool.crewai]
 type = "flow"
+entry = "mobile_app_shipping.main:kickoff"
 
 [tool.uv]
 required-environments = ["sys_platform == 'darwin' and platform_machine == 'x86_64'"]
