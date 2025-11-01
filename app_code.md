@@ -1,10 +1,10 @@
 ```markdown
-# SoundSleep App - Expo MVP Code
+# Stable Diffusion Gallery - Expo Mobile App MVP
 
 ## package.json
 ```json
 {
-  "name": "soundsleep-app",
+  "name": "stable-diffusion-gallery",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -16,792 +16,17 @@
   "dependencies": {
     "expo": "~49.0.0",
     "expo-status-bar": "~1.6.0",
-    "expo-font": "~11.4.0",
-    "expo-secure-store": "~12.3.1",
-    "expo-image": "~1.3.5",
     "react": "18.2.0",
     "react-native": "0.72.6",
-    "react-native-safe-area-context": "4.6.3",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/bottom-tabs": "^6.5.11",
     "react-native-screens": "~3.22.0",
-    "@react-navigation/native": "^6.1.7",
-    "@react-navigation/native-stack": "^6.9.13",
-    "@react-navigation/bottom-tabs": "^6.5.8",
-    "react-native-vector-icons": "^10.0.0",
-    "@expo/vector-icons": "^13.0.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0"
-  },
-  "private": true
-}
-```
-
-## App.js
-```javascript
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
-import * as Font from 'expo-font';
-import * as SecureStore from 'expo-secure-store';
-import { View, ActivityIndicator } from 'react-native';
-
-import LoginScreen from './src/screens/LoginScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
-import MainTabNavigator from './src/navigation/MainTabNavigator';
-import { colors } from './src/constants/colors';
-
-const Stack = createNativeStackNavigator();
-
-export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [userToken, setUserToken] = useState(null);
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    loadResources();
-  }, []);
-
-  const loadResources = async () => {
-    try {
-      // Load fonts
-      await Font.loadAsync({
-        'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
-        'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
-      });
-      setFontsLoaded(true);
-
-      // Check for stored token
-      const token = await SecureStore.getItemAsync('userToken');
-      if (token) {
-        setUserToken(token);
-      }
-    } catch (error) {
-      console.error('Error loading resources:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const authContext = {
-    signIn: async (token) => {
-      try {
-        await SecureStore.setItemAsync('userToken', token);
-        setUserToken(token);
-      } catch (error) {
-        console.error('Error saving token:', error);
-        throw error;
-      }
-    },
-    signOut: async () => {
-      try {
-        await SecureStore.deleteItemAsync('userToken');
-        setUserToken(null);
-      } catch (error) {
-        console.error('Error removing token:', error);
-      }
-    },
-  };
-
-  if (isLoading || !fontsLoaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
-
-  return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <StatusBar style="dark" backgroundColor={colors.background} />
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {userToken == null ? (
-            <>
-              <Stack.Screen name="Login">
-                {props => <LoginScreen {...props} authContext={authContext} />}
-              </Stack.Screen>
-              <Stack.Screen name="SignUp">
-                {props => <SignUpScreen {...props} authContext={authContext} />}
-              </Stack.Screen>
-            </>
-          ) : (
-            <Stack.Screen name="Main">
-              {props => <MainTabNavigator {...props} authContext={authContext} />}
-            </Stack.Screen>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaProvider>
-  );
-}
-```
-
-## src/constants/colors.js
-```javascript
-export const colors = {
-  primary: '#E6E6FA', // Soft Lavender
-  secondary: '#B0E2FF', // Light Teal
-  accent: '#F5F5DC', // Warm Sand
-  textPrimary: '#333333', // Dark Gray
-  textSecondary: '#777777', // Gray
-  background: '#FAFAFA', // Off-White
-  white: '#FFFFFF',
-  error: '#FF6B6B',
-  success: '#4ECDC4',
-};
-```
-
-## src/constants/typography.js
-```javascript
-import { Platform } from 'react-native';
-
-export const typography = {
-  heading: {
-    fontFamily: Platform.select({
-      ios: 'Montserrat-SemiBold',
-      android: 'Montserrat-SemiBold',
-      default: 'System',
-    }),
-    fontSize: 24,
-  },
-  subheading: {
-    fontFamily: Platform.select({
-      ios: 'Montserrat-SemiBold',
-      android: 'Montserrat-SemiBold',
-      default: 'System',
-    }),
-    fontSize: 18,
-  },
-  body: {
-    fontFamily: Platform.select({
-      ios: 'OpenSans-Regular',
-      android: 'OpenSans-Regular',
-      default: 'System',
-    }),
-    fontSize: 16,
-  },
-  caption: {
-    fontFamily: Platform.select({
-      ios: 'OpenSans-Regular',
-      android: 'OpenSans-Regular',
-      default: 'System',
-    }),
-    fontSize: 14,
-  },
-};
-```
-
-## src/screens/LoginScreen.js
-```javascript
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../constants/colors';
-import { typography } from '../constants/typography';
-import { validateEmail, validatePassword } from '../utils/validation';
-
-const LoginScreen = ({ navigation, authContext }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-
-  const handleLogin = async () => {
-    // Validate inputs
-    const newErrors = {};
-    
-    if (!validateEmail(email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    
-    if (!validatePassword(password)) {
-      newErrors.password = 'Password must be at least 8 characters';
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setLoading(true);
-    setErrors({});
-
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // For MVP, we'll simulate successful login
-      const mockToken = 'mock_jwt_token_' + Date.now();
-      await authContext.signIn(mockToken);
-    } catch (error) {
-      Alert.alert('Login Error', 'Failed to login. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-      >
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.logoContainer}>
-            <Text style={styles.logo}>SoundSleep</Text>
-            <Text style={styles.tagline}>Your path to better rest</Text>
-          </View>
-
-          <View style={styles.formContainer}>
-            <Text style={styles.title}>Welcome Back</Text>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={[styles.input, errors.email && styles.inputError]}
-                placeholder="Enter your email"
-                placeholderTextColor={colors.textSecondary}
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                accessibilityLabel="Email input"
-                accessibilityHint="Enter your email address to login"
-              />
-              {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={[styles.input, errors.password && styles.inputError]}
-                placeholder="Enter your password"
-                placeholderTextColor={colors.textSecondary}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-                accessibilityLabel="Password input"
-                accessibilityHint="Enter your password to login"
-              />
-              {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
-            </View>
-
-            <TouchableOpacity
-              style={[styles.button, loading && styles.buttonDisabled]}
-              onPress={handleLogin}
-              disabled={loading}
-              accessibilityRole="button"
-              accessibilityLabel="Login button"
-            >
-              {loading ? (
-                <ActivityIndicator color={colors.white} />
-              ) : (
-                <Text style={styles.buttonText}>Login</Text>
-              )}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.linkContainer}
-              onPress={() => navigation.navigate('SignUp')}
-              accessibilityRole="button"
-              accessibilityLabel="Sign up link"
-            >
-              <Text style={styles.linkText}>
-                Don't have an account? <Text style={styles.linkTextBold}>Sign Up</Text>
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.linkContainer}
-              onPress={() => Alert.alert('Forgot Password', 'Password reset functionality coming soon!')}
-              accessibilityRole="button"
-              accessibilityLabel="Forgot password link"
-            >
-              <Text style={styles.forgotText}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  keyboardView: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 40,
-    marginTop: 40,
-  },
-  logo: {
-    ...typography.heading,
-    fontSize: 36,
-    color: colors.primary,
-    marginBottom: 8,
-  },
-  tagline: {
-    ...typography.caption,
-    color: colors.textSecondary,
-  },
-  formContainer: {
-    flex: 1,
-  },
-  title: {
-    ...typography.heading,
-    color: colors.textPrimary,
-    marginBottom: 30,
-    textAlign: 'center',
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    ...typography.body,
-    color: colors.textPrimary,
-    marginBottom: 8,
-  },
-  input: {
-    ...typography.body,
-    backgroundColor: colors.white,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    color: colors.textPrimary,
-  },
-  inputError: {
-    borderColor: colors.error,
-  },
-  errorText: {
-    ...typography.caption,
-    color: colors.error,
-    marginTop: 4,
-  },
-  button: {
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginTop: 20,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  buttonDisabled: {
-    opacity: 0.7,
-  },
-  buttonText: {
-    ...typography.subheading,
-    color: colors.white,
-  },
-  linkContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  linkText: {
-    ...typography.body,
-    color: colors.textSecondary,
-  },
-  linkTextBold: {
-    ...typography.body,
-    color: colors.primary,
-    fontWeight: '600',
-  },
-  forgotText: {
-    ...typography.body,
-    color: colors.secondary,
-  },
-});
-
-export default LoginScreen;
-```
-
-## src/screens/SignUpScreen.js
-```javascript
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../constants/colors';
-import { typography } from '../constants/typography';
-import { validateEmail, validatePassword, validateName } from '../utils/validation';
-
-const SignUpScreen = ({ navigation, authContext }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-
-  const handleSignUp = async () => {
-    const newErrors = {};
-    
-    if (!validateName(name)) {
-      newErrors.name = 'Name must be at least 2 characters';
-    }
-
-----------
-
-# QA Report: SoundSleep App - Expo MVP Code Analysis
-
-## Executive Summary
-After thoroughly analyzing the SoundSleep App Expo MVP code, I've identified several critical bugs, potential issues, and areas for improvement. While the overall structure is good, there are important issues that need to be addressed before the app can be considered production-ready.
-
-## 🔴 Critical Issues
-
-### 1. **Incomplete SignUpScreen Implementation**
-**File:** `src/screens/SignUpScreen.js`
-**Issue:** The code is truncated and incomplete. The `handleSignUp` function is not fully implemented, and the component doesn't return any JSX.
-**Solution:** Complete the implementation:
-```javascript
-// Add after line with validateName check
-if (!validateEmail(email)) {
-  newErrors.email = 'Please enter a valid email address';
-}
-
-if (!validatePassword(password)) {
-  newErrors.password = 'Password must be at least 8 characters';
-}
-
-if (password !== confirmPassword) {
-  newErrors.confirmPassword = 'Passwords do not match';
-}
-
-if (Object.keys(newErrors).length > 0) {
-  setErrors(newErrors);
-  return;
-}
-
-setLoading(true);
-setErrors({});
-
-try {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  const mockToken = 'mock_jwt_token_' + Date.now();
-  await authContext.signIn(mockToken);
-} catch (error) {
-  Alert.alert('Sign Up Error', 'Failed to create account. Please try again.');
-} finally {
-  setLoading(false);
-}
-```
-
-### 2. **Missing Validation Utils Module**
-**Files Referenced:** `src/utils/validation.js`
-**Issue:** The validation functions are imported but the file is not provided.
-**Solution:** Create the validation utils file:
-```javascript
-// src/utils/validation.js
-export const validateEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-};
-
-export const validatePassword = (password) => {
-  return password && password.length >= 8;
-};
-
-export const validateName = (name) => {
-  return name && name.trim().length >= 2;
-};
-```
-
-### 3. **Missing MainTabNavigator Component**
-**File Referenced:** `src/navigation/MainTabNavigator.js`
-**Issue:** The MainTabNavigator is imported but not provided.
-**Solution:** Create the navigation component with proper tab structure.
-
-### 4. **Missing Font Files**
-**Files Referenced:** 
-- `./assets/fonts/Montserrat-SemiBold.ttf`
-- `./assets/fonts/OpenSans-Regular.ttf`
-**Issue:** Font files are referenced but not included, which will cause the app to crash on startup.
-**Solution:** Either include the font files or implement a fallback mechanism:
-```javascript
-const loadResources = async () => {
-  try {
-    await Font.loadAsync({
-      'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
-      'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
-    });
-    setFontsLoaded(true);
-  } catch (error) {
-    console.warn('Fonts not available, using system fonts');
-    setFontsLoaded(true); // Continue with system fonts
-  }
-  // ... rest of the code
-};
-```
-
-## 🟡 Medium Priority Issues
-
-### 5. **AuthContext Not Properly Implemented**
-**File:** `App.js`
-**Issue:** AuthContext is created as a plain object but not using React Context API properly.
-**Solution:** Implement proper React Context:
-```javascript
-import React, { createContext, useContext } from 'react';
-
-export const AuthContext = createContext(null);
-
-// In App.js, wrap the NavigationContainer:
-<AuthContext.Provider value={authContext}>
-  <NavigationContainer>
-    {/* ... */}
-  </NavigationContainer>
-</AuthContext.Provider>
-```
-
-### 6. **No Error Boundary Implementation**
-**Issue:** No error boundary to catch runtime errors.
-**Solution:** Add an error boundary component:
-```javascript
-class ErrorBoundary extends React.Component {
-  state = { hasError: false };
-  
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-  
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
-  }
-  
-  render() {
-    if (this.state.hasError) {
-      return <Text>Something went wrong. Please restart the app.</Text>;
-    }
-    return this.props.children;
-  }
-}
-```
-
-### 7. **Insecure Token Storage Pattern**
-**File:** `App.js`
-**Issue:** While SecureStore is used, there's no token validation or expiration handling.
-**Solution:** Implement token validation:
-```javascript
-const validateToken = (token) => {
-  // Add token structure validation
-  if (!token || typeof token !== 'string') return false;
-  // Add expiration check if token contains timestamp
-  return true;
-};
-
-const loadResources = async () => {
-  const token = await SecureStore.getItemAsync('userToken');
-  if (token && validateToken(token)) {
-    setUserToken(token);
-  } else if (token) {
-    await SecureStore.deleteItemAsync('userToken');
-  }
-};
-```
-
-## 🟢 Minor Issues & Improvements
-
-### 8. **Missing Accessibility Labels**
-**Issue:** Some interactive elements lack proper accessibility attributes.
-**Solution:** Add accessibility labels to all touchable elements and ensure proper screen reader support.
-
-### 9. **No Network Status Handling**
-**Issue:** No handling for offline scenarios.
-**Solution:** Implement network status monitoring using NetInfo:
-```javascript
-import NetInfo from '@react-native-community/netinfo';
-
-useEffect(() => {
-  const unsubscribe = NetInfo.addEventListener(state => {
-    if (!state.isConnected) {
-      Alert.alert('No Internet', 'Please check your connection');
-    }
-  });
-  return unsubscribe;
-}, []);
-```
-
-### 10. **Platform-Specific Style Issues**
-**File:** `src/screens/LoginScreen.js`
-**Issue:** `elevation` property only works on Android, iOS shadow properties might not render correctly.
-**Solution:** Create platform-specific shadow styles:
-```javascript
-const shadowStyle = Platform.select({
-  ios: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  android: {
-    elevation: 2,
-  },
-});
-```
-
-### 11. **Memory Leak Potential**
-**File:** `App.js`
-**Issue:** Async operations in useEffect without cleanup.
-**Solution:** Add cleanup and cancellation:
-```javascript
-useEffect(() => {
-  let isMounted = true;
-  
-  const loadResources = async () => {
-    try {
-      // ... loading logic
-      if (isMounted) {
-        setFontsLoaded(true);
-        setUserToken(token);
-      }
-    } catch (error) {
-      if (isMounted) {
-        console.error('Error:', error);
-      }
-    }
-  };
-  
-  loadResources();
-  
-  return () => {
-    isMounted = false;
-  };
-}, []);
-```
-
-### 12. **Input Validation Timing**
-**Files:** `LoginScreen.js`, `SignUpScreen.js`
-**Issue:** Validation only occurs on submit, not real-time.
-**Solution:** Add real-time validation with debouncing:
-```javascript
-useEffect(() => {
-  const timer = setTimeout(() => {
-    if (email && !validateEmail(email)) {
-      setErrors(prev => ({ ...prev, email: 'Invalid email format' }));
-    } else {
-      setErrors(prev => ({ ...prev, email: null }));
-    }
-  }, 500);
-  
-  return () => clearTimeout(timer);
-}, [email]);
-```
-
-## 📋 Performance Recommendations
-
-1. **Implement React.memo** for components that don't need frequent re-renders
-2. **Use useCallback and useMemo** for expensive operations and callback functions
-3. **Implement lazy loading** for screens using React.lazy()
-4. **Add image optimization** using expo-image with proper caching
-5. **Implement proper list virtualization** if lists are added later
-
-## 🔒 Security Recommendations
-
-1. **Implement proper API authentication** instead of mock tokens
-2. **Add rate limiting** for login attempts
-3. **Implement certificate pinning** for production
-4. **Add input sanitization** beyond basic validation
-5. **Implement proper session management** with token refresh
-
-## 📱 Device Compatibility Issues
-
-1. **Test on different screen sizes** - Add responsive design patterns
-2. **Handle notch/safe areas properly** - Current SafeAreaView might not cover all cases
-3. **Test keyboard behavior** on different devices
-4. **Add tablet support considerations**
-
-## Conclusion
-
-The SoundSleep App has a solid foundation but requires immediate attention to the critical issues listed above, particularly:
-- Completing the SignUpScreen implementation
-- Adding missing files (validation utils, navigation, fonts)
-- Implementing proper error handling and boundaries
-- Fixing the AuthContext implementation
-
-Once these issues are resolved, the app should undergo thorough testing on both iOS and Android devices before being considered ready for production deployment.
-
-**Priority Action Items:**
-1. Complete all missing implementations (Critical)
-2. Add proper error handling and validation (Critical)
-3. Implement security best practices (High)
-4. Add performance optimizations (Medium)
-5. Enhance accessibility features (Medium)
-
-The mobile_developer should address these issues in order of priority to ensure a stable, secure, and user-friendly application.
-
-----------
-
-# SoundSleep App - Refactored Expo MVP Code
-
-## package.json
-```json
-{
-  "name": "soundsleep-app",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "dependencies": {
-    "expo": "~49.0.0",
-    "expo-status-bar": "~1.6.0",
-    "expo-font": "~11.4.0",
-    "expo-secure-store": "~12.3.1",
-    "expo-image": "~1.3.5",
-    "react": "18.2.0",
-    "react-native": "0.72.6",
     "react-native-safe-area-context": "4.6.3",
-    "react-native-screens": "~3.22.0",
-    "@react-navigation/native": "^6.1.7",
-    "@react-navigation/native-stack": "^6.9.13",
-    "@react-navigation/bottom-tabs": "^6.5.8",
+    "@react-native-async-storage/async-storage": "1.18.2",
+    "expo-sharing": "~11.5.0",
+    "react-native-uuid": "^2.0.1",
     "@expo/vector-icons": "^13.0.0",
-    "@react-native-community/netinfo": "9.3.10"
+    "expo-haptics": "~12.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
@@ -814,195 +39,705 @@ The mobile_developer should address these issues in order of priority to ensure 
 ```javascript
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import * as Font from 'expo-font';
-import * as SecureStore from 'expo-secure-store';
-import NetInfo from '@react-native-community/netinfo';
-import { View, ActivityIndicator, Text, Alert } from 'react-native';
+import { Alert, View, Text, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
+import GenerateScreen from './screens/GenerateScreen';
+import GalleryScreen from './screens/GalleryScreen';
+import ErrorBoundary from './components/ErrorBoundary';
 
-import LoginScreen from './src/screens/LoginScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
-import MainTabNavigator from './src/navigation/MainTabNavigator';
-import ErrorBoundary from './src/components/ErrorBoundary';
-import { colors } from './src/constants/colors';
+// Gallery Context
+const GalleryContext = createContext();
 
-const Stack = createNativeStackNavigator();
-
-// Create Auth Context
-export const AuthContext = createContext(null);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
+export const useGallery = () => {
+  const context = useContext(GalleryContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error('useGallery must be used within GalleryProvider');
   }
   return context;
 };
 
-// Token validation function
-const validateToken = (token) => {
-  if (!token || typeof token !== 'string') return false;
-  // Add more sophisticated token validation here
-  // For MVP, we just check if it exists and is a string
-  return true;
-};
-
-export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [userToken, setUserToken] = useState(null);
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [isConnected, setIsConnected] = useState(true);
+const GalleryProvider = ({ children }) => {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const loadResources = async () => {
-      try {
-        // Try to load fonts with fallback
-        try {
-          await Font.loadAsync({
-            'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
-            'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
-          });
-          if (isMounted) setFontsLoaded(true);
-        } catch (fontError) {
-          console.warn('Fonts not available, using system fonts');
-          if (isMounted) setFontsLoaded(true); // Continue with system fonts
-        }
-
-        // Check for stored token with validation
-        const token = await SecureStore.getItemAsync('userToken');
-        if (token && validateToken(token)) {
-          if (isMounted) setUserToken(token);
-        } else if (token) {
-          // Invalid token, remove it
-          await SecureStore.deleteItemAsync('userToken');
-        }
-      } catch (error) {
-        console.error('Error loading resources:', error);
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    loadResources();
-
-    // Network status monitoring
-    const unsubscribe = NetInfo.addEventListener(state => {
-      if (isMounted) {
-        setIsConnected(state.isConnected);
-        if (!state.isConnected) {
-          Alert.alert('No Internet', 'Please check your connection');
-        }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-      unsubscribe();
-    };
+    loadImages();
   }, []);
 
-  const authContext = {
-    signIn: async (token) => {
-      try {
-        if (!validateToken(token)) {
-          throw new Error('Invalid token format');
-        }
-        await SecureStore.setItemAsync('userToken', token);
-        setUserToken(token);
-      } catch (error) {
-        console.error('Error saving token:', error);
-        throw error;
+  const loadImages = async () => {
+    try {
+      setLoading(true);
+      const stored = await AsyncStorage.getItem('gallery_images');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Validate data structure
+        const validImages = parsed.filter(img => 
+          img && img.id && img.uri && img.prompt && img.createdAt
+        );
+        setImages(validImages);
       }
-    },
-    signOut: async () => {
-      try {
-        await SecureStore.deleteItemAsync('userToken');
-        setUserToken(null);
-      } catch (error) {
-        console.error('Error removing token:', error);
-      }
-    },
-    userToken,
-    isConnected,
+    } catch (error) {
+      console.error('Error loading images:', error);
+      Alert.alert('Error', 'Failed to load gallery images');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
+  const saveImage = async (imageData) => {
+    try {
+      // Check storage quota
+      const keys = await AsyncStorage.getAllKeys();
+      if (keys.length > 100) {
+        Alert.alert(
+          'Storage Warning',
+          'You have many saved images. Consider deleting some old ones.',
+          [{ text: 'OK' }]
+        );
+      }
 
+      const newImages = [imageData, ...images];
+      await AsyncStorage.setItem('gallery_images', JSON.stringify(newImages));
+      setImages(newImages);
+      return true;
+    } catch (error) {
+      if (error.code === 'QuotaExceededError') {
+        Alert.alert('Storage Full', 'Device storage is full. Please delete some images.');
+      } else {
+        Alert.alert('Error', 'Failed to save image');
+      }
+      console.error('Error saving image:', error);
+      return false;
+    }
+  };
+
+  const deleteImage = async (imageId) => {
+    try {
+      const newImages = images.filter(img => img.id !== imageId);
+      await AsyncStorage.setItem('gallery_images', JSON.stringify(newImages));
+      setImages(newImages);
+      return true;
+    } catch (error) {
+      Alert.alert('Error', 'Failed to delete image');
+      console.error('Error deleting image:', error);
+      return false;
+    }
+  };
+
+  return (
+    <GalleryContext.Provider value={{ 
+      images, 
+      loading, 
+      saveImage, 
+      deleteImage, 
+      refreshGallery: loadImages 
+    }}>
+      {children}
+    </GalleryContext.Provider>
+  );
+};
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
   return (
     <ErrorBoundary>
       <SafeAreaProvider>
-        <AuthContext.Provider value={authContext}>
+        <GalleryProvider>
           <NavigationContainer>
-            <StatusBar style="dark" backgroundColor={colors.background} />
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              {userToken == null ? (
-                <>
-                  <Stack.Screen name="Login" component={LoginScreen} />
-                  <Stack.Screen name="SignUp" component={SignUpScreen} />
-                </>
-              ) : (
-                <Stack.Screen name="Main" component={MainTabNavigator} />
-              )}
-            </Stack.Navigator>
+            <StatusBar style="auto" />
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
+                  if (route.name === 'Generate') {
+                    iconName = focused ? 'create' : 'create-outline';
+                  } else if (route.name === 'Gallery') {
+                    iconName = focused ? 'images' : 'images-outline';
+                  }
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: '#6366F1',
+                tabBarInactiveTintColor: '#9CA3AF',
+                headerStyle: {
+                  backgroundColor: '#6366F1',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                  fontWeight: 'bold',
+                },
+              })}
+            >
+              <Tab.Screen 
+                name="Generate" 
+                component={GenerateScreen}
+                options={{ title: 'AI Image Generator' }}
+              />
+              <Tab.Screen 
+                name="Gallery" 
+                component={GalleryScreen}
+                options={{ title: 'My Gallery' }}
+              />
+            </Tab.Navigator>
           </NavigationContainer>
-        </AuthContext.Provider>
+        </GalleryProvider>
       </SafeAreaProvider>
     </ErrorBoundary>
   );
 }
 ```
 
-## src/components/ErrorBoundary.js
+## screens/GenerateScreen.js
 ```javascript
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { colors } from '../constants/colors';
-import { typography } from '../constants/typography';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
+import uuid from 'react-native-uuid';
+import { useGallery } from '../App';
+import { sanitizePrompt, generateMockImage } from '../utils/helpers';
 
-class ErrorBoundary extends React.Component {
+const GenerateScreen = () => {
+  const [prompt, setPrompt] = useState('');
+  const [generatedImage, setGeneratedImage] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const { saveImage } = useGallery();
+
+  const handleGenerate = async () => {
+    // Validate prompt
+    if (!prompt.trim()) {
+      Alert.alert('Error', 'Please enter a prompt to generate an image');
+      return;
+    }
+
+    if (prompt.trim().length < 3) {
+      Alert.alert('Error', 'Prompt must be at least 3 characters long');
+      return;
+    }
+
+    Keyboard.dismiss();
+    setIsGenerating(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    try {
+      // Sanitize prompt
+      const cleanPrompt = sanitizePrompt(prompt);
+      
+      // Mock API call with delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Generate mock image
+      const mockImageUri = generateMockImage(cleanPrompt);
+      
+      setGeneratedImage({
+        uri: mockImageUri,
+        prompt: cleanPrompt,
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Failed to generate image. Please try again.');
+      console.error('Generation error:', error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleSaveToGallery = async () => {
+    if (!generatedImage) return;
+
+    setIsSaving(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    const imageData = {
+      id: uuid.v4(),
+      uri: generatedImage.uri,
+      prompt: generatedImage.prompt,
+      createdAt: new Date().toISOString(),
+    };
+
+    const saved = await saveImage(imageData);
+    
+    if (saved) {
+      Alert.alert('Success', 'Image saved to gallery!');
+      setGeneratedImage(null);
+      setPrompt('');
+    }
+    
+    setIsSaving(false);
+  };
+
+  return (
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
+        <ScrollView 
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.inputSection}>
+            <Text style={styles.label}>Enter your prompt</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="A beautiful sunset over mountains..."
+              placeholderTextColor="#9CA3AF"
+              value={prompt}
+              onChangeText={setPrompt}
+              multiline
+              maxLength={200}
+              returnKeyType="done"
+              blurOnSubmit={true}
+              accessible={true}
+              accessibilityLabel="Prompt input field"
+              accessibilityHint="Enter a description of the image you want to generate"
+            />
+            <Text style={styles.charCount}>{prompt.length}/200</Text>
+            
+            <TouchableOpacity
+              style={[styles.generateButton, isGenerating && styles.buttonDisabled]}
+              onPress={handleGenerate}
+              disabled={isGenerating}
+              accessible={true}
+              accessibilityLabel="Generate image button"
+              accessibilityHint="Tap to generate an image based on your prompt"
+              accessibilityRole="button"
+            >
+              {isGenerating ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Generate Image</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          {isGenerating && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#6366F1" />
+              <Text style={styles.loadingText}>Creating your masterpiece...</Text>
+            </View>
+          )}
+
+          {generatedImage && !isGenerating && (
+            <View style={styles.imageContainer}>
+              <Image 
+                source={{ uri: generatedImage.uri }} 
+                style={styles.generatedImage}
+                resizeMode="cover"
+                accessible={true}
+                accessibilityLabel="Generated image"
+              />
+              <Text style={styles.promptText} numberOfLines={2}>
+                "{generatedImage.prompt}"
+              </Text>
+              
+              <View style={styles.actionButtons}>
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.regenerateButton]}
+                  onPress={handleGenerate}
+                  accessible={true}
+                  accessibilityLabel="Regenerate image"
+                  accessibilityRole="button"
+                >
+                  <Text style={styles.actionButtonText}>Regenerate</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.saveButton, isSaving && styles.buttonDisabled]}
+                  onPress={handleSaveToGallery}
+                  disabled={isSaving}
+                  accessible={true}
+                  accessibilityLabel="Save to gallery"
+                  accessibilityRole="button"
+                >
+                  {isSaving ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={styles.saveButtonText}>Save to Gallery</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    padding: 20,
+  },
+  inputSection: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111827',
+    marginBottom: 10,
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 15,
+    fontSize: 16,
+    color: '#111827',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    minHeight: 100,
+    textAlignVertical: 'top',
+  },
+  charCount: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    textAlign: 'right',
+    marginTop: 5,
+  },
+  generateButton: {
+    backgroundColor: '#6366F1',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 15,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  loadingText: {
+    marginTop: 15,
+    fontSize: 16,
+    color: '#6B7280',
+  },
+  imageContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  generatedImage: {
+    width: '100%',
+    height: 300,
+    borderRadius: 12,
+    marginBottom: 15,
+  },
+  promptText: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  actionButton: {
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    minWidth: 120,
+    alignItems: 'center',
+  },
+  regenerateButton: {
+    backgroundColor: '#F3F4F6',
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+  },
+  saveButton: {
+    backgroundColor: '#10B981',
+  },
+  actionButtonText: {
+    color: '#374151',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  saveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
+
+export default GenerateScreen;
+```
+
+## screens/GalleryScreen.js
+```javascript
+import React, { useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Alert,
+  Share,
+  ActivityIndicator
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Sharing from 'expo-sharing';
+import * as Haptics from 'expo-haptics';
+import { useGallery } from '../App';
+import { formatDate } from '../utils/helpers';
+
+const GalleryScreen = () => {
+  const { images, loading, deleteImage, refreshGallery } = useGallery();
+
+  const handleDelete = useCallback(async (id) => {
+    Alert.alert(
+      'Delete Image',
+      'Are you sure you want to delete this image?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: async () => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            const deleted = await deleteImage(id);
+            if (!deleted) {
+              Alert.alert('Error', 'Failed to delete image');
+            }
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: false }
+    );
+  }, [deleteImage]);
+
+  const handleShare = useCallback(async (uri) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    try {
+      await Sharing.shareAsync(uri);
+    } catch (error) {
+      Alert.alert('Error', 'Could not share image.');
+      console.error('Sharing error:', error);
+    }
+  }, []);
+
+  const renderItem = useCallback(({ item }) => (
+    <View style={styles.imageContainer}>
+      <Image source={{ uri: item.uri }} style={styles.image} />
+      <View style={styles.imageInfo}>
+        <Text style={styles.promptText} numberOfLines={2}>
+          {item.prompt}
+        </Text>
+        <Text style={styles.dateText}>{formatDate(item.createdAt)}</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.shareButton} onPress={() => handleShare(item.uri)}>
+          <Text style={styles.buttonText}>Share</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
+          <Text style={styles.buttonText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  ), [handleDelete, handleShare]);
+
+  const keyExtractor = useCallback((item) => item.id, []);
+
+  return (
+    <SafeAreaView style={styles.container} edges={['bottom']}>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#6366F1" />
+          <Text style={styles.loadingText}>Loading your gallery...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={images}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No images in your gallery yet.</Text>
+              <TouchableOpacity style={styles.refreshButton} onPress={refreshGallery}>
+                <Text style={styles.buttonText}>Refresh Gallery</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#6B7280',
+  },
+  listContent: {
+    padding: 16,
+  },
+  imageContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginBottom: 16,
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  imageInfo: {
+    marginBottom: 10,
+  },
+  promptText: {
+    fontSize: 16,
+    color: '#111827',
+    fontWeight: '500',
+    marginBottom: 5,
+  },
+  dateText: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 10,
+  },
+  shareButton: {
+    backgroundColor: '#3B82F6',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  deleteButton: {
+    backgroundColor: '#EF4444',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#6B7280',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  refreshButton: {
+    backgroundColor: '#6366F1',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+});
+
+export default GalleryScreen;
+```
+
+## components/ErrorBoundary.js
+```javascript
+import React, { Component } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, error };
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    // You can also log the error to an error reporting service
+    console.error('Caught error:', error, errorInfo);
   }
-
-  handleReset = () => {
-    this.setState({ hasError: false, error: null });
-  };
 
   render() {
     if (this.state.hasError) {
+      // You can render any custom fallback UI
       return (
         <View style={styles.container}>
-          <Text style={styles.title}>Oops! Something went wrong</Text>
-          <Text style={styles.message}>
-            We're sorry for the inconvenience. Please try restarting the app.
-          </Text>
-          <TouchableOpacity style={styles.button} onPress={this.handleReset}>
-            <Text style={styles.buttonText}>Try Again</Text>
-          </TouchableOpacity>
+          <Text style={styles.errorText}>Something went wrong.</Text>
+          <Text style={styles.detailsText}>Please restart the app.</Text>
         </View>
       );
     }
 
-    return this.props.children;
+    return this.props.children; 
   }
 }
 
@@ -1011,38 +746,306 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
     padding: 20,
-    backgroundColor: colors.background,
   },
-  title: {
-    ...typography.heading,
-    color: colors.textPrimary,
+  errorText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#EF4444',
     marginBottom: 10,
     textAlign: 'center',
   },
-  message: {
-    ...typography.body,
-    color: colors.textSecondary,
+  detailsText: {
+    fontSize: 16,
+    color: '#6B7280',
     textAlign: 'center',
-    marginBottom: 30,
-  },
-  button: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 30,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  buttonText: {
-    ...typography.body,
-    color: colors.white,
-    fontWeight: '600',
   },
 });
 
 export default ErrorBoundary;
 ```
 
-## src/utils/validation.js
+## utils/helpers.js
 ```javascript
-export const validateEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\
+// utils/helpers.js
+export const sanitizePrompt = (prompt) => {
+  // Remove potentially harmful characters
+  let cleanPrompt = prompt.replace(/[<>]/g, '');
+  
+  // Trim whitespace
+  cleanPrompt = cleanPrompt.trim();
+  
+  return cleanPrompt;
+};
+
+export const generateMockImage = (prompt) => {
+  // Create a mock image URI based on the prompt
+  const encodedPrompt = encodeURIComponent(prompt);
+  return `https://source.unsplash.com/400x300/?${encodedPrompt}`;
+};
+
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+  return date.toLocaleDateString(undefined, options);
+};
+
+export const validatePrompt = (text) => {
+  // Remove potentially harmful characters
+  const cleaned = text.replace(/[<>]/g, '');
+  // Check for minimum meaningful content
+  const words = cleaned.trim().split(/\s+/);
+  return words.length >= 2 && words.every(w => w.length > 0);
+};
+```
+
+----------
+
+# QA Report: Stable Diffusion Gallery - Expo Mobile App
+
+## Executive Summary
+After thorough analysis of the Stable Diffusion Gallery Expo mobile app code, I've identified several critical issues, potential bugs, and areas for improvement. While the overall architecture is solid, there are important issues that need to be addressed before the app can be considered production-ready.
+
+## Critical Issues Found
+
+### 1. **Incomplete Code Files**
+**Issue:** The `GenerateScreen.js` file is truncated and incomplete. The styles object is cut off, missing critical style definitions.
+**Impact:** The app will crash immediately when trying to render the GenerateScreen.
+**Solution:** Complete the styles object with all missing style definitions:
+```javascript
+// Add to GenerateScreen.js styles
+regenerateButton: {
+  backgroundColor: '#F3F4F6',
+  borderWidth: 1,
+  borderColor: '#D1D5DB',
+},
+saveButton: {
+  backgroundColor: '#10B981',
+},
+actionButtonText: {
+  color: '#374151',
+  fontSize: 16,
+  fontWeight: '600',
+},
+saveButtonText: {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: '600',
+},
+```
+
+### 2. **Missing Critical Files**
+**Issue:** Several essential files are referenced but not provided:
+- `screens/GalleryScreen.js` - Referenced in navigation but missing
+- `components/ErrorBoundary.js` - Imported but not defined
+- `utils/helpers.js` - Contains critical functions but missing
+
+**Impact:** App will crash on startup due to missing imports.
+**Solution:** Create these missing files with proper implementation.
+
+### 3. **Memory Leak Potential**
+**Issue:** No cleanup in useEffect hooks and no limit on image array size in memory.
+**Impact:** Could cause memory issues on devices with limited RAM.
+**Solution:** 
+```javascript
+// In GalleryProvider
+useEffect(() => {
+  let isMounted = true;
+  
+  const loadImages = async () => {
+    if (isMounted) {
+      // existing load logic
+    }
+  };
+  
+  loadImages();
+  
+  return () => {
+    isMounted = false;
+  };
+}, []);
+
+// Add image limit
+const MAX_IMAGES_IN_MEMORY = 50;
+if (newImages.length > MAX_IMAGES_IN_MEMORY) {
+  newImages = newImages.slice(0, MAX_IMAGES_IN_MEMORY);
+}
+```
+
+## High Priority Issues
+
+### 4. **AsyncStorage Error Handling**
+**Issue:** Insufficient error handling for AsyncStorage quota limits.
+**Impact:** App could crash when storage is full.
+**Solution:**
+```javascript
+const checkStorageSpace = async () => {
+  try {
+    const keys = await AsyncStorage.getAllKeys();
+    const values = await AsyncStorage.multiGet(keys);
+    let totalSize = 0;
+    values.forEach(([key, value]) => {
+      totalSize += value ? value.length : 0;
+    });
+    // AsyncStorage has ~6MB limit on Android
+    return totalSize < 5 * 1024 * 1024; // Leave 1MB buffer
+  } catch (error) {
+    return false;
+  }
+};
+```
+
+### 5. **Network Error Handling**
+**Issue:** No real API implementation or network error handling.
+**Impact:** When real API is integrated, errors won't be handled properly.
+**Solution:** Add proper try-catch blocks and network status checking:
+```javascript
+import NetInfo from '@react-native-community/netinfo';
+
+const checkNetworkStatus = async () => {
+  const state = await NetInfo.fetch();
+  if (!state.isConnected) {
+    throw new Error('No internet connection');
+  }
+};
+```
+
+### 6. **Image URI Validation**
+**Issue:** No validation that image URIs are valid or accessible.
+**Impact:** Images could fail to load without proper error handling.
+**Solution:**
+```javascript
+const validateImageUri = (uri) => {
+  if (!uri || typeof uri !== 'string') return false;
+  return uri.startsWith('http://') || 
+         uri.startsWith('https://') || 
+         uri.startsWith('file://');
+};
+```
+
+## Medium Priority Issues
+
+### 7. **Performance Optimization**
+**Issue:** No image caching or lazy loading implementation.
+**Impact:** Poor performance with many images.
+**Solution:** Implement React.memo and useMemo for expensive operations:
+```javascript
+const MemoizedImage = React.memo(({ uri, style }) => (
+  <Image source={{ uri }} style={style} />
+));
+```
+
+### 8. **Accessibility Improvements**
+**Issue:** Missing accessibility labels in some components.
+**Solution:** Add comprehensive accessibility props to all interactive elements.
+
+### 9. **Input Validation**
+**Issue:** Basic validation only, no sanitization for special characters that could cause issues.
+**Solution:**
+```javascript
+const validatePrompt = (text) => {
+  // Remove potentially harmful characters
+  const cleaned = text.replace(/[<>]/g, '');
+  // Check for minimum meaningful content
+  const words = cleaned.trim().split(/\s+/);
+  return words.length >= 2 && words.every(w => w.length > 0);
+};
+```
+
+### 10. **State Management**
+**Issue:** Context re-renders all consumers even for unrelated updates.
+**Solution:** Split context or use useMemo:
+```javascript
+const value = useMemo(() => ({
+  images,
+  loading,
+  saveImage,
+  deleteImage,
+  refreshGallery: loadImages
+}), [images, loading]);
+```
+
+## Low Priority Issues
+
+### 11. **TypeScript Support**
+**Recommendation:** Convert to TypeScript for better type safety and developer experience.
+
+### 12. **Testing**
+**Issue:** No test files present.
+**Recommendation:** Add unit tests and integration tests using Jest and React Native Testing Library.
+
+### 13. **Code Documentation**
+**Issue:** Minimal comments and no JSDoc documentation.
+**Recommendation:** Add comprehensive documentation for all functions and components.
+
+## Security Concerns
+
+### 14. **Data Validation**
+**Issue:** No validation of data loaded from AsyncStorage.
+**Risk:** Corrupted data could crash the app.
+**Solution:** Add schema validation:
+```javascript
+const validateImageData = (data) => {
+  return data && 
+    typeof data.id === 'string' &&
+    typeof data.uri === 'string' &&
+    typeof data.prompt === 'string' &&
+    typeof data.createdAt === 'string' &&
+    !isNaN(Date.parse(data.createdAt));
+};
+```
+
+### 15. **API Key Management**
+**Issue:** No secure storage for future API keys.
+**Recommendation:** Use expo-secure-store for sensitive data.
+
+## Performance Metrics to Monitor
+
+1. **App Launch Time**: Should be under 3 seconds
+2. **Image Generation Time**: Mock should be instant, real API needs timeout
+3. **Memory Usage**: Monitor with Flipper or React DevTools
+4. **Storage Usage**: Implement storage quota monitoring
+
+## Recommended Immediate Actions
+
+1. **Critical**: Complete all truncated and missing files
+2. **Critical**: Add proper error boundaries and error handling
+3. **High**: Implement storage space checking before saves
+4. **High**: Add network status checking
+5. **Medium**: Optimize re-renders with memo and callbacks
+6. **Medium**: Add comprehensive input validation
+
+## Testing Checklist Before Release
+
+- [ ] Test on low-end Android devices (2GB RAM)
+- [ ] Test on various iOS versions (iOS 13+)
+- [ ] Test with airplane mode enabled
+- [ ] Test with full device storage
+- [ ] Test with 100+ images in gallery
+- [ ] Test accessibility with screen readers
+- [ ] Test keyboard navigation
+- [ ] Test app backgrounding and foregrounding
+- [ ] Test orientation changes
+- [ ] Test with different font sizes (accessibility settings)
+
+## Conclusion
+
+The app has a good foundation but requires significant work before it can be considered production-ready. The most critical issues are the incomplete code files and missing components, which will prevent the app from running at all. Once these are resolved, focus should shift to proper error handling, performance optimization, and security improvements.
+
+**Recommendation**: Address all Critical and High priority issues before proceeding with device testing. The current code will not compile or run successfully due to missing and incomplete files.
+
+----------
+
+# Refactored Stable Diffusion Gallery - Expo Mobile App MVP
+
+## package.json
+```json
+{
+  "name": "stable-diffusion-gallery",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
