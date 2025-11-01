@@ -1,137 +1,114 @@
-## AR Local: Augmented Reality Local Exploration App - UI/UX Design Document
+```markdown
+## SoundSleep App: UX/UI Design Document
 
-### I. Visuals
+### 1. Visuals
 
 *   **Color Palette:**
-    *   Primary: #3498db (Blue) - Represents trust, stability, and technology.
-    *   Secondary: #2ecc71 (Green) - Represents exploration, growth, and local experiences.
-    *   Accent: #f39c12 (Orange) - Represents energy, excitement, and discovery.
-    *   Neutral: #ecf0f1 (Light Gray) - Used for backgrounds and content containers to provide visual clarity.
-    *   Text (Dark): #2c3e50 (Dark Blue) - For headings and important information.
-    *   Text (Light): #7f8c8d (Gray) - For body text and less important information.
+    *   Primary: Soft Lavender (#E6E6FA) - Calming and relaxing.
+    *   Secondary: Light Teal (#B0E2FF) - Promotes tranquility.
+    *   Accent: Warm Sand (#F5F5DC) - Provides a sense of comfort.
+    *   Text (Primary): Dark Gray (#333333) - Ensures readability.
+    *   Text (Secondary): Gray (#777777) - For less important information.
+    *   Background: Off-White (#FAFAFA) - Creates a clean and airy feel.
 
 *   **Typography:**
-    *   Headings: Montserrat (Bold) - Modern and clean, providing a strong visual hierarchy.
-    *   Body: Open Sans (Regular) - Readable and accessible, ensuring a smooth reading experience.
+    *   Headings: Montserrat (Semi-Bold) - Modern and clean.
+    *   Body Text: Open Sans (Regular) - Readable and accessible.
 
-*   **Layout:**
-    *   Consistent use of whitespace to avoid clutter and improve readability.
-    *   Card-based design for event listings and business information.
-    *   Bottom navigation bar for easy access to core features (Home, Map, Profile, Settings).
-    *   Use of visual cues (icons, animations) to guide users and provide feedback.
+*   **Layout Principles:**
+    *   Clean and uncluttered design.
+    *   Emphasis on whitespace to promote relaxation.
+    *   Consistent use of visual elements across all screens.
+    *   Intuitive navigation.
 
 *   **Elements:**
-    *   Buttons: Rounded corners, subtle shadow, and clear call-to-action text. Color changes on press/tap for feedback.
-    *   Icons: Line-based icons for a clean and modern look. Consistent style throughout the app.
-    *   Input Fields: Clearly labeled with appropriate placeholder text.
-    *   AR Overlay: Semi-transparent overlays with clear text and icons for event information and reviews.
+    *   Buttons: Rounded corners, subtle shadow, color change on press.
+    *   Icons: Simple, line-based icons.
+    *   Cards: Used to display content (sounds, meditations, stories), with rounded corners and subtle elevation.
+    *   Input Fields: Clean and minimal, with clear labels.
 
-### II. Features & User Flows
+### 2. Features
 
-#### 1. Login Screen (app_mockup_login.png)
+#### 2.1 Home Screen
 
-*   **Visuals:**
-    *   Background: A blurred image of a local landmark or cityscape.
-    *   Logo: AR Local logo prominently displayed at the top.
-    *   Input Fields: Email and Password fields with clear labels and validation.
-    *   Buttons: "Log In" and "Sign Up" buttons.
-    *   Social Login: Options to log in with Google or Facebook (optional).
-    *   "Forgot Password?" link.
+*   **Layout:**
+    *   Top: App logo and user greeting (e.g., "Good evening, [User]").
+    *   Middle: Featured content carousel (rotating selection of sounds, meditations, and stories).
+    *   Bottom: Tab bar for navigation (Home, Explore, Profile, Settings).
 
-*   **Features:**
-    *   User can log in with existing credentials or sign up for a new account.
-    *   Input validation to ensure correct email format and password strength.
-    *   "Forgot Password?" flow: User enters email, receives a password reset link.
-    *   Transition: Successful login navigates to the Home screen.
+*   **Content Presentation:**
+    *   Cards displaying sound titles, meditation names, and story summaries.
+    *   Visual cues (e.g., waveforms for sounds, images for meditations) to differentiate content types.
+    *   "Play" button overlay on each card for quick access.
 
-#### 2. Home Screen (app_mockup_home.png)
+*   **Functionality:**
+    *   Swiping through the featured content carousel.
+    *   Tapping on a card to play the corresponding sound, meditation, or story.
+    *   Accessing the "Explore" screen via the tab bar to browse the full library.
 
-*   **Visuals:**
-    *   Top Bar: AR Local logo, search bar, and location icon.
-    *   Featured Events: A carousel of featured events with images, titles, and brief descriptions.
-    *   Nearby Events: A list of nearby events, sorted by distance or relevance.
-    *   Filter Options: A button to access filter options (category, price, distance, etc.).
-    *   AR Button: A prominent button to activate the AR overlay.
+#### 2.2 Login Screen
 
-*   **Features:**
-    *   Displays a curated list of events and businesses based on location and preferences.
-    *   Search functionality to find specific events or businesses.
-    *   Filter options to refine search results.
-    *   AR overlay: Tapping the AR button activates the camera and overlays event information onto the user's view.
-    *   Event Details: Tapping on an event card navigates to the Event Details screen.
+*   **Layout:**
+    *   App logo at the top.
+    *   Input fields for email and password.
+    *   "Login" button.
+    *   "Sign Up" link below the login button.
+    *   "Forgot Password" link.
 
-#### 3. Event Details Screen (Not explicitly pictured, but described)
+*   **Functionality:**
+    *   Entering email and password.
+    *   Tapping the "Login" button to authenticate.
+    *   Tapping the "Sign Up" link to navigate to the registration screen.
+    *   Tapping the "Forgot Password" link to initiate the password reset flow.
+    *   Input validation with clear error messages.
 
-*   **Visuals:**
-    *   Event Image: Large image of the event.
-    *   Event Title: Prominent display of the event title.
-    *   Event Description: Detailed description of the event.
-    *   Location Information: Address, map, and directions.
-    *   Reviews: Ratings and reviews from other users.
-    *   Buttons: "Add to Calendar," "Share," "Get Directions."
+#### 2.3 Profile Screen
 
-*   **Features:**
-    *   Provides comprehensive information about a selected event.
-    *   User can add the event to their calendar, share it with friends, or get directions.
-    *   Displays reviews and ratings from other users.
-    *   User can leave their own review and rating.
+*   **Layout:**
+    *   Top: User avatar and name.
+    *   Middle: Display of Sleep data from sleep tracker
+    *   Bottom: List of options such as: "Edit Profile", "Subscription Details", "Settings".
 
-#### 4. Map Screen (Not explicitly pictured, but described)
+*   **Functionality:**
+    *   Display user information.
+    *   "Edit Profile" navigates to an edit profile screen.
+    *   "Subscription Details" navigates to subscription management.
+    *    Clicking on sleep data opens detailed sleep analysis.
 
-*   **Visuals:**
-    *   Interactive Map: Displays a map with pins indicating nearby events and businesses.
-    *   Filter Options: Accessible from the map screen to filter events and businesses.
-    *   AR Mode Toggle: A toggle to switch between the traditional map view and the AR overlay.
+#### 2.4 Settings Screen
 
-*   **Features:**
-    *   Allows users to explore events and businesses on a map.
-    *   AR mode: Overlays event information onto the map view.
-    *   Tapping on a pin navigates to the Event Details or Business Details screen.
+*   **Layout:**
+    *   List of settings options.
 
-#### 5. Profile Screen (app_mockup_profile.png)
+*   **Settings Options:**
+    *   Account Settings (email, password, etc.).
+    *   Notification Preferences (sound on/off, type of notification).
+    *   App Customization (theme selection).
+    *   Help & Support (FAQ, contact us).
+    *   About (app version, terms of service, privacy policy).
 
-*   **Visuals:**
-    *   Profile Picture: User's profile picture.
-    *   User Information: Name, email, and other relevant information.
-    *   Saved Events: A list of saved events.
-    *   Review History: A list of events and businesses the user has reviewed.
-    *   Settings Button: A button to access the Settings screen.
+*   **Functionality:**
+    *   Tapping on a setting option to navigate to the corresponding settings screen.
+    *   Toggles or switches for enabling/disabling options.
+    *   Clear and concise descriptions for each setting.
 
-*   **Features:**
-    *   Displays the user's profile information.
-    *   Allows users to view their saved events and review history.
-    *   Provides access to the Settings screen.
+### 3. Transitions and Interactions
 
-#### 6. Settings Screen (app_mockup_settings.png)
+*   **Screen Transitions:**
+    *   Fade-in/fade-out transitions between screens.
+    *   Slide-in/slide-out transitions for modal views (e.g., edit profile).
 
-*   **Visuals:**
-    *   Account Settings: Options to change password, email, and other account details.
-    *   Notification Settings: Options to customize notification preferences.
-    *   Privacy Settings: Options to manage data privacy settings.
-    *   About: Information about the app and its developers.
-    *   Help & Support: Links to FAQs and support resources.
-    *   Logout Button: A button to log out of the app.
+*   **Button Interactions:**
+    *   Subtle color change on button press.
+    *   Ripple effect on button press (optional).
 
-*   **Features:**
-    *   Allows users to manage their account settings, notification preferences, and privacy settings.
-    *   Provides access to help and support resources.
-    *   Allows users to log out of the app.
+*   **Content Interactions:**
+    *   Smooth scrolling through content lists.
+    *   Animated progress bar during playback of sounds, meditations, and stories.
 
-### III. Transitions
+### 4. Additional Notes
 
-*   **Screen Transitions:** Smooth, animated transitions between screens (e.g., slide-in, fade-in).
-*   **AR Overlay Transition:** A seamless transition between the camera view and the AR overlay.
-*   **Button Feedback:** Visual feedback on button press/tap (e.g., color change, animation).
-
-### IV. Accessibility
-
-*   **Text Size:** Allow users to adjust text size for improved readability.
-*   **Color Contrast:** Ensure sufficient color contrast between text and background for users with visual impairments.
-*   **Alternative Text:** Provide alternative text for images for screen readers.
-*   **Keyboard Navigation:** Support keyboard navigation for users with motor impairments.
-
-### V. Additional Notes
-
-*   The app should be optimized for both iOS and Android devices.
-*   Regular user testing should be conducted to gather feedback and improve the user experience.
-*   The design should be flexible and adaptable to future features and updates.
+*   **Accessibility:** Ensure the app is accessible to users with disabilities by providing alternative text for images, supporting screen readers, and using sufficient color contrast.
+*   **Responsiveness:** Design the app to be responsive across different screen sizes and orientations.
+*   **Onboarding:** Consider implementing an onboarding flow to guide new users through the app's features and functionality.
+```

@@ -1,10 +1,10 @@
 ```markdown
-# CodeSpark Mobile App - Expo MVP Code
+# SoundSleep App - Expo MVP Code
 
 ## package.json
 ```json
 {
-  "name": "codespark",
+  "name": "soundsleep-app",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -17,19 +17,17 @@
     "expo": "~49.0.0",
     "expo-status-bar": "~1.6.0",
     "expo-font": "~11.4.0",
-    "expo-constants": "~14.4.0",
-    "@react-navigation/native": "^6.1.0",
-    "@react-navigation/stack": "^6.3.0",
-    "@react-navigation/bottom-tabs": "^6.5.0",
+    "expo-secure-store": "~12.3.1",
+    "expo-image": "~1.3.5",
+    "react": "18.2.0",
+    "react-native": "0.72.6",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
-    "@react-native-async-storage/async-storage": "1.18.2",
-    "react-native-gesture-handler": "~2.12.0",
-    "react-native-reanimated": "~3.3.0",
-    "react-native-svg": "13.9.0",
-    "@expo/vector-icons": "^13.0.0",
-    "react": "18.2.0",
-    "react-native": "0.72.5"
+    "@react-navigation/native": "^6.1.7",
+    "@react-navigation/native-stack": "^6.9.13",
+    "@react-navigation/bottom-tabs": "^6.5.8",
+    "react-native-vector-icons": "^10.0.0",
+    "@expo/vector-icons": "^13.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
@@ -38,93 +36,898 @@
 }
 ```
 
-## app.json
-```json
-{
-  "expo": {
-    "name": "CodeSpark",
-    "slug": "codespark",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#4CAF50"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#4CAF50"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
-  }
-}
-```
-
 ## App.js
 ```javascript
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Font from 'expo-font';
+import * as SecureStore from 'expo-secure-store';
 import { View, ActivityIndicator } from 'react-native';
 
-// Import screens
-import OnboardingScreen from './src/screens/OnboardingScreen';
-import MainNavigator from './src/navigation/MainNavigator';
+import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+import MainTabNavigator from './src/navigation/MainTabNavigator';
+import { colors } from './src/constants/colors';
 
-// Import theme
-import { colors } from './src/constants/theme';
-
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasOnboarded, setHasOnboarded] = useState(false);
+  const [userToken, setUserToken] = useState(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
-    loadApp();
+    loadResources();
   }, []);
 
-  const loadApp = async () => {
+  const loadResources = async () => {
     try {
       // Load fonts
       await Font.loadAsync({
-        'Nunito-Regular': require('./assets/fonts/Nunito-Regular.ttf'),
-        'Nunito-Bold': require('./assets/fonts/Nunito-Bold.ttf'),
-        'BubblegumSans': require('./assets/fonts/BubblegumSans-Regular.ttf'),
+        'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
+        'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
       });
       setFontsLoaded(true);
 
-      // Check onboarding status
-      const onboardingStatus = await AsyncStorage.getItem('hasCompletedOnboarding');
-      if (onboardingStatus === 'true') {
-        setHasOnboarded(true);
+      // Check for stored token
+      const token = await SecureStore.getItemAsync('userToken');
+      if (token) {
+        setUserToken(token);
       }
     } catch (error) {
-      console.error('Error loading app:', error);
+      console.error('Error loading resources:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const completeOnboarding = async () => {
-    await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
-    setHasOnboarded(true);
+  const authContext = {
+    signIn: async (token) => {
+      try {
+        await SecureStore.setItemAsync('userToken', token);
+        setUserToken(token);
+      } catch (error) {
+        console.error('Error saving token:', error);
+        throw error;
+      }
+    },
+    signOut: async () => {
+      try {
+        await SecureStore.deleteItemAsync('userToken');
+        setUserToken(null);
+      } catch (error) {
+        console.error('Error removing token:', error);
+      }
+    },
+  };
+
+  if (isLoading || !fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background }}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StatusBar style="dark" backgroundColor={colors.background} />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          {userToken == null ? (
+            <>
+              <Stack.Screen name="Login">
+                {props => <LoginScreen {...props} authContext={authContext} />}
+              </Stack.Screen>
+              <Stack.Screen name="SignUp">
+                {props => <SignUpScreen {...props} authContext={authContext} />}
+              </Stack.Screen>
+            </>
+          ) : (
+            <Stack.Screen name="Main">
+              {props => <MainTabNavigator {...props} authContext={authContext} />}
+            </Stack.Screen>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
+}
+```
+
+## src/constants/colors.js
+```javascript
+export const colors = {
+  primary: '#E6E6FA', // Soft Lavender
+  secondary: '#B0E2FF', // Light Teal
+  accent: '#F5F5DC', // Warm Sand
+  textPrimary: '#333333', // Dark Gray
+  textSecondary: '#777777', // Gray
+  background: '#FAFAFA', // Off-White
+  white: '#FFFFFF',
+  error: '#FF6B6B',
+  success: '#4ECDC4',
+};
+```
+
+## src/constants/typography.js
+```javascript
+import { Platform } from 'react-native';
+
+export const typography = {
+  heading: {
+    fontFamily: Platform.select({
+      ios: 'Montserrat-SemiBold',
+      android: 'Montserrat-SemiBold',
+      default: 'System',
+    }),
+    fontSize: 24,
+  },
+  subheading: {
+    fontFamily: Platform.select({
+      ios: 'Montserrat-SemiBold',
+      android: 'Montserrat-SemiBold',
+      default: 'System',
+    }),
+    fontSize: 18,
+  },
+  body: {
+    fontFamily: Platform.select({
+      ios: 'OpenSans-Regular',
+      android: 'OpenSans-Regular',
+      default: 'System',
+    }),
+    fontSize: 16,
+  },
+  caption: {
+    fontFamily: Platform.select({
+      ios: 'OpenSans-Regular',
+      android: 'OpenSans-Regular',
+      default: 'System',
+    }),
+    fontSize: 14,
+  },
+};
+```
+
+## src/screens/LoginScreen.js
+```javascript
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { validateEmail, validatePassword } from '../utils/validation';
+
+const LoginScreen = ({ navigation, authContext }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const handleLogin = async () => {
+    // Validate inputs
+    const newErrors = {};
+    
+    if (!validateEmail(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    if (!validatePassword(password)) {
+      newErrors.password = 'Password must be at least 8 characters';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setLoading(true);
+    setErrors({});
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // For MVP, we'll simulate successful login
+      const mockToken = 'mock_jwt_token_' + Date.now();
+      await authContext.signIn(mockToken);
+    } catch (error) {
+      Alert.alert('Login Error', 'Failed to login. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.logoContainer}>
+            <Text style={styles.logo}>SoundSleep</Text>
+            <Text style={styles.tagline}>Your path to better rest</Text>
+          </View>
+
+          <View style={styles.formContainer}>
+            <Text style={styles.title}>Welcome Back</Text>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                style={[styles.input, errors.email && styles.inputError]}
+                placeholder="Enter your email"
+                placeholderTextColor={colors.textSecondary}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                accessibilityLabel="Email input"
+                accessibilityHint="Enter your email address to login"
+              />
+              {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Password</Text>
+              <TextInput
+                style={[styles.input, errors.password && styles.inputError]}
+                placeholder="Enter your password"
+                placeholderTextColor={colors.textSecondary}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                autoCapitalize="none"
+                accessibilityLabel="Password input"
+                accessibilityHint="Enter your password to login"
+              />
+              {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+            </View>
+
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleLogin}
+              disabled={loading}
+              accessibilityRole="button"
+              accessibilityLabel="Login button"
+            >
+              {loading ? (
+                <ActivityIndicator color={colors.white} />
+              ) : (
+                <Text style={styles.buttonText}>Login</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.linkContainer}
+              onPress={() => navigation.navigate('SignUp')}
+              accessibilityRole="button"
+              accessibilityLabel="Sign up link"
+            >
+              <Text style={styles.linkText}>
+                Don't have an account? <Text style={styles.linkTextBold}>Sign Up</Text>
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.linkContainer}
+              onPress={() => Alert.alert('Forgot Password', 'Password reset functionality coming soon!')}
+              accessibilityRole="button"
+              accessibilityLabel="Forgot password link"
+            >
+              <Text style={styles.forgotText}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 40,
+    marginTop: 40,
+  },
+  logo: {
+    ...typography.heading,
+    fontSize: 36,
+    color: colors.primary,
+    marginBottom: 8,
+  },
+  tagline: {
+    ...typography.caption,
+    color: colors.textSecondary,
+  },
+  formContainer: {
+    flex: 1,
+  },
+  title: {
+    ...typography.heading,
+    color: colors.textPrimary,
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    ...typography.body,
+    color: colors.textPrimary,
+    marginBottom: 8,
+  },
+  input: {
+    ...typography.body,
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    color: colors.textPrimary,
+  },
+  inputError: {
+    borderColor: colors.error,
+  },
+  errorText: {
+    ...typography.caption,
+    color: colors.error,
+    marginTop: 4,
+  },
+  button: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 20,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
+  },
+  buttonText: {
+    ...typography.subheading,
+    color: colors.white,
+  },
+  linkContainer: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  linkText: {
+    ...typography.body,
+    color: colors.textSecondary,
+  },
+  linkTextBold: {
+    ...typography.body,
+    color: colors.primary,
+    fontWeight: '600',
+  },
+  forgotText: {
+    ...typography.body,
+    color: colors.secondary,
+  },
+});
+
+export default LoginScreen;
+```
+
+## src/screens/SignUpScreen.js
+```javascript
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { validateEmail, validatePassword, validateName } from '../utils/validation';
+
+const SignUpScreen = ({ navigation, authContext }) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const handleSignUp = async () => {
+    const newErrors = {};
+    
+    if (!validateName(name)) {
+      newErrors.name = 'Name must be at least 2 characters';
+    }
+
+----------
+
+# QA Report: SoundSleep App - Expo MVP Code Analysis
+
+## Executive Summary
+After thoroughly analyzing the SoundSleep App Expo MVP code, I've identified several critical bugs, potential issues, and areas for improvement. While the overall structure is good, there are important issues that need to be addressed before the app can be considered production-ready.
+
+## 🔴 Critical Issues
+
+### 1. **Incomplete SignUpScreen Implementation**
+**File:** `src/screens/SignUpScreen.js`
+**Issue:** The code is truncated and incomplete. The `handleSignUp` function is not fully implemented, and the component doesn't return any JSX.
+**Solution:** Complete the implementation:
+```javascript
+// Add after line with validateName check
+if (!validateEmail(email)) {
+  newErrors.email = 'Please enter a valid email address';
+}
+
+if (!validatePassword(password)) {
+  newErrors.password = 'Password must be at least 8 characters';
+}
+
+if (password !== confirmPassword) {
+  newErrors.confirmPassword = 'Passwords do not match';
+}
+
+if (Object.keys(newErrors).length > 0) {
+  setErrors(newErrors);
+  return;
+}
+
+setLoading(true);
+setErrors({});
+
+try {
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  const mockToken = 'mock_jwt_token_' + Date.now();
+  await authContext.signIn(mockToken);
+} catch (error) {
+  Alert.alert('Sign Up Error', 'Failed to create account. Please try again.');
+} finally {
+  setLoading(false);
+}
+```
+
+### 2. **Missing Validation Utils Module**
+**Files Referenced:** `src/utils/validation.js`
+**Issue:** The validation functions are imported but the file is not provided.
+**Solution:** Create the validation utils file:
+```javascript
+// src/utils/validation.js
+export const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
+
+export const validatePassword = (password) => {
+  return password && password.length >= 8;
+};
+
+export const validateName = (name) => {
+  return name && name.trim().length >= 2;
+};
+```
+
+### 3. **Missing MainTabNavigator Component**
+**File Referenced:** `src/navigation/MainTabNavigator.js`
+**Issue:** The MainTabNavigator is imported but not provided.
+**Solution:** Create the navigation component with proper tab structure.
+
+### 4. **Missing Font Files**
+**Files Referenced:** 
+- `./assets/fonts/Montserrat-SemiBold.ttf`
+- `./assets/fonts/OpenSans-Regular.ttf`
+**Issue:** Font files are referenced but not included, which will cause the app to crash on startup.
+**Solution:** Either include the font files or implement a fallback mechanism:
+```javascript
+const loadResources = async () => {
+  try {
+    await Font.loadAsync({
+      'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
+      'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+    });
+    setFontsLoaded(true);
+  } catch (error) {
+    console.warn('Fonts not available, using system fonts');
+    setFontsLoaded(true); // Continue with system fonts
+  }
+  // ... rest of the code
+};
+```
+
+## 🟡 Medium Priority Issues
+
+### 5. **AuthContext Not Properly Implemented**
+**File:** `App.js`
+**Issue:** AuthContext is created as a plain object but not using React Context API properly.
+**Solution:** Implement proper React Context:
+```javascript
+import React, { createContext, useContext } from 'react';
+
+export const AuthContext = createContext(null);
+
+// In App.js, wrap the NavigationContainer:
+<AuthContext.Provider value={authContext}>
+  <NavigationContainer>
+    {/* ... */}
+  </NavigationContainer>
+</AuthContext.Provider>
+```
+
+### 6. **No Error Boundary Implementation**
+**Issue:** No error boundary to catch runtime errors.
+**Solution:** Add an error boundary component:
+```javascript
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+  
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return <Text>Something went wrong. Please restart the app.</Text>;
+    }
+    return this.props.children;
+  }
+}
+```
+
+### 7. **Insecure Token Storage Pattern**
+**File:** `App.js`
+**Issue:** While SecureStore is used, there's no token validation or expiration handling.
+**Solution:** Implement token validation:
+```javascript
+const validateToken = (token) => {
+  // Add token structure validation
+  if (!token || typeof token !== 'string') return false;
+  // Add expiration check if token contains timestamp
+  return true;
+};
+
+const loadResources = async () => {
+  const token = await SecureStore.getItemAsync('userToken');
+  if (token && validateToken(token)) {
+    setUserToken(token);
+  } else if (token) {
+    await SecureStore.deleteItemAsync('userToken');
+  }
+};
+```
+
+## 🟢 Minor Issues & Improvements
+
+### 8. **Missing Accessibility Labels**
+**Issue:** Some interactive elements lack proper accessibility attributes.
+**Solution:** Add accessibility labels to all touchable elements and ensure proper screen reader support.
+
+### 9. **No Network Status Handling**
+**Issue:** No handling for offline scenarios.
+**Solution:** Implement network status monitoring using NetInfo:
+```javascript
+import NetInfo from '@react-native-community/netinfo';
+
+useEffect(() => {
+  const unsubscribe = NetInfo.addEventListener(state => {
+    if (!state.isConnected) {
+      Alert.alert('No Internet', 'Please check your connection');
+    }
+  });
+  return unsubscribe;
+}, []);
+```
+
+### 10. **Platform-Specific Style Issues**
+**File:** `src/screens/LoginScreen.js`
+**Issue:** `elevation` property only works on Android, iOS shadow properties might not render correctly.
+**Solution:** Create platform-specific shadow styles:
+```javascript
+const shadowStyle = Platform.select({
+  ios: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  android: {
+    elevation: 2,
+  },
+});
+```
+
+### 11. **Memory Leak Potential**
+**File:** `App.js`
+**Issue:** Async operations in useEffect without cleanup.
+**Solution:** Add cleanup and cancellation:
+```javascript
+useEffect(() => {
+  let isMounted = true;
+  
+  const loadResources = async () => {
+    try {
+      // ... loading logic
+      if (isMounted) {
+        setFontsLoaded(true);
+        setUserToken(token);
+      }
+    } catch (error) {
+      if (isMounted) {
+        console.error('Error:', error);
+      }
+    }
+  };
+  
+  loadResources();
+  
+  return () => {
+    isMounted = false;
+  };
+}, []);
+```
+
+### 12. **Input Validation Timing**
+**Files:** `LoginScreen.js`, `SignUpScreen.js`
+**Issue:** Validation only occurs on submit, not real-time.
+**Solution:** Add real-time validation with debouncing:
+```javascript
+useEffect(() => {
+  const timer = setTimeout(() => {
+    if (email && !validateEmail(email)) {
+      setErrors(prev => ({ ...prev, email: 'Invalid email format' }));
+    } else {
+      setErrors(prev => ({ ...prev, email: null }));
+    }
+  }, 500);
+  
+  return () => clearTimeout(timer);
+}, [email]);
+```
+
+## 📋 Performance Recommendations
+
+1. **Implement React.memo** for components that don't need frequent re-renders
+2. **Use useCallback and useMemo** for expensive operations and callback functions
+3. **Implement lazy loading** for screens using React.lazy()
+4. **Add image optimization** using expo-image with proper caching
+5. **Implement proper list virtualization** if lists are added later
+
+## 🔒 Security Recommendations
+
+1. **Implement proper API authentication** instead of mock tokens
+2. **Add rate limiting** for login attempts
+3. **Implement certificate pinning** for production
+4. **Add input sanitization** beyond basic validation
+5. **Implement proper session management** with token refresh
+
+## 📱 Device Compatibility Issues
+
+1. **Test on different screen sizes** - Add responsive design patterns
+2. **Handle notch/safe areas properly** - Current SafeAreaView might not cover all cases
+3. **Test keyboard behavior** on different devices
+4. **Add tablet support considerations**
+
+## Conclusion
+
+The SoundSleep App has a solid foundation but requires immediate attention to the critical issues listed above, particularly:
+- Completing the SignUpScreen implementation
+- Adding missing files (validation utils, navigation, fonts)
+- Implementing proper error handling and boundaries
+- Fixing the AuthContext implementation
+
+Once these issues are resolved, the app should undergo thorough testing on both iOS and Android devices before being considered ready for production deployment.
+
+**Priority Action Items:**
+1. Complete all missing implementations (Critical)
+2. Add proper error handling and validation (Critical)
+3. Implement security best practices (High)
+4. Add performance optimizations (Medium)
+5. Enhance accessibility features (Medium)
+
+The mobile_developer should address these issues in order of priority to ensure a stable, secure, and user-friendly application.
+
+----------
+
+# SoundSleep App - Refactored Expo MVP Code
+
+## package.json
+```json
+{
+  "name": "soundsleep-app",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~49.0.0",
+    "expo-status-bar": "~1.6.0",
+    "expo-font": "~11.4.0",
+    "expo-secure-store": "~12.3.1",
+    "expo-image": "~1.3.5",
+    "react": "18.2.0",
+    "react-native": "0.72.6",
+    "react-native-safe-area-context": "4.6.3",
+    "react-native-screens": "~3.22.0",
+    "@react-navigation/native": "^6.1.7",
+    "@react-navigation/native-stack": "^6.9.13",
+    "@react-navigation/bottom-tabs": "^6.5.8",
+    "@expo/vector-icons": "^13.0.0",
+    "@react-native-community/netinfo": "9.3.10"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}
+```
+
+## App.js
+```javascript
+import React, { useState, useEffect, createContext, useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import * as Font from 'expo-font';
+import * as SecureStore from 'expo-secure-store';
+import NetInfo from '@react-native-community/netinfo';
+import { View, ActivityIndicator, Text, Alert } from 'react-native';
+
+import LoginScreen from './src/screens/LoginScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+import MainTabNavigator from './src/navigation/MainTabNavigator';
+import ErrorBoundary from './src/components/ErrorBoundary';
+import { colors } from './src/constants/colors';
+
+const Stack = createNativeStackNavigator();
+
+// Create Auth Context
+export const AuthContext = createContext(null);
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+};
+
+// Token validation function
+const validateToken = (token) => {
+  if (!token || typeof token !== 'string') return false;
+  // Add more sophisticated token validation here
+  // For MVP, we just check if it exists and is a string
+  return true;
+};
+
+export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [userToken, setUserToken] = useState(null);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadResources = async () => {
+      try {
+        // Try to load fonts with fallback
+        try {
+          await Font.loadAsync({
+            'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),
+            'OpenSans-Regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+          });
+          if (isMounted) setFontsLoaded(true);
+        } catch (fontError) {
+          console.warn('Fonts not available, using system fonts');
+          if (isMounted) setFontsLoaded(true); // Continue with system fonts
+        }
+
+        // Check for stored token with validation
+        const token = await SecureStore.getItemAsync('userToken');
+        if (token && validateToken(token)) {
+          if (isMounted) setUserToken(token);
+        } else if (token) {
+          // Invalid token, remove it
+          await SecureStore.deleteItemAsync('userToken');
+        }
+      } catch (error) {
+        console.error('Error loading resources:', error);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    loadResources();
+
+    // Network status monitoring
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (isMounted) {
+        setIsConnected(state.isConnected);
+        if (!state.isConnected) {
+          Alert.alert('No Internet', 'Please check your connection');
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
+
+  const authContext = {
+    signIn: async (token) => {
+      try {
+        if (!validateToken(token)) {
+          throw new Error('Invalid token format');
+        }
+        await SecureStore.setItemAsync('userToken', token);
+        setUserToken(token);
+      } catch (error) {
+        console.error('Error saving token:', error);
+        throw error;
+      }
+    },
+    signOut: async () => {
+      try {
+        await SecureStore.deleteItemAsync('userToken');
+        setUserToken(null);
+      } catch (error) {
+        console.error('Error removing token:', error);
+      }
+    },
+    userToken,
+    isConnected,
   };
 
   if (isLoading) {
@@ -136,719 +939,110 @@ export default function App() {
   }
 
   return (
-    <>
-      <StatusBar style="dark" backgroundColor={colors.background} />
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {!hasOnboarded ? (
-            <Stack.Screen name="Onboarding">
-              {props => <OnboardingScreen {...props} onComplete={completeOnboarding} />}
-            </Stack.Screen>
-          ) : (
-             <Stack.Screen name="Main" component={MainNavigator} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <AuthContext.Provider value={authContext}>
+          <NavigationContainer>
+            <StatusBar style="dark" backgroundColor={colors.background} />
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              {userToken == null ? (
+                <>
+                  <Stack.Screen name="Login" component={LoginScreen} />
+                  <Stack.Screen name="SignUp" component={SignUpScreen} />
+                </>
+              ) : (
+                <Stack.Screen name="Main" component={MainTabNavigator} />
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </AuthContext.Provider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }
 ```
 
-## src/constants/theme.js
-```javascript
-export const colors = {
-  primary: '#4CAF50',
-  secondary: '#FFC107',
-  accent: '#2196F3',
-  background: '#F5F5F5',
-  textPrimary: '#333333',
-  textSecondary: '#757575',
-  error: '#F44336',
-  white: '#FFFFFF',
-  cardBackground: '#FFFFFF',
-  shadowColor: '#000000',
-};
-
-export const fonts = {
-  headline: {
-    fontFamily: 'BubblegumSans',
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
-  title: {
-    fontFamily: 'Nunito-Bold',
-    fontSize: 20,
-  },
-  body: {
-    fontFamily: 'Nunito-Regular',
-    fontSize: 16,
-  },
-  caption: {
-    fontFamily: 'Nunito-Regular',
-    fontSize: 14,
-  },
-};
-
-export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 16,
-  lg: 24,
-  xl: 32,
-};
-
-export const borderRadius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  full: 9999,
-};
-```
-
-## src/navigation/MainNavigator.js
+## src/components/ErrorBoundary.js
 ```javascript
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
 
-// Import screens
-import HomeScreen from '../screens/HomeScreen';
-import GamesScreen from '../screens/GamesScreen';
-import PuzzlesScreen from '../screens/PuzzlesScreen';
-import ProjectsScreen from '../screens/ProjectsScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-
-// Import theme
-import { colors } from '../constants/theme';
-
-const Tab = createBottomTabNavigator();
-
-export default function MainNavigator() {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          switch (route.name) {
-            case 'Home':
-              iconName = focused ? 'home' : 'home-outline';
-              break;
-            case 'Games':
-              iconName = focused ? 'game-controller' : 'game-controller-outline';
-              break;
-            case 'Puzzles':
-              iconName = focused ? 'extension-puzzle' : 'extension-puzzle-outline';
-              break;
-            case 'Projects':
-              iconName = focused ? 'create' : 'create-outline';
-              break;
-            case 'Profile':
-              iconName = focused ? 'person' : 'person-outline';
-              break;
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textSecondary,
-        tabBarStyle: {
-          backgroundColor: colors.white,
-          borderTopWidth: 1,
-          borderTopColor: '#E0E0E0',
-          paddingBottom: 5,
-          paddingTop: 5,
-          height: 60,
-        },
-        headerStyle: {
-          backgroundColor: colors.primary,
-        },
-        headerTintColor: colors.white,
-        headerTitleStyle: {
-          fontFamily: 'BubblegumSans',
-          fontSize: 24,
-        },
-      })}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'CodeSpark' }} />
-      <Tab.Screen name="Games" component={GamesScreen} />
-      <Tab.Screen name="Puzzles" component={PuzzlesScreen} />
-      <Tab.Screen name="Projects" component={ProjectsScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
-  );
-}
-```
-
-## src/screens/OnboardingScreen.js
-```javascript
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Dimensions,
-  SafeAreaView,
-  Image,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { colors, fonts, spacing, borderRadius } from '../constants/theme';
-
-const { width } = Dimensions.get('window');
-
-const avatars = [
-  { id: '1', name: 'Robot', color: '#FF6B6B', emoji: '🤖' },
-  { id: '2', name: 'Unicorn', color: '#C06BFF', emoji: '🦄' },
-  { id: '3', name: 'Dragon', color: '#4ECDC4', emoji: '🐉' },
-  { id: '4', name: 'Astronaut', color: '#45B7D1', emoji: '👨‍🚀' },
-  { id: '5', name: 'Wizard', color: '#96CEB4', emoji: '🧙‍♂️' },
-  { id: '6', name: 'Ninja', color: '#2C3E50', emoji: '🥷' },
-];
-
-export default function OnboardingScreen({ navigation, onComplete }) {
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
-  const [step, setStep] = useState(1);
-
-  const handleAvatarSelect = (avatar) => {
-    setSelectedAvatar(avatar);
-  };
-
-  const handleContinue = async () => {
-    if (selectedAvatar) {
-      await AsyncStorage.setItem('selectedAvatar', JSON.stringify(selectedAvatar));
-      await onComplete();
-      navigation.replace('Main');
-    }
-  };
-
-  const renderAvatar = ({ item }) => {
-    const isSelected = selectedAvatar?.id === item.id;
-    return (
-      <TouchableOpacity
-        style={[
-          styles.avatarCard,
-          { backgroundColor: item.color },
-          isSelected && styles.selectedAvatar,
-        ]}
-        onPress={() => handleAvatarSelect(item)}
-        activeOpacity={0.7}
-      >
-        <Text style={styles.avatarEmoji}>{item.emoji}</Text>
-        <Text style={styles.avatarName}>{item.name}</Text>
-        {isSelected && (
-          <View style={styles.checkmark}>
-            <Text style={styles.checkmarkText}>✓</Text>
-          </View>
-        )}
-      </TouchableOpacity>
-    );
-  };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Welcome to CodeSpark! 🚀</Text>
-        <Text style={styles.subtitle}>Let's start your coding adventure!</Text>
-
-        <View style={styles.stepContainer}>
-          <Text style={styles.stepText}>Choose Your Avatar</Text>
-          <Text style={styles.stepDescription}>
-            Pick a character to join you on your coding journey
-          </Text>
-        </View>
-
-        <FlatList
-          data={avatars}
-          renderItem={renderAvatar}
-          keyExtractor={(item) => item.id}
-          numColumns={2}
-          columnWrapperStyle={styles.avatarRow}
-          contentContainerStyle={styles.avatarGrid}
-          scrollEnabled={false}
-        />
-
-        <TouchableOpacity
-          style={[
-            styles.continueButton,
-            !selectedAvatar && styles.disabledButton,
-          ]}
-          onPress={handleContinue}
-          disabled={!selectedAvatar}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.continueButtonText}>
-            {selectedAvatar ? "Let's Start Coding!" : 'Select an Avatar'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-  },
-  title: {
-    ...fonts.headline,
-    color: colors.primary,
-    textAlign: 'center',
-    marginBottom: spacing.sm,
-  },
-  subtitle: {
-    ...fonts.body,
-    color: colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: spacing.xl,
-  },
-  stepContainer: {
-    marginBottom: spacing.lg,
-  },
-  stepText: {
-    ...fonts.title,
-    color: colors.textPrimary,
-    textAlign: 'center',
-    marginBottom: spacing.xs,
-  },
-  stepDescription: {
-    ...fonts.caption,
-    color: colors.textSecondary,
-    textAlign: 'center',
-  },
-  avatarGrid: {
-    paddingVertical: spacing.md,
-  },
-  avatarRow: {
-    justifyContent: 'space-between',
-    marginBottom: spacing.md,
-  },
-  avatarCard: {
-    width: (width - spacing.lg * 2 - spacing.md) / 2,
-    height: 140,
-    borderRadius: borderRadius.md,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.md,
-  },
-  selectedAvatar: {
-    borderWidth: 3,
-    borderColor: colors.primary,
-  },
-  avatarEmoji: {
-    fontSize: 48,
-    marginBottom: spacing.sm,
-  },
-  avatarName: {
-    ...fonts.body,
-    color: colors.white,
-    fontWeight: 'bold',
-  },
-  checkmark: {
-    position: 'absolute',
-    top: spacing.sm,
-    right: spacing.sm,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkmarkText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  continueButton: {
-    backgroundColor: colors.primary,
-    paddingVertical: spacing.md,
-    borderRadius: borderRadius.sm
-  },
-  disabledButton: {
-    backgroundColor: colors.textSecondary,
-    opacity: 0.5,
-  },
-  continueButtonText: {
-    ...fonts.body,
-    color: colors.white,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-});
-```
-
-## src/screens/HomeScreen.js
-```javascript
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../constants/theme';
-
-const HomeScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Home Screen</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-  },
-  text: {
-    fontSize: 20,
-  },
-});
-
-export default HomeScreen;
-```
-
-## src/screens/GamesScreen.js
-```javascript
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../constants/theme';
-
-const GamesScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Games Screen</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-  },
-  text: {
-    fontSize: 20,
-  },
-});
-
-export default GamesScreen;
-```
-
-## src/screens/PuzzlesScreen.js
-```javascript
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../constants/theme';
-
-const PuzzlesScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Puzzles Screen</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-  },
-  text: {
-    fontSize: 20,
-  },
-});
-
-export default PuzzlesScreen;
-```
-
-## src/screens/ProjectsScreen.js
-```javascript
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../constants/theme';
-
-const ProjectsScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Projects Screen</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-  },
-  text: {
-    fontSize: 20,
-  },
-});
-
-export default ProjectsScreen;
-```
-
-## src/screens/ProfileScreen.js
-```javascript
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../constants/theme';
-
-const ProfileScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Profile Screen</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-  },
-  text: {
-    fontSize: 20,
-  },
-});
-
-export default ProfileScreen;
-```
-
----
-
-# QA Report: CodeSpark Mobile App - Expo MVP
-
-## Executive Summary
-After thorough analysis of the CodeSpark mobile app codebase, I've identified several critical bugs, potential issues, and areas for improvement that need to be addressed before the app can be considered production-ready.
-
----
-
-## 🔴 Critical Issues
-
-### 1. **Incomplete Button Style in OnboardingScreen.js**
-**Location:** `src/screens/OnboardingScreen.js`, line 157  
-**Issue:** The `continueButton` style definition is incomplete - it's cut off at `borderRadius: borderRadius.sm` without closing the style object.  
-**Impact:** This will cause a syntax error and prevent the app from running.  
-**Solution:**
-```javascript
-continueButton: {
-  backgroundColor: colors.primary,
-  paddingVertical: spacing.md,
-  borderRadius: borderRadius.sm, // Add comma
-  marginTop: 'auto', // Add missing properties
-  marginBottom: spacing.xl,
-},
-disabledButton: { // Add missing style
-  backgroundColor: colors.textSecondary,
-  opacity: 0.5,
-},
-continueButtonText: { // Add missing style
-  ...fonts.body,
-  color: colors.white,
-  textAlign: 'center',
-  fontWeight: 'bold',
-},
-```
-
-### 2. **Missing Screen Components**
-**Location:** `src/navigation/MainNavigator.js`  
-**Issue:** The navigator imports 5 screens (HomeScreen, GamesScreen, PuzzlesScreen, ProjectsScreen, ProfileScreen) but these files are not provided in the codebase.  
-**Impact:** The app will crash immediately when trying to navigate to any tab.  
-**Solution:** Create all missing screen components with at least basic placeholder content.
-
----
-
-## 🟡 High Priority Issues
-
-### 3. **Missing Font Files**
-**Location:** `App.js`, lines 31-35  
-**Issue:** The app attempts to load custom fonts from the assets folder, but these font files are not confirmed to exist.  
-**Impact:** If font files are missing, the app will crash on startup.  
-**Solution:** Ensure all font files exist in the correct location:
-- `./assets/fonts/Nunito-Regular.ttf`
-- `./assets/fonts/Nunito-Bold.ttf`
-- `./assets/fonts/BubblegumSans-Regular.ttf`
-
-### 4. **Missing Image Assets**
-**Location:** `app.json`  
-**Issue:** References to image assets that may not exist:
-- `./assets/icon.png`
-- `./assets/splash.png`
-- `./assets/adaptive-icon.png`
-- `./assets/favicon.png`  
-**Impact:** Build process will fail if these assets don't exist.  
-**Solution:** Verify all image assets exist or provide default placeholders.
-
-### 5. **Navigation Flow Issue**
-**Location:** `App.js`, lines 66-73  
-**Issue:** When `hasOnboarded` is true, the Onboarding screen is not added to the stack, but the Main screen tries to replace a non-existent screen.  
-**Impact:** Potential navigation issues.  
-**Solution:**
-```javascript
-<Stack.Navigator screenOptions={{ headerShown: false }}>
-  {!hasOnboarded ? (
-    <Stack.Screen name="Onboarding">
-      {props => <OnboardingScreen {...props} onComplete={completeOnboarding} />}
-    </Stack.Screen>
-  ) : (
-    <Stack.Screen name="Main" component={MainNavigator} />
-  )}
-</Stack.Navigator>
-```
-
----
-
-## 🟢 Medium Priority Issues
-
-### 6. **Error Handling Improvements**
-**Location:** `App.js`, `loadApp` function  
-**Issue:** Error is only logged to console, user gets no feedback if app fails to load.  
-**Solution:** Add user-facing error state:
-```javascript
-const [error, setError] = useState(null);
-
-// In catch block:
-catch (error) {
-  console.error('Error loading app:', error);
-  setError('Failed to load app. Please restart.');
-}
-
-// In render:
-if (error) {
-  return (
-    <View style={styles.errorContainer}>
-      <Text>{error}</Text>
-      <TouchableOpacity onPress={loadApp}>
-        <Text>Retry</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-```
-
-### 7. **AsyncStorage Error Handling**
-**Location:** `OnboardingScreen.js`, `handleContinue` function  
-**Issue:** No error handling for AsyncStorage operations.  
-**Solution:**
-```javascript
-const handleContinue = async () => {
-  if (selectedAvatar) {
-    try {
-      await AsyncStorage.setItem('selectedAvatar', JSON.stringify(selectedAvatar));
-      await onComplete();
-      navigation.replace('Main');
-    } catch (error) {
-      console.error('Failed to save avatar:', error);
-      // Show error message to user
-    }
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
   }
-};
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  handleReset = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.title}>Oops! Something went wrong</Text>
+          <Text style={styles.message}>
+            We're sorry for the inconvenience. Please try restarting the app.
+          </Text>
+          <TouchableOpacity style={styles.button} onPress={this.handleReset}>
+            <Text style={styles.buttonText}>Try Again</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: colors.background,
+  },
+  title: {
+    ...typography.heading,
+    color: colors.textPrimary,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  message: {
+    ...typography.body,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  button: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: 30,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  buttonText: {
+    ...typography.body,
+    color: colors.white,
+    fontWeight: '600',
+  },
+});
+
+export default ErrorBoundary;
 ```
 
-### 8. **Unused Variable**
-**Location:** `OnboardingScreen.js`, line 26  
-**Issue:** `step` state variable is defined but never used.  
-**Solution:** Remove unused state or implement multi-step onboarding if intended.
-
----
-
-## 🔵 Performance & Best Practice Improvements
-
-### 9. **Font Loading Optimization**
-**Suggestion:** Consider using `expo-splash-screen` to keep splash screen visible while fonts load:
+## src/utils/validation.js
 ```javascript
-import * as SplashScreen from 'expo-splash-screen';
-
-SplashScreen.preventAutoHideAsync();
-
-// After fonts loaded:
-await SplashScreen.hideAsync();
-```
-
-### 10. **Memoization Opportunities**
-**Location:** `OnboardingScreen.js`  
-**Suggestion:** Memoize `renderAvatar` function to prevent unnecessary re-renders:
-```javascript
-const renderAvatar = useCallback(({ item }) => {
-  // ... existing code
-}, [selectedAvatar]);
-```
-
-### 11. **Accessibility Improvements**
-**Suggestion:** Add accessibility props to interactive elements:
-```javascript
-<TouchableOpacity
-  accessible={true}
-  accessibilityLabel={`Select ${item.name} avatar`}
-  accessibilityRole="button"
-  accessibilityState={{ selected: isSelected }}
->
-```
-
-### 12. **TypeScript Migration**
-**Suggestion:** Consider migrating to TypeScript for better type safety and developer experience.
-
----
-
-## 📋 Testing Recommendations
-
-1. **Unit Tests:** Add Jest tests for utility functions and components
-2. **Integration Tests:** Test navigation flows and data persistence
-3. **E2E Tests:** Implement Detox tests for critical user journeys
-4. **Device Testing:** Test on various screen sizes and both iOS/Android
-
----
-
-## ✅ Positive Aspects
-
-- Good project structure and organization
-- Consistent theming system
-- Proper use of React Navigation
-- Clean component separation
-- Good use of React Hooks
-
----
-
-## 📊 Summary
-
-**Total Issues Found:** 12
-- **Critical:** 2 (must fix before testing)
-- **High Priority:** 4 (should fix before release)
-- **Medium Priority:** 3 (can be addressed in next iteration)
-- **Improvements:** 3 (nice to have)
-
-## Recommended Action Plan
-
-1. **Immediate (Before Testing):**
-   - Fix the incomplete style object in OnboardingScreen.js
-   - Create placeholder screen components
-   - Verify all asset files exist
-
-2. **Before Release:**
-   - Implement proper error handling
-   - Add loading states and user feedback
-   - Test on physical devices
-
-3. **Future Iterations:**
-   - Add comprehensive testing
-   - Improve accessibility
-   - Consider TypeScript migration
-
-The codebase shows good architectural decisions and follows React Native best practices, but requires the above fixes before it can be tested on mobile devices. Once these issues are resolved, the app should provide a solid foundation for the CodeSpark educational platform.
-```
+export const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\

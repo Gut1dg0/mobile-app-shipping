@@ -127,7 +127,7 @@ def select():
     )
 
 # Get absolute path to the real static folder
-STATIC_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../static'))
+STATIC_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static/'))
 
 # Serve images from ./src/static
 @app.route('/images/<path:filename>')
