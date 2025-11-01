@@ -1,127 +1,137 @@
-## CodeSpark: UI/UX Design Document
+## AR Local: Augmented Reality Local Exploration App - UI/UX Design Document
 
-**1. Visuals**
+### I. Visuals
 
 *   **Color Palette:**
-    *   Primary: `#4CAF50` (Green) - Represents growth, learning, and positivity.
-    *   Secondary: `#FFC107` (Yellow) - Represents energy, creativity, and fun.
-    *   Accent: `#2196F3` (Blue) - Represents trust, intelligence, and progress.
-    *   Background: `#F5F5F5` (Light Gray) - Provides a clean and uncluttered backdrop.
-    *   Text (Primary): `#333333` (Dark Gray) - Ensures readability.
-    *   Text (Secondary): `#757575` (Gray) - For less important information.
-    *   Error: `#F44336` (Red) - For error messages and warnings.
+    *   Primary: #3498db (Blue) - Represents trust, stability, and technology.
+    *   Secondary: #2ecc71 (Green) - Represents exploration, growth, and local experiences.
+    *   Accent: #f39c12 (Orange) - Represents energy, excitement, and discovery.
+    *   Neutral: #ecf0f1 (Light Gray) - Used for backgrounds and content containers to provide visual clarity.
+    *   Text (Dark): #2c3e50 (Dark Blue) - For headings and important information.
+    *   Text (Light): #7f8c8d (Gray) - For body text and less important information.
 
 *   **Typography:**
-    *   Headline: "Bubblegum Sans", sans-serif, bold, 24-36pt. This font provides a playful, child-friendly feel.
-    *   Body: "Nunito", sans-serif, regular, 14-16pt. Ensures readability and a modern look.
-
-*   **UI Elements:**
-    *   Buttons: Rounded corners (8dp), solid fill with primary color, white text, subtle shadow.
-    *   Icons: Flat, vector-based icons with a consistent style. Use a 24x24dp grid for consistency.
-    *   Input Fields: Rounded corners (8dp), light gray background, dark gray text, clear visual cues for focus and error states.
-    *   Cards: White background, rounded corners (12dp), subtle shadow to create depth.
-    *   Avatars: Circular, with a solid background color and a simple character illustration.
+    *   Headings: Montserrat (Bold) - Modern and clean, providing a strong visual hierarchy.
+    *   Body: Open Sans (Regular) - Readable and accessible, ensuring a smooth reading experience.
 
 *   **Layout:**
-    *   Use a grid system to ensure consistency and alignment.
-    *   Maintain sufficient spacing between elements to avoid clutter.
-    *   Use visual hierarchy to guide the user's attention.
-    *   Optimize for different screen sizes and resolutions.
+    *   Consistent use of whitespace to avoid clutter and improve readability.
+    *   Card-based design for event listings and business information.
+    *   Bottom navigation bar for easy access to core features (Home, Map, Profile, Settings).
+    *   Use of visual cues (icons, animations) to guide users and provide feedback.
 
-*   **Illustrations:**
-    *   Use colorful and engaging illustrations to create a playful and inviting atmosphere.
-    *   Illustrations should be age-appropriate and relevant to the coding concepts being taught.
-    *   Consider using animations to bring the illustrations to life.
+*   **Elements:**
+    *   Buttons: Rounded corners, subtle shadow, and clear call-to-action text. Color changes on press/tap for feedback.
+    *   Icons: Line-based icons for a clean and modern look. Consistent style throughout the app.
+    *   Input Fields: Clearly labeled with appropriate placeholder text.
+    *   AR Overlay: Semi-transparent overlays with clear text and icons for event information and reviews.
 
-**2. Features**
+### II. Features & User Flows
 
-*   **Onboarding:**
-    *   A brief, interactive tutorial to introduce the app's main features and benefits.
-    *   Character selection: Allow users to choose an avatar.
-    *   Age selection: Important for content filtering and difficulty adjustment.
+#### 1. Login Screen (app_mockup_login.png)
 
-*   **Home Screen:**
-    *   Layout: A dashboard with clear sections for games, puzzles, creative projects, and progress tracking.
-    *   Games: Display a curated selection of coding games with visually appealing thumbnails.
-    *   Puzzles: Showcase puzzle challenges with increasing difficulty levels.
-    *   Creative Projects: Provide access to the sandbox environment for creating games, stories, and animations.
-    *   Progress Tracking: A summary of the user's progress, including completed games, puzzles solved, and skills learned.
-    *   Navigation: A bottom navigation bar with icons for Home, Games, Projects, and Profile.
+*   **Visuals:**
+    *   Background: A blurred image of a local landmark or cityscape.
+    *   Logo: AR Local logo prominently displayed at the top.
+    *   Input Fields: Email and Password fields with clear labels and validation.
+    *   Buttons: "Log In" and "Sign Up" buttons.
+    *   Social Login: Options to log in with Google or Facebook (optional).
+    *   "Forgot Password?" link.
 
-*   **Games Screen:**
-    *   Layout: A scrollable list of coding games, categorized by coding concept (e.g., sequencing, loops, conditionals).
-    *   Filtering: Allow users to filter games by difficulty level and coding concept.
-    *   Search: Implement a search bar to quickly find specific games.
-    *   Game Details: Tapping on a game thumbnail opens a game details screen with a description, learning objectives, and screenshots/videos.
+*   **Features:**
+    *   User can log in with existing credentials or sign up for a new account.
+    *   Input validation to ensure correct email format and password strength.
+    *   "Forgot Password?" flow: User enters email, receives a password reset link.
+    *   Transition: Successful login navigates to the Home screen.
 
-*   **Puzzle Screen:**
-    *   Layout: A series of puzzles, presented in a sequential order.
-    *   Difficulty: Puzzles gradually increase in difficulty as the user progresses.
-    *   Hints: Provide optional hints to help users solve challenging puzzles.
-    *   Solutions: Offer solutions for puzzles that users are unable to solve, but encourage them to try again first.
+#### 2. Home Screen (app_mockup_home.png)
 
-*   **Creative Projects Screen:**
-    *   Layout: A sandbox environment where users can create their own games, stories, and animations.
-    *   Tools: Provide a set of intuitive coding blocks and visual assets for creating projects.
-    *   Sharing: Allow users to share their projects with friends and family.
-    *   Inspiration: Offer templates and examples to inspire creativity.
+*   **Visuals:**
+    *   Top Bar: AR Local logo, search bar, and location icon.
+    *   Featured Events: A carousel of featured events with images, titles, and brief descriptions.
+    *   Nearby Events: A list of nearby events, sorted by distance or relevance.
+    *   Filter Options: A button to access filter options (category, price, distance, etc.).
+    *   AR Button: A prominent button to activate the AR overlay.
 
-*   **Progress Tracking Screen:**
-    *   Layout: A dashboard that displays the user's progress in each coding concept.
-    *   Visualizations: Use charts and graphs to visualize progress over time.
-    *   Achievements: Award badges and certificates for completing games, puzzles, and projects.
-    *   Parent/Educator View: Allow parents and educators to track a child's progress and identify areas where they may need additional support.
+*   **Features:**
+    *   Displays a curated list of events and businesses based on location and preferences.
+    *   Search functionality to find specific events or businesses.
+    *   Filter options to refine search results.
+    *   AR overlay: Tapping the AR button activates the camera and overlays event information onto the user's view.
+    *   Event Details: Tapping on an event card navigates to the Event Details screen.
 
-*   **Character Customization:**
-    *   Layout: A screen where users can personalize their in-app avatar.
-    *   Options: Provide a variety of customization options, including clothing, hairstyles, accessories, and colors.
-    *   Virtual Currency: Allow users to purchase additional customization options with virtual currency.
+#### 3. Event Details Screen (Not explicitly pictured, but described)
 
-*   **Login/Registration:**
-    *   Simple and secure login/registration process.
-    *   Option to sign up with email/password or social media accounts (e.g., Google, Facebook).
-    *   Parental consent: Implement a mechanism to obtain parental consent for users under 13 years of age.
+*   **Visuals:**
+    *   Event Image: Large image of the event.
+    *   Event Title: Prominent display of the event title.
+    *   Event Description: Detailed description of the event.
+    *   Location Information: Address, map, and directions.
+    *   Reviews: Ratings and reviews from other users.
+    *   Buttons: "Add to Calendar," "Share," "Get Directions."
 
-*   **Settings:**
-    *   Adjustable font sizes.
-    *   Voice-over options.
-    *   Colorblind modes.
-    *   Language selection.
-    *   Parental controls.
+*   **Features:**
+    *   Provides comprehensive information about a selected event.
+    *   User can add the event to their calendar, share it with friends, or get directions.
+    *   Displays reviews and ratings from other users.
+    *   User can leave their own review and rating.
 
-*   **Transitions:**
-    *   Use smooth and subtle transitions between screens.
-    *   Avoid jarring or distracting animations.
-    *   Consider using shared element transitions to create a sense of continuity.
+#### 4. Map Screen (Not explicitly pictured, but described)
 
-**3. User Flow**
+*   **Visuals:**
+    *   Interactive Map: Displays a map with pins indicating nearby events and businesses.
+    *   Filter Options: Accessible from the map screen to filter events and businesses.
+    *   AR Mode Toggle: A toggle to switch between the traditional map view and the AR overlay.
 
-1.  **App Launch:** The user launches the app and is presented with the onboarding screen.
-2.  **Onboarding:** The user completes the onboarding tutorial and selects an avatar.
-3.  **Home Screen:** The user is taken to the home screen, where they can choose to play games, solve puzzles, create projects, or track their progress.
-4.  **Game Selection:** The user navigates to the games screen and selects a game to play.
-5.  **Gameplay:** The user plays the game and learns coding concepts.
-6.  **Puzzle Solving:** The user navigates to the puzzle screen and attempts to solve a puzzle.
-7.  **Creative Project Creation:** The user navigates to the creative projects screen and starts creating a new project.
-8.  **Progress Tracking:** The user navigates to the progress tracking screen to view their progress and achievements.
-9.  **Settings:** The user navigates to the settings screen to adjust app preferences.
+*   **Features:**
+    *   Allows users to explore events and businesses on a map.
+    *   AR mode: Overlays event information onto the map view.
+    *   Tapping on a pin navigates to the Event Details or Business Details screen.
 
-**4. Accessibility Considerations**
+#### 5. Profile Screen (app_mockup_profile.png)
 
-*   **Adjustable Font Sizes:** Allow users to increase or decrease the font size to improve readability.
-*   **Voice-Over Options:** Provide voice-over narration for all text and UI elements.
-*   **Colorblind Modes:** Offer alternative color palettes for users with colorblindness.
-*   **Keyboard Navigation:** Ensure that all UI elements can be accessed and interacted with using a keyboard or other assistive device.
-*   **Clear Visual Hierarchy:** Use visual cues to guide the user's attention and make it easy to understand the app's structure.
-*   **Sufficient Contrast:** Ensure that there is sufficient contrast between text and background colors.
+*   **Visuals:**
+    *   Profile Picture: User's profile picture.
+    *   User Information: Name, email, and other relevant information.
+    *   Saved Events: A list of saved events.
+    *   Review History: A list of events and businesses the user has reviewed.
+    *   Settings Button: A button to access the Settings screen.
 
-**5. Monetization (Freemium Model)**
+*   **Features:**
+    *   Displays the user's profile information.
+    *   Allows users to view their saved events and review history.
+    *   Provides access to the Settings screen.
 
-*   Offer a limited amount of free content to attract users.
-*   Provide a clear and compelling call to action to subscribe to unlock all games, features, and content.
-*   Offer optional in-app purchases for cosmetic items, virtual currency, or additional content packs.
-*   Ensure that in-app purchases are clearly labeled and do not disrupt the core educational experience.
+#### 6. Settings Screen (app_mockup_settings.png)
 
-**6. Dall-e Image Generation**
+*   **Visuals:**
+    *   Account Settings: Options to change password, email, and other account details.
+    *   Notification Settings: Options to customize notification preferences.
+    *   Privacy Settings: Options to manage data privacy settings.
+    *   About: Information about the app and its developers.
+    *   Help & Support: Links to FAQs and support resources.
+    *   Logout Button: A button to log out of the app.
 
-The Dall-e image generator was used to create a mockup of the app's home screen, envisioning a colorful and engaging interface for young coders. The image file is saved as `app_mockup_home.png`.
+*   **Features:**
+    *   Allows users to manage their account settings, notification preferences, and privacy settings.
+    *   Provides access to help and support resources.
+    *   Allows users to log out of the app.
+
+### III. Transitions
+
+*   **Screen Transitions:** Smooth, animated transitions between screens (e.g., slide-in, fade-in).
+*   **AR Overlay Transition:** A seamless transition between the camera view and the AR overlay.
+*   **Button Feedback:** Visual feedback on button press/tap (e.g., color change, animation).
+
+### IV. Accessibility
+
+*   **Text Size:** Allow users to adjust text size for improved readability.
+*   **Color Contrast:** Ensure sufficient color contrast between text and background for users with visual impairments.
+*   **Alternative Text:** Provide alternative text for images for screen readers.
+*   **Keyboard Navigation:** Support keyboard navigation for users with motor impairments.
+
+### V. Additional Notes
+
+*   The app should be optimized for both iOS and Android devices.
+*   Regular user testing should be conducted to gather feedback and improve the user experience.
+*   The design should be flexible and adaptable to future features and updates.
