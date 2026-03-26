@@ -6,7 +6,6 @@ from crewai.tasks.conditional_task import ConditionalTask
 from crewai.tasks.task_output import TaskOutput
 from typing import List
 from crewai_tools import FileReadTool
-from mobile_app_shipping.tools.zip_project_tool import zip_project
 from pathlib import Path
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -20,7 +19,7 @@ file_read_tool = FileReadTool(file_path=file_path)
 #file_read_tool = FileReadTool(file_path='/Users/agustincompean/Desktop/CrewAI/Flows/mobile_app_shipping/app_design.md')
 
 gemini_llm = LLM(
-    model="gemini/gemini-2.0-flash",
+    model="gemini/gemini-3-flash-preview",
     temperature=0.7,
 )
 

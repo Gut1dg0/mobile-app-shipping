@@ -153,8 +153,9 @@ def kickoff():
     flow_instance.kickoff()
 
     # ✅ Start Flask server after Crew 1 finishes, in a background thread
+    port = int(os.environ.get("PORT", 5000))
+
     def run_flask():
-        port = int(os.environ.get("PORT", 5000))
         print(f"🌐 Starting Flask server on http://127.0.0.1:{port}")
         app.run(host="0.0.0.0", port=port, debug=False)
 
@@ -168,11 +169,11 @@ def kickoff():
     # Automatically open browser if not production
     if os.environ.get("ENV") != "production":
         try:
-            webbrowser.open("http://127.0.0.1:5000")
+            webbrowser.open(f"http://127.0.0.1:{port}")
         except Exception as e:
             print(f"⚠️ Could not open browser automatically: {e}")
 
-    print("✅ Flask server running — open http://127.0.0.1:5000 if it didn't open automatically.\n")
+    print(f"✅ Flask server running — open http://127.0.0.1:{port} if it didn't open automatically.\n")
 
     # Keep main thread alive (since CrewAI flow ended)
     while True:

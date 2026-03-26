@@ -8,7 +8,7 @@ from typing import List
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 gemini_llm = LLM(
-    model="gemini/gemini-2.0-flash",
+    model="gemini/gemini-3-flash-preview",
     temperature=0.7,
 )
 
