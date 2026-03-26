@@ -10,7 +10,6 @@ from typing import List
 from flask import Flask, render_template, send_from_directory, request
 from pydantic import BaseModel, Field
 from crewai.flow import Flow, listen, start
-from crewai.project import after_kickoff
 
 # === Import your Crews ===
 from mobile_app_shipping.crews.app_idea_crew.app_idea_crew import AppIdeaCrew
@@ -46,7 +45,7 @@ class MobileAppFlow(Flow[MobileAppConcepts]):
         result = app_idea_crew.crew().kickoff()
 
         # get the plain text from CrewOutput
-        raw_result = result.raw_output if hasattr(result, "raw_output") else str(result)
+        raw_result = result.raw if hasattr(result, "raw") else str(result)
         print("🧾 Raw LLM output from Crew 1:\n", raw_result[:500])
 
         parsed_concepts: List[str] = []
@@ -73,13 +72,6 @@ class MobileAppFlow(Flow[MobileAppConcepts]):
         self.state.concepts = parsed_concepts
         print(f"✅ Parsed {len(parsed_concepts)} concepts for web display.")
         return self.state
-
-    @after_kickoff
-    def prep_web_interface(self):
-        """Mark that the interface is ready but don't launch Flask here."""
-        print("⚙️ Preparing to launch Human-in-the-Loop interface...")
-        # just log readiness; we’ll start Flask in kickoff()
-        return True
 
     def resume_after_selection(self, chosen_concept: str):
         """Called by Flask when the human selects a concept."""

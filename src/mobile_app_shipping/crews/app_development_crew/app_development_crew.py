@@ -6,17 +6,6 @@ from crewai.tasks.conditional_task import ConditionalTask
 from crewai.tasks.task_output import TaskOutput
 from typing import List
 from crewai_tools import FileReadTool
-from pathlib import Path
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
-
-file_path = os.path.join(os.getcwd(), 'app_design.md')
-assert os.path.exists(file_path), "File not found!"
-
-file_read_tool = FileReadTool(file_path=file_path)
-
-#file_read_tool = FileReadTool(file_path='/Users/agustincompean/Desktop/CrewAI/Flows/mobile_app_shipping/app_design.md')
 
 gemini_llm = LLM(
     model="gemini/gemini-3-flash-preview",
@@ -48,6 +37,8 @@ class AppDevelopmentCrew():
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def mobile_developer(self) -> Agent:
+        file_path = os.path.join(os.getcwd(), 'app_design.md')
+        file_read_tool = FileReadTool(file_path=file_path)
         return Agent(
             config=self.agents_config['mobile_developer'], # type: ignore[index]
             verbose=True,
