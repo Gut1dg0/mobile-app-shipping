@@ -26,7 +26,7 @@ selected_concept = ""  # stores user’s selected idea
 flow_instance = None   # reference to current Flow instance
 
 class MobileAppConcepts(BaseModel):
-    concepts: List[str] = []
+    concepts: List[str] = ['Flow Concept 1', 'Flow Concept 2', 'Flow Concept 3']  # default placeholder concepts
 
 
 class MobileAppFlow(Flow[MobileAppConcepts]):
