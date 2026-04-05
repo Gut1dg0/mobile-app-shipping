@@ -1,75 +1,110 @@
 development_task:
   description: >
-    Develop the necessary code to have an mvp of a mobile app. To develop the code,
-    have a look at the document containing the app's design, features and requirements.
-    To find the document use the file_read_tool. Develop the code having in mind that it will
-    be tested in an Expo-managed environment, therefore, the packages used in the project
-    should be compatible with Expo and the project shouldn't have an ios or android
-    folder or any code or configurations for a bare react native project.
+    Develop a complete, runnable Flutter MVP project based on the app design document.
+    Use the file_read_tool to read `app_design.md` before writing any code.
 
-    Once you finish generating the code, provide it to the qa_engineer.
+    You must produce ALL of the following files:
+
+    1. pubspec.yaml — valid Flutter pubspec with:
+       - name (snake_case, no spaces), description, version: 1.0.0+1
+       - environment: sdk: '>=3.0.0 <4.0.0'
+       - All dependencies needed (e.g. provider, go_router, http, shared_preferences)
+       - flutter: uses-material-design: true
+
+    2. lib/main.dart — entry point calling runApp()
+
+    3. lib/screens/ — one .dart file per screen (home, login, profile, settings at minimum)
+
+    4. lib/widgets/ — reusable widget files if needed
+
+    For EACH file, wrap its content using this EXACT delimiter format with no deviation:
+
+    === FILE: pubspec.yaml ===
+    <full file content here>
+    === END FILE ===
+
+    === FILE: lib/main.dart ===
+    <full file content here>
+    === END FILE ===
+
+    Rules:
+    - All Dart code must be null-safe (sound null safety).
+    - Do not use deprecated APIs.
+    - Every import must reference a package that is declared in pubspec.yaml or is part of Flutter/Dart core.
+    - No placeholder comments like "// TODO" — implement every function fully.
+    - Navigation must work between all screens.
 
   expected_output: >
-    Code for a mobile app project in Expo. The code should be divided in a way that
-    clearly indicates what piece of code should be in what file. For instance:
-    <markdown>
-    #App.js
-    <code>...</code>
-    </markdown>
-
+    All Flutter project files wrapped in === FILE: <path> === / === END FILE === delimiters.
+    Every file must be complete — no truncation, no ellipsis, no "add more code here" placeholders.
   agent: mobile_developer
 
 qa_task:
   description: >
-    Analyze the code and perform one of the following steps depending on the results
-    of the analysis.
+    Review all the Flutter project files produced by the mobile_developer.
 
-    - If the code contains issues or bugs, generate a full report outlining the issues
-    found on the code or any improvements you think could be implemented, so the mobile_developer
-    can work on them. The report should contain a list of the bugs, issues or
-    improvements and their respective solution.
+    Check specifically for:
+    - pubspec.yaml syntax errors or missing/incompatible dependencies
+    - Missing or incorrect Dart imports
+    - Null safety violations
+    - Widget build() methods that return null or are incomplete
+    - Navigation routes that are defined but never connected, or referenced but not defined
+    - Any compilation-blocking issues
 
-    - If the code is good to go, pass it over to the document_specialist so he can
-    turn it into a markdown-formatted document.
+    If you find issues, produce a detailed report with:
+    - The file name
+    - The specific problem
+    - The exact fix (show the corrected code snippet)
+
+    If the code is clean and would compile successfully, say "LGTM — code is ready for delivery."
 
   expected_output: >
-    Either a fully fledged report with the bugs or issues found on the code provided by the mobile_developer.
-    Or a congrats message letting the mobile_developer know that the code is great and the project is
-    ready to be tested on a mobile device.
-
+    Either a detailed bug report listing every issue with its exact fix,
+    or "LGTM — code is ready for delivery." if no issues were found.
   agent: qa_engineer
 
 refactoring_task:
   description: >
-    If the qa_engineer gives you a report back that means you need to work on some improvements
-    to the code. If so:
-    - Work on solving any issue or bug outlined on the report.
-    Fix any necessary code to have an mvp of the mobile app. Remember that the code will
-    be tested in an Expo-managed environment, therefore, the packages used in the project
-    should be compatible with Expo and the project shouldn't have an ios or android
-    folder or any code or configurations for a bare react native project.
+    The qa_engineer has found issues in the Flutter project code. Fix every issue listed in
+    the QA report.
 
-    Give your refactored code to the document_specialist so he can paste it into
-    a markdown document.
+    After fixing, re-emit ALL project files using the exact same delimiter format:
+
+    === FILE: <relative path> ===
+    <full file content>
+    === END FILE ===
+
+    Do not omit any files — include both fixed files and unchanged files.
+    All Dart code must be null-safe and complete with no TODOs or placeholders.
 
   expected_output: >
-    Refactored and improved code for an Expo project. The code should be bug-free and ready
-    to be tested.
-
+    All Flutter project files (fixed) wrapped in === FILE: <path> === / === END FILE === delimiters.
   agent: mobile_developer
 
 document_task:
   description: >
-    Fill a markdown document with the code that will be provided to you.
+    You will receive Flutter project code from the mobile_developer (either original or refactored).
+    Your job is to write ALL of it into a markdown file with perfect fidelity.
 
-    Make sure all the code is pasted with integrity in the markdown file.
+    Format the output using EXACTLY this delimiter pattern for each file:
 
-    The file should be formatted in a way that clearly indicates what piece of code
-    should be in what file. For instance:
-    <markdown>
-    #App.js
-    <code>...</code>
-    </markdown>
+    === FILE: pubspec.yaml ===
+    <complete file content>
+    === END FILE ===
+
+    === FILE: lib/main.dart ===
+    <complete file content>
+    === END FILE ===
+
+    ...and so on for every file.
+
+    Rules:
+    - Do NOT add any text, commentary, or explanation outside the delimiters.
+    - Do NOT truncate or summarize any file content.
+    - Copy every character of every file exactly as provided.
+    - The output must contain every file that was produced by the mobile_developer.
+
   expected_output: >
-    A markdown file containing all the code for a mobile app project.
+    A markdown file containing all Flutter project files, each wrapped in
+    === FILE: <path> === / === END FILE === delimiters, with zero omissions or alterations.
   agent: document_specialist

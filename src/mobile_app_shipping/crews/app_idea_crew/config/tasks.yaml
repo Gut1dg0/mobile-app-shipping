@@ -1,10 +1,33 @@
 research_task:
   description: >
-    Conduct a thorough research on the latest trending, high-volume, low-competition keywords for mobile apps
-    on Google Play Store. Use the SerperDevTool to browse the web for available platforms and tools to complete
-    the research.
+    Conduct thorough, data-driven research on the latest trending, high-volume, low-competition keywords
+    for mobile apps on both the Apple App Store and Google Play Store.
+
+    Step 1 — Discover real data sources:
+    Use SerperDevTool to search for queries such as:
+    - "site:sensortower.com trending app keywords 2024 2025"
+    - "site:appfollow.io trending keywords mobile apps"
+    - "google play store trending app categories keywords high volume low competition"
+    - "apple app store trending search keywords ASO 2024 2025"
+    - "free ASO keyword research tool trending mobile app keywords"
+    Search for at least 5 different queries targeting real ASO data.
+
+    Step 2 — Scrape real data:
+    Use the ScrapeWebsiteTool to visit the most promising pages returned by your searches and
+    extract actual keyword data, including any available metrics such as search volume,
+    competition level, trend direction, and number of competing apps.
+
+    Step 3 — Report with real evidence:
+    For each keyword you report, cite the source URL where you found the data and include
+    whatever real metrics you were able to extract (volume estimate, competition score/level,
+    trend direction). Do not invent or approximate data — only report what you actually found.
+
   expected_output: >
-    A list with 10 bullet points of the most relevant keywords for mobile apps on Google Play Store.
+    A list of exactly 10 keywords for mobile apps, each with:
+    - Keyword name
+    - Platform(s): App Store / Play Store / Both
+    - Real metrics found (search volume estimate, competition level, trend direction)
+    - Source URL where the data was obtained
   agent: researcher
 
 app_ideas_task:

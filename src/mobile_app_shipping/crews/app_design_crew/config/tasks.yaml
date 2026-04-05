@@ -10,7 +10,7 @@ analysis_task:
     - Marketing Strategy (How you will market the app)
     - Roadmap (What features will be added in the future)
     - Competitive Analysis (How the app will compare to the competition)
-    - Technical Requirements (What technology will be used)
+    - Technical Requirements (Flutter/Dart will be used; list key packages from pub.dev)
     - Conclusion (Summarize the app idea)
   expected_output: >
     A report both in JSON and markdown format.

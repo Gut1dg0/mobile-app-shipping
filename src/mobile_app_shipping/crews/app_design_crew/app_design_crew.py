@@ -7,13 +7,8 @@ from typing import List
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
-gemini_llm = LLM(
-    model="gemini/gemini-3-flash-preview",
-    temperature=0.7,
-)
-
-anthropic_llm = LLM(
-    model="anthropic/claude-opus-4-1-20250805",
+groq_llm = LLM(
+    model="groq/llama-3.3-70b-versatile",
     temperature=0.7,
 )
 
@@ -35,7 +30,7 @@ class AppDesignCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            llm=groq_llm,
         )
 
     @agent
@@ -44,7 +39,7 @@ class AppDesignCrew():
             config=self.agents_config['uxui_designer'], # type: ignore[index]
             verbose=True,
             tools=[stable_diffusion_gallery],
-            llm=gemini_llm
+            llm=groq_llm
         )
 
     # To learn more about structured task outputs,
