@@ -43,7 +43,7 @@ class AppDevelopmentCrew():
             config=self.agents_config['mobile_developer'], # type: ignore[index]
             verbose=True,
             tools=[file_read_tool],
-            llm=anthropic_llm,
+            llm=gemini_llm,
             allow_delegation=True,
         )
 
@@ -52,7 +52,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['qa_engineer'], # type: ignore[index]
             verbose=True,
-            llm=anthropic_llm,
+            llm=gemini_llm,
         )
 
     @agent
@@ -60,7 +60,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['document_specialist'], # type: ignore[index]
             verbose=True,
-            llm=anthropic_llm,
+            llm=gemini_llm,
         )
 
     # To learn more about structured task outputs,
