@@ -6,6 +6,7 @@ colorTo: purple
 sdk: docker
 pinned: false
 app_port: 7860
+short_description: Mobile App Ideas and Code Generator
 ---
 
 # Mobile App Shipping Crew
