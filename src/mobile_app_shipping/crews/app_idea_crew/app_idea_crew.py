@@ -13,7 +13,7 @@ groq_llm = LLM(
 )
 
 gemini_llm = LLM(
-    model="gemini-3.1-pro-preview",
+    model="google/gemini-3.1-pro-preview",
     temperature=0.7,
 )
 
