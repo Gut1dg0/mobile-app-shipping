@@ -7,9 +7,8 @@ from typing import List
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
-ollama_llm = LLM(
-    model="ollama/qwen2.5:7b",
-    base_url="http://localhost:11434",
+sonnet_llm = LLM(
+    model="anthropic/claude-sonnet-4-6",
     temperature=0.7,
 )
 
@@ -31,7 +30,7 @@ class AppDesignCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=ollama_llm,
+            llm=sonnet_llm,
         )
 
     @agent

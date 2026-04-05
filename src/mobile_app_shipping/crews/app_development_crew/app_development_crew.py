@@ -7,19 +7,18 @@ from crewai.tasks.task_output import TaskOutput
 from typing import List
 from crewai_tools import FileReadTool
 
-claude_llm = LLM(
-    model="anthropic/claude-sonnet-4-6",
+opus_llm = LLM(
+    model="anthropic/claude-opus-4-6",
     temperature=0.2,
 )
 
-ollama_llm = LLM(
-    model="ollama/qwen2.5:7b",
-    base_url="http://localhost:11434",
+sonnet_llm = LLM(
+    model="anthropic/claude-sonnet-4-6",
     temperature=0.7,
 )
 
-gemini_llm = LLM(
-    model="google/gemini-3.1-pro-preview",
+groq_llm = LLM(
+    model="groq/llama-3.1-8b-instant",
     temperature=0.7,
 )
 
@@ -46,7 +45,7 @@ class AppDevelopmentCrew():
             config=self.agents_config['mobile_developer'], # type: ignore[index]
             verbose=True,
             tools=[file_read_tool],
-            llm=ollama_llm,
+            llm=opus_llm,
             allow_delegation=True,
         )
 
@@ -55,7 +54,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['qa_engineer'], # type: ignore[index]
             verbose=True,
-            llm=ollama_llm,
+            llm=opus_llm,
         )
 
     @agent
@@ -63,7 +62,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['document_specialist'], # type: ignore[index]
             verbose=True,
-            llm=ollama_llm,
+            llm=groq_llm,
         )
 
     @task
