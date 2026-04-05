@@ -7,13 +7,9 @@ from crewai_tools import SerperDevTool, ScrapeWebsiteTool
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
-groq_llm = LLM(
-    model="groq/llama-3.1-8b-instant",
-    temperature=0.7,
-)
-
-gemini_llm = LLM(
-    model="gemini/gemini-3-flash-preview",
+ollama_llm = LLM(
+    model="ollama/qwen2.5:7b",
+    base_url="http://localhost:11434",
     temperature=0.7,
 )
 
@@ -38,7 +34,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            llm=ollama_llm,
             tools=[search_tool, scrape_tool]
         )
 
@@ -47,7 +43,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=groq_llm
+            llm=ollama_llm
         )
 
     # To learn more about structured task outputs,

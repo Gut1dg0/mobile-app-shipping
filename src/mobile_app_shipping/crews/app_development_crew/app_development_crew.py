@@ -12,6 +12,12 @@ claude_llm = LLM(
     temperature=0.2,
 )
 
+ollama_llm = LLM(
+    model="ollama/qwen2.5:7b",
+    base_url="http://localhost:11434",
+    temperature=0.7,
+)
+
 gemini_llm = LLM(
     model="google/gemini-3.1-pro-preview",
     temperature=0.7,
@@ -40,7 +46,7 @@ class AppDevelopmentCrew():
             config=self.agents_config['mobile_developer'], # type: ignore[index]
             verbose=True,
             tools=[file_read_tool],
-            llm=claude_llm,
+            llm=ollama_llm,
             allow_delegation=True,
         )
 
@@ -49,7 +55,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['qa_engineer'], # type: ignore[index]
             verbose=True,
-            llm=claude_llm,
+            llm=ollama_llm,
         )
 
     @agent
@@ -57,7 +63,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['document_specialist'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            llm=ollama_llm,
         )
 
     @task
