@@ -2,3 +2,10 @@
 __pycache__/
 lib/
 .DS_Store
+.venv/
+
+# Runtime-generated outputs
+app_roadmap.md
+app_design.md
+app_code.md
+src/mobile_app_shipping/static/app_mockup_*.png
