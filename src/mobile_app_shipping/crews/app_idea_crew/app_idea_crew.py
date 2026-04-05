@@ -12,6 +12,11 @@ groq_llm = LLM(
     temperature=0.7,
 )
 
+gemini_llm = LLM(
+    model="gemini-3.0-preview",
+    temperature=0.7,
+)
+
 search_tool = SerperDevTool()
 scrape_tool = ScrapeWebsiteTool()
 
@@ -33,7 +38,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
             verbose=True,
-            llm=groq_llm,
+            llm=gemini_llm,
             tools=[search_tool, scrape_tool]
         )
 
@@ -42,7 +47,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=groq_llm
+            llm=gemini_llm
         )
 
     # To learn more about structured task outputs,

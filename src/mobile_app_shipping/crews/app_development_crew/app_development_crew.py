@@ -12,6 +12,11 @@ claude_llm = LLM(
     temperature=0.2,
 )
 
+gemini_llm = LLM(
+    model="gemini-3.0-preview",
+    temperature=0.7,
+)
+
 
 def qa_found_issues(output: TaskOutput) -> bool:
     content = output.output.lower()
@@ -52,7 +57,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['document_specialist'], # type: ignore[index]
             verbose=True,
-            llm=claude_llm,
+            llm=gemini_llm,
         )
 
     @task
