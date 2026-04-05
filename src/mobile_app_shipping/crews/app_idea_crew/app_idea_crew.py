@@ -12,6 +12,11 @@ groq_llm = LLM(
     temperature=0.7,
 )
 
+haiku_llm = LLM(
+    model="anthropic/claude-haiku-4-5",
+    temperature=0.7,
+)
+
 sonnet_llm = LLM(
     model="anthropic/claude-sonnet-4-6",
     temperature=0.7,
@@ -38,7 +43,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
             verbose=True,
-            llm=sonnet_llm,
+            llm=haiku_llm,
             tools=[search_tool, scrape_tool]
         )
 

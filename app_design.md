@@ -1,477 +1,282 @@
-# MindfulBreath Mobile App - UX/UI Design Document
-
-## Executive Summary
-
-This comprehensive design document outlines the complete user experience and interface specifications for the MindfulBreath mobile application. The design philosophy centers on creating a calming, intuitive, and scientifically-backed mental wellness experience that leverages AI technology while maintaining human warmth and accessibility.
-
-## Design Philosophy
-
-### Core Principles
-- **Calm First**: Every design decision prioritizes reducing cognitive load and promoting tranquility
-- **Accessibility**: Inclusive design supporting users across all anxiety levels and technical abilities
-- **Scientific Credibility**: Visual language that conveys trustworthiness and medical validity
-- **Personalized Experience**: Adaptive interfaces that evolve with user preferences and needs
-- **Seamless Flow**: Frictionless navigation that never interrupts the wellness journey
-
-## Visual Design System
-
-### Color Palette
-
-**Primary Colors**
-- **Tranquil Blue**: #4A90E2 - Primary brand color, used for main CTAs and active states
-- **Deep Calm**: #2C5282 - Secondary blue for headers and emphasis
-- **Soft Sky**: #E6F2FF - Light blue for backgrounds and cards
-
-**Secondary Colors**
-- **Lavender Mist**: #9B88FF - Accent color for premium features and achievements
-- **Sage Green**: #68D391 - Success states and positive feedback
-- **Warm Coral**: #FC8181 - Gentle alerts and reminders (never harsh red)
-- **Moonlight Gray**: #F7FAFC - Primary background color
-
-**Neutral Palette**
-- **Charcoal**: #2D3748 - Primary text color
-- **Stone**: #718096 - Secondary text and icons
-- **Pearl**: #E2E8F0 - Dividers and borders
-- **Pure White**: #FFFFFF - Card backgrounds and input fields
-
-**Gradient System**
-- **Morning Breath**: Linear gradient from #4A90E2 to #9B88FF (120°)
-- **Evening Calm**: Linear gradient from #2C5282 to #4A90E2 (180°)
-- **Premium Glow**: Radial gradient from #9B88FF to #4A90E2
-
-### Typography
-
-**Font Family**
-- **Primary**: SF Pro Display (iOS) / Google Sans (Android)
-- **Secondary**: Inter for body text
-- **Monospace**: SF Mono for timers and metrics
-
-**Type Scale**
-- **H1**: 32px/40px - Bold (Screen titles)
-- **H2**: 24px/32px - Semibold (Section headers)
-- **H3**: 20px/28px - Medium (Card titles)
-- **Body Large**: 17px/24px - Regular (Primary content)
-- **Body**: 15px/22px - Regular (Standard text)
-- **Caption**: 13px/18px - Regular (Supporting text)
-- **Micro**: 11px/14px - Medium (Labels and badges)
-
-### Spacing System
-- **Base unit**: 4px
-- **Spacing scale**: 4, 8, 12, 16, 24, 32, 48, 64, 96px
-- **Screen padding**: 16px horizontal, 24px vertical
-- **Card padding**: 16px all sides
-- **Component spacing**: 12px between related, 24px between sections
-
-### Elevation & Shadows
-- **Level 0**: No shadow (flat elements)
-- **Level 1**: 0 2px 4px rgba(0,0,0,0.08) - Cards and buttons
-- **Level 2**: 0 4px 12px rgba(0,0,0,0.12) - Floating elements
-- **Level 3**: 0 8px 24px rgba(0,0,0,0.16) - Modals and overlays
-
-### Border Radius
-- **Small**: 8px - Buttons and inputs
-- **Medium**: 12px - Cards and containers
-- **Large**: 16px - Modals and sheets
-- **Full**: 50% - Circular elements and avatars
-
-## Component Library
-
-### Buttons
-
-**Primary Button**
-- Background: #4A90E2
-- Text: White, 16px semibold
-- Height: 48px
-- Border radius: 8px
-- Shadow: Level 1
-- Pressed state: Darken 10%, scale 0.98
-- Disabled: 40% opacity
-
-**Secondary Button**
-- Background: White
-- Border: 1px solid #E2E8F0
-- Text: #4A90E2, 16px medium
-- Height: 48px
-- Border radius: 8px
-- Shadow: None
-- Hover: Background #F7FAFC
-
-**Text Button**
-- Background: Transparent
-- Text: #4A90E2, 15px medium
-- Padding: 8px 12px
-- Underline on hover
-
-**Floating Action Button**
-- Size: 56px diameter
-- Background: Morning Breath gradient
-- Icon: White, 24px
-- Shadow: Level 2
-- Position: Bottom right, 16px margin
-
-### Input Fields
-
-**Standard Input**
-- Height: 48px
-- Background: White
-- Border: 1px solid #E2E8F0
-- Border radius: 8px
-- Padding: 12px 16px
-- Focus: Border #4A90E2, shadow 0 0 0 3px rgba(74,144,226,0.1)
-- Error: Border #FC8181, helper text below
-
-**Text Area**
-- Min height: 96px
-- Same styling as standard input
-- Auto-expanding with max height 200px
-
-### Cards
-
-**Content Card**
-- Background: White
-- Border radius: 12px
-- Shadow: Level 1
-- Padding: 16px
-- Margin bottom: 12px
-
-**Feature Card**
-- Background: Linear gradient overlay on white
-- Border radius: 16px
-- Shadow: Level 2
-- Padding: 24px
-- Premium badge: Top right corner
-
-### Navigation Components
-
-**Tab Bar**
-- Height: 56px
-- Background: White with top border
-- 5 tabs maximum
-- Active: Icon #4A90E2, label visible
-- Inactive: Icon #718096, label hidden on scroll
-
-**Navigation Bar**
-- Height: 64px
-- Background: Blur effect over content
-- Title: Center aligned, 20px semibold
-- Actions: Icon buttons 44x44px touch target
-
-### Feedback Elements
-
-**Progress Indicators**
-- Circular: 4px stroke, animated gradient
-- Linear: 4px height, rounded ends
-- Skeleton screens for loading states
-
-**Toasts & Alerts**
-- Position: Top of screen, below nav bar
-- Background: White with colored left border
-- Auto-dismiss: 3 seconds
-- Swipe to dismiss gesture
-
-## Screen Specifications
-
-### 1. Login Screen
-
-**Layout Structure**
-- Status bar: System default
-- Logo placement: Center, 120px from top
-- Welcome message: 24px below logo
-- Form container: 48px below message
-- Social login: Bottom of screen
-
-**Components**
-- Logo: 80x80px, with app name below (24px semibold)
-- Welcome text: "Welcome to your calm space" (H2, #2D3748)
-- Email input: Standard input with email icon
-- Password input: Standard input with eye toggle
-- "Forgot Password?": Text button, right aligned
-- Login button: Primary button, full width
-- Divider: "Or continue with" (Caption, centered)
-- Social buttons: Google, Apple, Facebook (48px height, outlined)
-- Sign up prompt: "New here? Create account" (bottom safe area)
-
-**Animations**
-- Logo: Gentle breathing animation (scale 1.0 to 1.05, 4s loop)
-- Form: Slide up from bottom (0.3s ease-out)
-- Keyboard: Push content up smoothly
-
-**Validation**
-- Real-time email format validation
-- Password strength indicator
-- Error messages: Below fields, #FC8181
-- Success: Smooth transition to onboarding/home
-
-### 2. Home Screen
-
-**Layout Structure**
-- Navigation bar: "MindfulBreath" title, profile avatar right
-- Greeting section: Personalized message with time of day
-- Quick action cards: 2x2 grid
-- Current state widget: AI-detected mood/stress
-- Recommended sessions: Horizontal scroll
-- Daily affirmation: Expandable card
-- Bottom tab bar: 5 tabs
-
-**Components**
-
-*Greeting Section* (24px from top)
-- "Good [morning], [Name]" (H1, #2D3748)
-- "How are you feeling?" (Body, #718096)
-- Mood selector: 5 emoji options in a row
-
-*Quick Actions Grid* (32px below greeting)
-- Card size: (screen width - 48) / 2
-- Icons: 32px, centered
-- Labels: Caption, centered
-- Actions: "Quick Breathe", "Check Anxiety", "Daily Affirmation", "Sleep Mode"
-
-*Current State Widget* (24px below grid)
-- Full width card with gradient background
-- Heart rate visualization: Live waveform
-- Stress level: Visual meter with color coding
-- "Start Breathing" CTA: Secondary button
-
-*Recommended Sessions* (24px below state)
-- Section title: "Recommended for you" (H3)
-- Card width: 280px, height: 160px
-- Horizontal scroll with peek of next card
-- Each card: Image background, title, duration, difficulty
-
-*Daily Affirmation* (24px below sessions)
-- Collapsed: Shows first line with expand arrow
-- Expanded: Full text with share and save buttons
-- Background: Soft gradient
-- Typography: 18px medium, centered
-
-**Animations**
-- Mood selector: Bounce on selection
-- Quick action cards: Subtle lift on press
-- Heart rate: Continuous wave animation
-- Session cards: Parallax on scroll
-
-### 3. Profile Screen
-
-**Layout Structure**
-- Navigation bar: "Profile", edit button right
-- Profile header: Avatar, name, stats
-- Achievement section: Recent badges
-- Statistics dashboard: Weekly/monthly views
-- Subscription status: Current plan card
-- Settings shortcuts: List format
-- Bottom tab bar: Highlighted profile tab
-
-**Components**
-
-*Profile Header* (24px from top)
-- Avatar: 96px circle, center aligned
-- Edit overlay: Camera icon on avatar tap
-- Name: H2, centered
-- Member since: Caption, #718096
-- Stats row: 3 columns (Sessions, Streak, Minutes)
-
-*Achievements* (32px below header)
-- Section title: "Recent Achievements" (H3)
-- Badge size: 64px
-- Horizontal scroll, 5 max visible
-- Each badge: Icon, title below
-- "View all" link: Text button, right aligned
-
-*Statistics Dashboard* (24px below achievements)
-- Toggle: "Week" / "Month" segmented control
-- Chart: Line graph showing anxiety trends
-- Key metrics: Cards below chart
-  - Average anxiety level
-  - Total breathing minutes
-  - Improvement percentage
-- Export button: "Share with therapist"
-
-*Subscription Card* (24px below stats)
-- Current plan: "Free" or "Premium"
-- Benefits list: Checkmarks, 13px text
-- Upgrade CTA: Primary button if free user
-- Manage link: Text button if premium
-
-*Settings List* (24px below subscription)
-- Row height: 56px
-- Icons: 24px, #718096
-- Chevron: Right side, 16px
-- Options: Reminders, Privacy, Help, About, Logout
-
-**Interactions**
-- Pull to refresh: Updates statistics
-- Avatar tap: Photo picker
-- Stats tap: Detailed view modal
-- Achievement tap: Share modal
-
-### 4. Settings Screen
-
-**Layout Structure**
-- Navigation bar: Back arrow, "Settings" title
-- Grouped sections: Preferences, Account, Support, About
-- Toggle switches: Right aligned
-- Nested navigation: Chevrons for sub-screens
-
-**Components**
-
-*Preferences Section*
-- Notifications: Toggle with sub-options
-  - Breathing reminders
-  - Daily affirmations
-  - Achievement alerts
-  - Marketing messages
-- App appearance: Light/Dark/Auto selector
-- Sounds: Toggle with volume slider
-- Haptics: Toggle switch
-- Language: Current selection with chevron
-
-*Account Section*
-- Profile information: Email, name (chevron to edit)
-- Password: "Change password" with chevron
-- Subscription: Current plan with manage option
-- Connected devices: List of wearables
-- Data & Privacy: Export, delete options
-
-*Support Section*
-- Help center: Chevron navigation
-- Contact support: Email/chat options
-- FAQ: Chevron navigation
-- Community: Link to forums
-
-*About Section*
-- Version: App version number
-- Terms of service: Chevron navigation
-- Privacy policy: Chevron navigation
-- Licenses: Open source attributions
-- Rate app: Opens store rating
-
-**Visual Treatment**
-- Section headers: Caps, 11px, #718096, 24px padding top
-- Row separators: 1px, #E2E8F0, inset 16px
-- Toggle switches: #4A90E2 when on
-- Destructive actions: #FC8181 text (logout, delete)
-
-## User Flows
-
-### Onboarding Flow (First-time users)
-
-1. **Welcome Screen**
-   - Logo animation
-   - "Welcome to MindfulBreath" message
-   - "Get Started" primary button
-
-2. **Personal Goals**
-   - "What brings you here?" question
-   - Multi-select options: Reduce anxiety, Better sleep, Daily calm, Focus
-   - Progress indicator: 1 of 4
-
-3. **Experience Level**
-   - "Have you practiced breathing exercises?"
-   - Options: Beginner, Some experience, Regular practice
-   - Progress indicator: 2 of 4
-
-4. **Notification Preferences**
-   - "When should we check in?"
-   - Time picker for daily reminder
-   - Skip option available
-   - Progress indicator: 3 of 4
-
-5. **AI Permissions**
-   - Explain camera/microphone usage
-   - Optional permissions with benefits explained
-   - "Enable" or "Maybe later" options
-   - Progress indicator: 4 of 4
-
-6. **Completion**
-   - Celebration animation
-   - "You're all set!" message
-   - "Start first session" CTA
-
-### Daily Session Flow
-
-1. **Session Selection**
-   - Choose from recommended or browse all
-   - Filter by duration, difficulty, goal
-   - Preview with description and reviews
-
-2. **Pre-Session Check**
-   - "How are you feeling?" (1-10 scale)
-   - Optional: Camera-based heart rate check
-   - Session customization based on input
-
-3. **Active Session**
-   - Full-screen breathing visualization
-   - Timer and progress ring
-   - Pause/stop controls (swipe down)
-   - Haptic feedback on inhale/exhale
-
-4. **Post-Session**
-   - "How do you feel now?" (1-10 scale)
-   - Session summary: Duration, technique, improvement
-   - Save to favorites option
-   - Share achievement option
-
-5. **Insights**
-   - AI-generated insights about progress
-   - Recommendations for next session
-   - Option to schedule reminder
-
-### Premium Upgrade Flow
-
-1. **Trigger Points**
-   - Locked feature tap
-   - Profile subscription card
-   - Settings subscription menu
-
-2. **Premium Benefits Screen**
-   - Full-screen presentation
-   - Feature comparison table
-   - Testimonials carousel
-   - Pricing: Monthly vs Annual toggle
-
-3. **Payment**
-   - Apple Pay / Google Pay primary
-   - Credit card fallback
-   - Promo code field (collapsible)
-   - Terms and restore purchases links
-
-4. **Confirmation**
-   - Success animation
-   - Welcome to Premium message
-   - "Explore premium features" CTA
-
-### Emergency Anxiety Flow
-
-1. **Quick Access**
-   - 3D touch / long press app icon
-   - Home screen emergency button
-   - Shake gesture activation
-
-2. **Immediate Relief**
-   - Skip all setup questions
-   - Start with 4-7-8 breathing
-   - Large, clear visual guide
-   - Calming background animation
-
-3. **Stabilization**
-   - After 2 minutes, check-in prompt
-   - Option to continue or try different technique
-   - Access to crisis resources if needed
-
-4. **Follow-up**
-   - Log the episode (optional)
-   - Schedule check-in reminder
-   - Suggest preventive session for tomorrow
-
-## Animations & Transitions
-
-### Screen Transitions
-- **Push navigation**: 0.3s ease-in-out, slide from right
-- **Modal presentation**: 0.25s ease-out, slide from bottom
-- **Tab switches**: 0.2s ease-in-out, fade transition
-- **Pull to dismiss**: Interactive spring physics
-
-### Micro-interactions
-- **Button press**: Scale to 0.95, 0.1s
-- **Toggle switch**: 0.2s spring animation
-- **Card selection**:
+# GameHub Mobile App — UX/UI Design Document
+
+---
+
+## Overview
+
+This document provides a complete UX/UI design specification for **GameHub**, a one-stop offline puzzle gaming platform. It covers visual design, layout structure, interaction patterns, transitions, and screen-by-screen breakdowns for the Home, Login, Profile, and Settings screens. This document is intended to guide the mobile developer through the full implementation of the app's front-end experience.
+
+---
+
+## 1. VISUALS
+
+### 1.1 Color Palette
+
+GameHub's visual identity is built around a **dark, immersive gaming aesthetic** with vivid accent colors that evoke intelligence, energy, and fun — while remaining accessible and easy on the eyes during extended play sessions.
+
+| Role | Color Name | Hex Code | Usage |
+|---|---|---|---|
+| **Primary Background** | Deep Space Navy | `#0D1117` | Main app background |
+| **Secondary Background** | Midnight Slate | `#161B22` | Cards, modals, bottom sheets |
+| **Surface / Card** | Graphite Ash | `#21262D` | Puzzle cards, list items, containers |
+| **Primary Accent** | Electric Violet | `#7C3AED` | CTAs, active states, highlights |
+| **Secondary Accent** | Neon Cyan | `#22D3EE` | Streaks, badges, progress bars |
+| **Tertiary Accent** | Amber Glow | `#F59E0B` | XP indicators, daily challenge highlights |
+| **Success** | Emerald Pulse | `#10B981` | Completion states, correct answers |
+| **Error / Destructive** | Crimson Alert | `#EF4444` | Errors, delete actions, wrong answers |
+| **Text Primary** | Snow White | `#F0F6FC` | Headings, primary body text |
+| **Text Secondary** | Silver Mist | `#8B949E` | Subtitles, labels, hints |
+| **Divider / Border** | Steel Edge | `#30363D` | Card borders, separators |
+| **Overlay / Scrim** | Black Veil | `#000000` at 60% opacity | Modal backgrounds, bottom sheets |
+
+#### Gradient Definitions
+
+- **Hero Gradient:** `linear-gradient(135deg, #7C3AED 0%, #22D3EE 100%)` — Used on featured cards, onboarding screens, and premium CTAs.
+- **XP Bar Gradient:** `linear-gradient(90deg, #7C3AED 0%, #F59E0B 100%)` — Used on the experience progress bar in the profile.
+- **Daily Challenge Gradient:** `linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)` — Used on the daily challenge card.
+- **Streak Gradient:** `linear-gradient(135deg, #22D3EE 0%, #10B981 100%)` — Used on streak indicators and badges.
+
+#### Colorblind-Friendly Mode
+
+When enabled in Settings, the app replaces red/green states with:
+- **Success:** `#0077BB` (Blue) replacing Emerald Pulse
+- **Error:** `#EE7733` (Orange) replacing Crimson Alert
+- All iconography is paired with text labels to avoid color-only communication.
+
+---
+
+### 1.2 Typography
+
+GameHub uses a dual-font system — one for display/branding and one for body readability.
+
+| Role | Font Family | Weight | Size | Line Height |
+|---|---|---|---|---|
+| **App Logo / Brand** | Orbitron | 700 (Bold) | 28sp | 36sp |
+| **Screen Title (H1)** | Orbitron | 600 (SemiBold) | 24sp | 32sp |
+| **Section Header (H2)** | Orbitron | 600 (SemiBold) | 18sp | 26sp |
+| **Card Title (H3)** | Inter | 600 (SemiBold) | 16sp | 22sp |
+| **Body Text** | Inter | 400 (Regular) | 14sp | 20sp |
+| **Caption / Label** | Inter | 400 (Regular) | 12sp | 16sp |
+| **Button Text** | Inter | 600 (SemiBold) | 15sp | 20sp |
+| **Badge / Chip Text** | Inter | 700 (Bold) | 11sp | 14sp |
+
+- **Minimum font size:** 12sp (never below, for accessibility)
+- **Adjustable font scale:** Users can set 1x, 1.25x, or 1.5x scale in Settings, which multiplies all `sp` values proportionally.
+
+---
+
+### 1.3 Iconography
+
+- **Icon Library:** Material Symbols (Rounded style) for system icons, supplemented by custom SVG icons for puzzle categories.
+- **Icon Size:** 24dp standard; 20dp in dense lists; 32dp for feature highlights.
+- **Icon Color:** Defaults to Text Secondary (`#8B949E`); active/selected state switches to Primary Accent (`#7C3AED`).
+- **Puzzle Category Icons:** Custom-illustrated SVG icons per puzzle type (sudoku grid, crossword, jigsaw piece, maze path, etc.) rendered with `flutter_svg`.
+
+---
+
+### 1.4 Spacing & Layout Grid
+
+- **Base Spacing Unit:** 8dp
+- **Horizontal Screen Padding:** 16dp (left and right)
+- **Card Internal Padding:** 16dp all sides
+- **Section Vertical Spacing:** 24dp between major sections
+- **Component Vertical Spacing:** 12dp between items in a list
+- **Border Radius:**
+  - Small (chips, badges): 8dp
+  - Medium (cards, inputs): 12dp
+  - Large (bottom sheets, featured cards): 20dp
+  - Full (buttons, pills, avatars): 50dp (fully rounded)
+
+---
+
+### 1.5 Elevation & Shadows
+
+Since the app uses a dark theme, elevation is communicated through **surface color lightening** rather than drop shadows:
+
+| Elevation Level | Surface Color | Usage |
+|---|---|---|
+| Level 0 | `#0D1117` | Base background |
+| Level 1 | `#161B22` | Sheets, drawers |
+| Level 2 | `#21262D` | Cards, list items |
+| Level 3 | `#2D333B` | Floating buttons, dropdowns |
+| Level 4 | `#373E47` | Tooltips, snackbars |
+
+Subtle `box-shadow: 0px 4px 12px rgba(0,0,0,0.4)` is applied to floating elements like the FAB and bottom navigation bar.
+
+---
+
+### 1.6 Buttons
+
+#### Primary Button (CTA)
+- **Background:** Electric Violet `#7C3AED`
+- **Text:** Snow White `#F0F6FC`, Inter SemiBold 15sp
+- **Border Radius:** 50dp (pill shape)
+- **Height:** 52dp
+- **Padding:** 16dp horizontal
+- **Pressed State:** Background darkens to `#6D28D9`, scale animates to 0.97
+- **Disabled State:** Background `#30363D`, text `#8B949E`
+- **Shadow:** `0px 4px 16px rgba(124, 58, 237, 0.4)` (violet glow)
+
+#### Secondary Button (Outlined)
+- **Background:** Transparent
+- **Border:** 1.5dp stroke, Electric Violet `#7C3AED`
+- **Text:** Electric Violet `#7C3AED`, Inter SemiBold 15sp
+- **Border Radius:** 50dp
+- **Height:** 52dp
+- **Pressed State:** Background fills to `rgba(124, 58, 237, 0.12)`
+
+#### Ghost / Text Button
+- **Background:** Transparent
+- **Text:** Silver Mist `#8B949E`, Inter SemiBold 14sp
+- **Pressed State:** Text brightens to Snow White, subtle underline appears
+
+#### Icon Button (Circular)
+- **Size:** 44dp × 44dp
+- **Background:** Graphite Ash `#21262D`
+- **Icon:** 22dp, Silver Mist `#8B949E`
+- **Active State:** Background Electric Violet `#7C3AED`, icon Snow White
+- **Border Radius:** 50dp
+
+#### Danger Button (Destructive)
+- **Background:** Crimson Alert `#EF4444`
+- **Text:** Snow White, Inter SemiBold 15sp
+- **Border Radius:** 50dp
+- **Height:** 52dp
+- **Pressed State:** Background darkens to `#DC2626`
+
+---
+
+### 1.7 Input Fields
+
+- **Background:** Graphite Ash `#21262D`
+- **Border:** 1dp Steel Edge `#30363D` at rest; 2dp Electric Violet `#7C3AED` on focus
+- **Border Radius:** 12dp
+- **Height:** 56dp
+- **Text Color:** Snow White `#F0F6FC`, Inter Regular 14sp
+- **Placeholder Color:** Silver Mist `#8B949E`
+- **Label (floating):** Inter SemiBold 12sp, Electric Violet `#7C3AED` when focused
+- **Error State:** Border Crimson Alert `#EF4444`, error message in 12sp below field
+- **Leading Icon:** 20dp, Silver Mist (e.g., lock icon for password, envelope for email)
+- **Trailing Icon:** Visibility toggle for password fields (eye icon)
+
+---
+
+### 1.8 Cards
+
+#### Standard Puzzle Card
+- **Size:** Full-width minus 32dp horizontal padding; height 100dp
+- **Background:** Graphite Ash `#21262D`
+- **Border Radius:** 12dp
+- **Layout:** Horizontal — 56dp×56dp puzzle category icon on left (with gradient background circle), title + subtitle in center, difficulty badge on right
+- **Difficulty Badge:** Pill-shaped chip; Beginner = Emerald Pulse, Intermediate = Amber Glow, Expert = Crimson Alert, Master = Electric Violet
+- **Pressed State:** Background lightens to `#2D333B`, scale animates to 0.98
+
+#### Featured / Hero Card
+- **Size:** Full-width minus 32dp; height 180dp
+- **Background:** Hero Gradient overlay on a blurred puzzle screenshot
+- **Border Radius:** 20dp
+- **Content:** Large title, subtitle, "Play Now" pill button at bottom-left
+- **Badge:** "FEATURED" or "DAILY PICK" label at top-left, Amber Glow background
+
+#### Stat Card (Profile)
+- **Size:** (Screen width − 48dp) / 2 (two-column grid)
+- **Height:** 100dp
+- **Background:** Graphite Ash `#21262D`
+- **Border Radius:** 12dp
+- **Content:** Large number (H2 Orbitron), label caption below, small icon top-right
+
+---
+
+### 1.9 Bottom Navigation Bar
+
+- **Background:** Midnight Slate `#161B22`
+- **Height:** 64dp + safe area inset
+- **Border Top:** 1dp Steel Edge `#30363D`
+- **Items:** 4 tabs — Home, Explore, Challenges, Profile
+- **Active Tab:** Icon Electric Violet `#7C3AED` + label Electric Violet, subtle pill indicator above icon
+- **Inactive Tab:** Icon and label Silver Mist `#8B949E`
+- **Tab Icons:** Home (house), Explore (compass), Challenges (trophy), Profile (person)
+- **Animation:** Active indicator slides horizontally between tabs with a spring animation (300ms)
+
+---
+
+### 1.10 Animations & Transitions
+
+| Transition Type | Duration | Easing | Usage |
+|---|---|---|---|
+| **Screen Push (forward)** | 350ms | Cubic ease-out | Navigate to new screen, slides in from right |
+| **Screen Pop (back)** | 300ms | Cubic ease-in | Back navigation, slides out to right |
+| **Modal / Bottom Sheet** | 400ms | Spring (damping 0.8) | Settings, filter panels slide up from bottom |
+| **Tab Switch** | 250ms | Ease-in-out | Switching bottom nav tabs, fade + slight slide |
+| **Card Press** | 100ms | Ease-out | Scale down to 0.97 on press, spring back on release |
+| **Button Press** | 80ms | Ease-out | Scale to 0.97, darken background |
+| **Achievement Unlock** | 600ms | Spring bounce | Badge scales from 0 to 1.1 then settles at 1.0 |
+| **Streak Counter** | 500ms | Ease-out | Number rolls up with a slot-machine animation |
+| **Progress Bar Fill** | 800ms | Ease-out | Bar fills from current to new value on screen load |
+| **Puzzle Complete** | 1200ms | Custom spring | Confetti Lottie animation + card expands then collapses |
+| **Shimmer Loading** | Loop, 1500ms | Linear | Skeleton placeholders while content loads |
+| **Page Hero Transition** | 400ms | Ease-in-out | Shared element transition from card to puzzle screen |
+
+---
+
+## 2. SCREEN DESIGNS
+
+---
+
+### 2.1 Login Screen
+
+#### Layout Structure
+
+The Login screen is the first screen new users see after the splash/onboarding. It follows a **single-scroll, centered layout** with a dark immersive background.
+
+**Background:**
+A subtle animated particle field (slow-moving geometric puzzle piece shapes in `rgba(124, 58, 237, 0.08)`) overlaid on the Deep Space Navy background. This is implemented using a lightweight canvas animation — not video — to preserve battery and offline capability.
+
+**Top Section — Branding (from top, ~30% of screen height):**
+- Centered GameHub logo: custom SVG puzzle-piece-shaped icon (interlocking G and H letters) in Electric Violet, 72dp × 72dp, with a soft violet glow effect (`box-shadow: 0 0 32px rgba(124,58,237,0.5)`)
+- App name "GAMEHUB" in Orbitron Bold 28sp, Snow White, centered, 12dp below icon
+- Tagline: "100+ Puzzles. Zero Internet Required." in Inter Regular 14sp, Silver Mist, centered, 8dp below app name
+
+**Middle Section — Auth Form (~40% of screen height):**
+
+Displayed in a card container with Midnight Slate `#161B22` background, 20dp border radius, 24dp internal padding, positioned 32dp below the tagline:
+
+- **Email Input Field** (full-width)
+  - Leading icon: envelope (20dp, Silver Mist)
+  - Placeholder: "Enter your email"
+  - Keyboard type: email
+
+- **12dp gap**
+
+- **Password Input Field** (full-width)
+  - Leading icon: lock (20dp, Silver Mist)
+  - Trailing icon: eye toggle for show/hide
+  - Placeholder: "Enter your password"
+
+- **"Forgot Password?" text button** — right-aligned, 8dp below password field, Ghost style, "Forgot Password?" in Silver Mist 13sp
+
+- **16dp gap**
+
+- **"Sign In" Primary Button** — full-width, Electric Violet, pill shape, "Sign In" in Snow White Inter SemiBold 15sp
+
+- **16dp gap**
+
+- **Divider with label:** Thin Steel Edge lines on each side of "OR" text in Silver Mist 12sp
+
+- **16dp gap**
+
+- **"Continue with Google" Secondary Button** — full-width, outlined, leading Google logo SVG 20dp, "Continue with Google" text in Snow White 15sp
+
+- **12dp gap**
+
+- **"Continue with Apple" Secondary Button** — same style, Apple logo SVG (Snow White), "Continue with Apple" text
+
+**Bottom Section — Registration CTA (~10% of screen height):**
+- Centered text: "New to GameHub? " + tappable "Create Account" in Electric Violet SemiBold 14sp
+- 16dp above the bottom safe area
+
+#### Interaction Behaviors
+
+- **Form Validation:** Real-time validation triggers on field blur (when user leaves the field). Error messages appear with a subtle shake animation (3 oscillations, 300ms) below the field in Crimson Alert 12sp.
+- **Sign In Loading State:** On tap of "Sign In", the button text is replaced by a small circular progress indicator (Snow White, 20dp) and the button is disabled. This lasts until the auth response returns.
+- **Success

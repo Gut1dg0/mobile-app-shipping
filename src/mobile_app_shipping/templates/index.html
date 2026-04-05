@@ -116,6 +116,100 @@
       flex-shrink: 0;
     }
 
+    /* ── Agent ticker ── */
+    .agents-section {
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 48px;
+      position: relative;
+    }
+    .agents-section::before,
+    .agents-section::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .agents-section::before { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
+    .agents-section::after  { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
+
+    .ticker-label {
+      text-align: center;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+      animation: ticker-scroll 28s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      min-width: 190px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .agent-card:hover { border-color: var(--accent); }
+
+    .agent-card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .agent-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .agent-name  { font-size: 0.88rem; font-weight: 700; line-height: 1.2; }
+    .agent-crew  { font-size: 0.7rem; color: var(--muted); }
+
+    .llm-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      width: fit-content;
+    }
+    .llm-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.8;
+    }
+    .badge-haiku  { background: rgba(0,180,216,0.12);  color: #00b4d8; }
+    .badge-sonnet { background: rgba(108,99,255,0.15); color: #a89bff; }
+    .badge-opus   { background: rgba(245,158,11,0.12); color: #f59e0b; }
+    .badge-groq   { background: rgba(249,115,22,0.12); color: #fb923c; }
+
     /* ── CTA ── */
     #launch-btn {
       background: linear-gradient(135deg, var(--accent), #8b5cf6);
@@ -183,21 +277,187 @@
         <div class="step-icon">&#128161;</div>
         <div class="step-label">Step 1</div>
         <div class="step-name">Idea Research</div>
-        <div class="step-crew">AppIdeaCrew · Groq</div>
+        <div class="step-crew">AppIdeaCrew · Haiku + Groq</div>
       </div>
       <div class="arrow">&#8594;</div>
       <div class="step">
         <div class="step-icon">&#127775;</div>
         <div class="step-label">Step 2</div>
         <div class="step-name">Design + Mockups</div>
-        <div class="step-crew">AppDesignCrew · Stable Diffusion</div>
+        <div class="step-crew">AppDesignCrew · Claude Sonnet</div>
       </div>
       <div class="arrow">&#8594;</div>
       <div class="step">
         <div class="step-icon">&#128187;</div>
         <div class="step-label">Step 3</div>
         <div class="step-name">Code + QA</div>
-        <div class="step-crew">AppDevCrew · Claude</div>
+        <div class="step-crew">AppDevCrew · Claude Opus</div>
+      </div>
+    </div>
+
+    <!-- Agent ticker -->
+    <div class="agents-section">
+      <div class="ticker-label">Agents &amp; their LLMs</div>
+      <div class="ticker-track" id="ticker">
+
+        <!-- AppIdeaCrew -->
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(0,180,216,0.12)">&#128269;</div>
+            <div>
+              <div class="agent-name">Researcher</div>
+              <div class="agent-crew">AppIdeaCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-haiku">Claude Haiku 4.5</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(249,115,22,0.12)">&#128200;</div>
+            <div>
+              <div class="agent-name">Business Analyst</div>
+              <div class="agent-crew">AppIdeaCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-groq">Groq Llama 3.1 8B</div>
+        </div>
+
+        <!-- AppDesignCrew -->
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(108,99,255,0.15)">&#128202;</div>
+            <div>
+              <div class="agent-name">Business Analyst</div>
+              <div class="agent-crew">AppDesignCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-sonnet">Claude Sonnet 4.6</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(108,99,255,0.15)">&#127912;</div>
+            <div>
+              <div class="agent-name">UX/UI Designer</div>
+              <div class="agent-crew">AppDesignCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-sonnet">Claude Sonnet 4.6</div>
+        </div>
+
+        <!-- AppDevelopmentCrew -->
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">&#128187;</div>
+            <div>
+              <div class="agent-name">Mobile Developer</div>
+              <div class="agent-crew">AppDevCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-opus">Claude Opus 4.6</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">&#128269;</div>
+            <div>
+              <div class="agent-name">QA Engineer</div>
+              <div class="agent-crew">AppDevCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-opus">Claude Opus 4.6</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">&#128196;</div>
+            <div>
+              <div class="agent-name">Doc Specialist</div>
+              <div class="agent-crew">AppDevCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-opus">Claude Opus 4.6</div>
+        </div>
+
+        <!-- Duplicate set for seamless loop -->
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(0,180,216,0.12)">&#128269;</div>
+            <div>
+              <div class="agent-name">Researcher</div>
+              <div class="agent-crew">AppIdeaCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-haiku">Claude Haiku 4.5</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(249,115,22,0.12)">&#128200;</div>
+            <div>
+              <div class="agent-name">Business Analyst</div>
+              <div class="agent-crew">AppIdeaCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-groq">Groq Llama 3.1 8B</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(108,99,255,0.15)">&#128202;</div>
+            <div>
+              <div class="agent-name">Business Analyst</div>
+              <div class="agent-crew">AppDesignCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-sonnet">Claude Sonnet 4.6</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(108,99,255,0.15)">&#127912;</div>
+            <div>
+              <div class="agent-name">UX/UI Designer</div>
+              <div class="agent-crew">AppDesignCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-sonnet">Claude Sonnet 4.6</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">&#128187;</div>
+            <div>
+              <div class="agent-name">Mobile Developer</div>
+              <div class="agent-crew">AppDevCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-opus">Claude Opus 4.6</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">&#128269;</div>
+            <div>
+              <div class="agent-name">QA Engineer</div>
+              <div class="agent-crew">AppDevCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-opus">Claude Opus 4.6</div>
+        </div>
+
+        <div class="agent-card">
+          <div class="agent-card-top">
+            <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">&#128196;</div>
+            <div>
+              <div class="agent-name">Doc Specialist</div>
+              <div class="agent-crew">AppDevCrew</div>
+            </div>
+          </div>
+          <div class="llm-badge badge-opus">Claude Opus 4.6</div>
+        </div>
+
       </div>
     </div>
 
@@ -208,8 +468,10 @@
     <h3>Built with</h3>
     <div class="chips">
       <div class="chip"><b>CrewAI</b> multi-agent framework</div>
-      <div class="chip"><b>Groq Llama 3.1 8B</b> research &amp; design</div>
-      <div class="chip"><b>Claude Sonnet</b> code &amp; QA</div>
+      <div class="chip"><b>Claude Haiku 4.5</b> web research</div>
+      <div class="chip"><b>Groq Llama 3.1 8B</b> concept analysis</div>
+      <div class="chip"><b>Claude Sonnet 4.6</b> design &amp; docs</div>
+      <div class="chip"><b>Claude Opus 4.6</b> code &amp; QA</div>
       <div class="chip"><b>Stable Diffusion XL</b> mockups</div>
       <div class="chip"><b>Serper</b> web research</div>
       <div class="chip"><b>Flask</b> web server</div>

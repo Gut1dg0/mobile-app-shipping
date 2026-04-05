@@ -39,7 +39,7 @@ class AppDesignCrew():
             config=self.agents_config['uxui_designer'], # type: ignore[index]
             verbose=True,
             tools=[stable_diffusion_gallery],
-            llm=ollama_llm
+            llm=sonnet_llm
         )
 
     # To learn more about structured task outputs,

@@ -62,7 +62,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['document_specialist'], # type: ignore[index]
             verbose=True,
-            llm=groq_llm,
+            llm=opus_llm,
         )
 
     @task
