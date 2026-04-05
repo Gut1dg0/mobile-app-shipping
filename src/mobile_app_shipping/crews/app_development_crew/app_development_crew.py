@@ -13,7 +13,7 @@ claude_llm = LLM(
 )
 
 gemini_llm = LLM(
-    model="gemini-3.0-preview",
+    model="gemini-3.1-pro-preview",
     temperature=0.7,
 )
 
