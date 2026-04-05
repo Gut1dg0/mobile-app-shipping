@@ -60,7 +60,7 @@ class AppDevelopmentCrew():
         return Agent(
             config=self.agents_config['document_specialist'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            llm=anthropic_llm,
         )
 
     # To learn more about structured task outputs,

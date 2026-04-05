@@ -145,6 +145,25 @@ wheels = [
 ]
 
 [[package]]
+name = "anthropic"
+version = "0.73.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "distro" },
+    { name = "docstring-parser" },
+    { name = "httpx" },
+    { name = "jiter" },
+    { name = "pydantic" },
+    { name = "sniffio" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f0/07/f550112c3f5299d02f06580577f602e8a112b1988ad7c98ac1a8f7292d7e/anthropic-0.73.0.tar.gz", hash = "sha256:30f0d7d86390165f86af6ca7c3041f8720bb2e1b0e12a44525c8edfdbd2c5239", size = 425168, upload-time = "2025-11-14T18:47:52.635Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/15/b1/5d4d3f649e151e58dc938cf19c4d0cd19fca9a986879f30fea08a7b17138/anthropic-0.73.0-py3-none-any.whl", hash = "sha256:0d56cd8b3ca3fea9c9b5162868bdfd053fbc189b8b56d4290bd2d427b56db769", size = 367839, upload-time = "2025-11-14T18:47:51.195Z" },
+]
+
+[[package]]
 name = "anyio"
 version = "4.11.0"
 source = { registry = "https://pypi.org/simple" }
@@ -560,6 +579,9 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+anthropic = [
+    { name = "anthropic", marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'" },
+]
 google-genai = [
     { name = "google-genai", version = "1.49.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'" },
 ]
@@ -613,6 +635,9 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+anthropic = [
+    { name = "anthropic", marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'" },
+]
 google-genai = [
     { name = "google-genai", version = "1.65.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'" },
 ]
@@ -1873,8 +1898,8 @@ name = "mobile-app-shipping"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "crewai", version = "1.9.3", source = { registry = "https://pypi.org/simple" }, extra = ["google-genai", "tools"], marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'" },
-    { name = "crewai", version = "1.12.1", source = { registry = "https://pypi.org/simple" }, extra = ["google-genai", "tools"], marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'" },
+    { name = "crewai", version = "1.9.3", source = { registry = "https://pypi.org/simple" }, extra = ["anthropic", "google-genai", "tools"], marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'" },
+    { name = "crewai", version = "1.12.1", source = { registry = "https://pypi.org/simple" }, extra = ["anthropic", "google-genai", "tools"], marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'" },
     { name = "flask" },
     { name = "google-genai", version = "1.49.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine == 'x86_64' and sys_platform == 'darwin'" },
     { name = "google-genai", version = "1.65.0", source = { registry = "https://pypi.org/simple" }, marker = "platform_machine != 'x86_64' or sys_platform != 'darwin'" },
@@ -1883,7 +1908,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "crewai", extras = ["tools", "google-genai"], specifier = ">=1.0.0,<2.0.0" },
+    { name = "crewai", extras = ["anthropic", "google-genai", "tools"], specifier = ">=1.0.0,<2.0.0" },
     { name = "flask", specifier = ">=3.1.2" },
     { name = "google-genai", specifier = ">=1.0.0" },
     { name = "requests", specifier = ">=2.32.5" },

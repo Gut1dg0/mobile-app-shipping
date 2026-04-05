@@ -12,6 +12,11 @@ gemini_llm = LLM(
     temperature=0.7,
 )
 
+anthropic_llm = LLM(
+    model="anthropic/claude-opus-4-1-20250805",
+    temperature=0.7,
+)
+
 search_tool = SerperDevTool()
 
 @CrewBase
@@ -32,7 +37,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            llm=anthropic_llm,
             tools=[search_tool]
         )
 
@@ -41,7 +46,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm
+            llm=anthropic_llm
         )
 
     # To learn more about structured task outputs,

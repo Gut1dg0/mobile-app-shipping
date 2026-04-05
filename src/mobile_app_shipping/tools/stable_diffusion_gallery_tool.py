@@ -22,7 +22,7 @@ def stable_diffusion_gallery(prompt: str) -> str:
     screens = ["Home", "Profile", "Settings", "Login"]
     image_paths = []
     headers = {"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"}
-    api_url = f"https://api-inference.huggingface.co/models/{MODEL_ID}"
+    api_url = f"https://router.huggingface.co/hf-inference/models/{MODEL_ID}"
 
     for screen in screens:
         screen_prompt = f"{prompt}, {screen} screen of the mobile app interface, modern, professional, 3D UI, pastel colors, minimal design"

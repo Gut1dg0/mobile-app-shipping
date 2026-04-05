@@ -12,6 +12,11 @@ gemini_llm = LLM(
     temperature=0.7,
 )
 
+anthropic_llm = LLM(
+    model="anthropic/claude-opus-4-1-20250805",
+    temperature=0.7,
+)
+
 @CrewBase
 class AppDesignCrew():
     """AppDesignCrew crew"""
@@ -30,7 +35,7 @@ class AppDesignCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=gemini_llm,
+            llm=anthropic_llm,
         )
 
     @agent
@@ -39,7 +44,7 @@ class AppDesignCrew():
             config=self.agents_config['uxui_designer'], # type: ignore[index]
             verbose=True,
             tools=[stable_diffusion_gallery],
-            llm=gemini_llm
+            llm=anthropic_llm
         )
 
     # To learn more about structured task outputs,

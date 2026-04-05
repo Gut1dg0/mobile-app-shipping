@@ -1,3 +1,13 @@
+---
+title: Mobile App Shipping
+emoji: 📱
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+app_port: 7860
+---
+
 # Mobile App Shipping Crew
 
 Welcome to the Mobile App Shipping Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.

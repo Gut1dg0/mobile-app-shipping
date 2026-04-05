@@ -1,213 +1,477 @@
-# Habitual: Simple Habit Tracker - Mobile App Concept Report
+# MindfulBreath Mobile App - UX/UI Design Document
 
-## Introduction
+## Executive Summary
 
-The 'Habitual' app idea was selected due to the growing market for habit tracking apps and the opportunity to differentiate by focusing on simplicity, intuitive design, and seamless integration with users already familiar with similar apps like 'Simple Habit Tracker'. The app aims to provide a clean, distraction-free experience to help users build consistency with their daily routines and achieve their goals.
+This comprehensive design document outlines the complete user experience and interface specifications for the MindfulBreath mobile application. The design philosophy centers on creating a calming, intuitive, and scientifically-backed mental wellness experience that leverages AI technology while maintaining human warmth and accessibility.
 
-## Features
+## Design Philosophy
 
-*   **Habit Creation and Customization:** Users can easily create new habits with customizable names, descriptions, frequencies (daily, weekly, monthly), and target times. Allows setting reminders and choosing from a variety of icons and colors to personalize each habit.
-*   **Simple and Intuitive Interface:** A clean and uncluttered interface with a focus on ease of use. The main screen displays a clear overview of daily habits and their current status (completed, skipped, pending).
-*   **Progress Tracking and Visualization:** Visual progress tracking through charts and graphs. Users can view their streak, completion rate, and overall progress for each habit over time. Includes daily, weekly, and monthly summaries.
-*   **Reminders and Notifications:** Customizable reminders to prompt users to complete their habits at specific times. Options for multiple reminders per habit and customizable notification sounds.
-*   **Streak Tracking:** Tracks consecutive days a habit has been completed. Encourages users to maintain their streaks and build momentum.
-*   **Habit Categories:** Organize habits into categories (e.g., health, fitness, work) for better organization and filtering.
-*   **Achievements and Rewards:** In-app achievements and virtual rewards for reaching milestones and maintaining streaks. Gamification elements to motivate users.
-*   **Data Export:** Ability to export habit data in CSV or other formats for personal analysis or integration with other apps.
-*   **Dark Mode:** Option for a dark mode interface to reduce eye strain and improve battery life.
-*   **Integration with Health Apps (Optional):** Potential integration with health apps like Apple Health or Google Fit to automatically track certain habits (e.g., exercise, sleep).
+### Core Principles
+- **Calm First**: Every design decision prioritizes reducing cognitive load and promoting tranquility
+- **Accessibility**: Inclusive design supporting users across all anxiety levels and technical abilities
+- **Scientific Credibility**: Visual language that conveys trustworthiness and medical validity
+- **Personalized Experience**: Adaptive interfaces that evolve with user preferences and needs
+- **Seamless Flow**: Frictionless navigation that never interrupts the wellness journey
 
-## Target Audience
+## Visual Design System
 
-*   **Demographics:** Adults aged 18-45, both male and female.
-*   **Interests:** Individuals interested in self-improvement, productivity, health and fitness, and building positive habits.
-*   **Tech Savviness:** Comfortable using mobile apps and technology in general. Likely users of other productivity or self-improvement apps.
-*   **Needs:** Seeking a simple, intuitive, and effective way to track their habits and build consistency in their daily routines. May have tried other habit tracking apps but found them too complex or overwhelming.
-*   **User Personas:**
-    *   **The Aspiring Achiever:** A young professional who wants to improve their productivity and achieve their career goals by building good habits.
-    *   **The Health Enthusiast:** An individual focused on improving their health and fitness through consistent exercise, healthy eating, and other positive habits.
-    *   **The Student:** A student looking to improve their study habits, time management, and overall academic performance.
+### Color Palette
 
-## Business Model
+**Primary Colors**
+- **Tranquil Blue**: #4A90E2 - Primary brand color, used for main CTAs and active states
+- **Deep Calm**: #2C5282 - Secondary blue for headers and emphasis
+- **Soft Sky**: #E6F2FF - Light blue for backgrounds and cards
 
-*   **Monetization Strategies:**
-    *   **Freemium Model:** Offer a free version of the app with limited features. Users can upgrade to a premium subscription for access to all features, unlimited habit tracking, advanced statistics, and ad-free experience.
-    *   **Subscription Model:** Offer a monthly or annual subscription for access to all features. This provides a recurring revenue stream.
-    *   **In-App Purchases:** Offer optional in-app purchases for cosmetic items (e.g., custom themes, icons) or additional features (e.g., advanced reporting).
-*   **Pricing Strategy:** Competitive pricing compared to other habit tracking apps. Offer a free trial of the premium version to encourage users to upgrade.
-*   **Revenue Projections:** Based on market analysis and user acquisition projections, estimate monthly recurring revenue (MRR) and annual recurring revenue (ARR) for the subscription model.
+**Secondary Colors**
+- **Lavender Mist**: #9B88FF - Accent color for premium features and achievements
+- **Sage Green**: #68D391 - Success states and positive feedback
+- **Warm Coral**: #FC8181 - Gentle alerts and reminders (never harsh red)
+- **Moonlight Gray**: #F7FAFC - Primary background color
 
-## Marketing Strategy
+**Neutral Palette**
+- **Charcoal**: #2D3748 - Primary text color
+- **Stone**: #718096 - Secondary text and icons
+- **Pearl**: #E2E8F0 - Dividers and borders
+- **Pure White**: #FFFFFF - Card backgrounds and input fields
 
-*   **App Store Optimization:** Optimize app store listing with relevant keywords, compelling screenshots, and a persuasive app description to improve visibility in app store search results.
-*   **Social Media Marketing:** Create engaging content on social media platforms (e.g., Instagram, Facebook, Twitter) to promote the app and build a community around habit tracking and self-improvement.
-*   **Content Marketing:** Develop blog posts, articles, and videos on topics related to habit formation, productivity, and self-improvement to attract potential users and establish thought leadership.
-*   **Influencer Marketing:** Partner with relevant influencers in the self-improvement and productivity space to promote the app to their followers.
-*   **Paid Advertising:** Run targeted advertising campaigns on social media and search engines to reach potential users based on their interests and demographics.
-*   **Public Relations:** Reach out to media outlets and bloggers to get the app reviewed and featured in relevant articles and publications.
-*   **Email Marketing:** Build an email list and send out newsletters with tips, promotions, and updates about the app.
-*   **Partnerships:** Collaborate with other apps and services in the productivity and self-improvement space to cross-promote each other's products.
-*   **Referral Program:** Implement a referral program to incentivize existing users to refer new users to the app.
+**Gradient System**
+- **Morning Breath**: Linear gradient from #4A90E2 to #9B88FF (120°)
+- **Evening Calm**: Linear gradient from #2C5282 to #4A90E2 (180°)
+- **Premium Glow**: Radial gradient from #9B88FF to #4A90E2
 
-## Roadmap
+### Typography
 
-*   **Phase 1: MVP Launch (3 months)**
-    *   Core habit creation and tracking functionality
-    *   Simple and intuitive user interface
-    *   Basic progress tracking and visualization
-    *   Reminders and notifications
-*   **Phase 2: Feature Enhancement (6 months)**
-    *   Habit categories
-    *   Achievements and rewards
-    *   Data export
-    *   Dark mode
-*   **Phase 3: Advanced Features and Integrations (9 months)**
-    *   Integration with health apps
-    *   Advanced reporting and analytics
-    *   Customizable themes and icons
-    *   Social sharing
-*   **Phase 4: Community Features (12 months)**
-    *   Habit challenges with friends
-    *   Public habit forums
-    *   Expert help via chat
+**Font Family**
+- **Primary**: SF Pro Display (iOS) / Google Sans (Android)
+- **Secondary**: Inter for body text
+- **Monospace**: SF Mono for timers and metrics
 
-## Competitive Analysis
+**Type Scale**
+- **H1**: 32px/40px - Bold (Screen titles)
+- **H2**: 24px/32px - Semibold (Section headers)
+- **H3**: 20px/28px - Medium (Card titles)
+- **Body Large**: 17px/24px - Regular (Primary content)
+- **Body**: 15px/22px - Regular (Standard text)
+- **Caption**: 13px/18px - Regular (Supporting text)
+- **Micro**: 11px/14px - Medium (Labels and badges)
 
-*   **Competitors:** Loop Habit Tracker, Habitica, Streaks, Fabulous, TickTick
-*   **Differentiation:** Habitual differentiates itself by focusing on extreme simplicity and an intuitive user experience. While competitors may offer more advanced features, Habitual prioritizes ease of use and a clean interface, making it ideal for users who are new to habit tracking or who prefer a minimalist approach. The focus on a 'Simple Habit Tracker' style interface will also attract users already familiar with that aesthetic.
-*   **Strengths:**
-    *   Simple and intuitive interface
-    *   Focus on core habit tracking functionality
-    *   Clean and distraction-free design
-    *   Potential for strong user engagement
-*   **Weaknesses:**
-    *   May lack some advanced features compared to competitors
-    *   Requires effective marketing to stand out in a crowded market
+### Spacing System
+- **Base unit**: 4px
+- **Spacing scale**: 4, 8, 12, 16, 24, 32, 48, 64, 96px
+- **Screen padding**: 16px horizontal, 24px vertical
+- **Card padding**: 16px all sides
+- **Component spacing**: 12px between related, 24px between sections
 
-## Technical Requirements
+### Elevation & Shadows
+- **Level 0**: No shadow (flat elements)
+- **Level 1**: 0 2px 4px rgba(0,0,0,0.08) - Cards and buttons
+- **Level 2**: 0 4px 12px rgba(0,0,0,0.12) - Floating elements
+- **Level 3**: 0 8px 24px rgba(0,0,0,0.16) - Modals and overlays
 
-*   **Platforms:** iOS and Android
-*   **Development Languages:** Swift (iOS) and Kotlin (Android)
-*   **Database:** Cloud-based database (e.g., Firebase, AWS)
-*   **Backend:** Node.js or Python (Django/Flask)
-*   **Push Notifications:** Firebase Cloud Messaging (FCM) or Apple Push Notification Service (APNs)
-*   **Analytics:** Google Analytics or Firebase Analytics
+### Border Radius
+- **Small**: 8px - Buttons and inputs
+- **Medium**: 12px - Cards and containers
+- **Large**: 16px - Modals and sheets
+- **Full**: 50% - Circular elements and avatars
 
-## Conclusion
+## Component Library
 
-Habitual: Simple Habit Tracker is a mobile app concept with strong potential in the growing market for habit tracking solutions. By focusing on simplicity, intuitive design, and a user-friendly experience, the app can attract a wide audience of individuals seeking to build consistency in their daily routines and achieve their personal and professional goals. A freemium business model, combined with a comprehensive marketing strategy, can drive user acquisition and generate sustainable revenue. The roadmap outlines a clear path for future development and feature enhancements to keep the app competitive and engaging.
+### Buttons
 
-## UI/UX Design Document
+**Primary Button**
+- Background: #4A90E2
+- Text: White, 16px semibold
+- Height: 48px
+- Border radius: 8px
+- Shadow: Level 1
+- Pressed state: Darken 10%, scale 0.98
+- Disabled: 40% opacity
 
-### Visuals
+**Secondary Button**
+- Background: White
+- Border: 1px solid #E2E8F0
+- Text: #4A90E2, 16px medium
+- Height: 48px
+- Border radius: 8px
+- Shadow: None
+- Hover: Background #F7FAFC
 
-*   **Color Palette:**
-    *   Primary: `#4CAF50` (Green - for positive reinforcement and progress)
-    *   Secondary: `#E8F5E9` (Light Green - for backgrounds and subtle accents)
-    *   Accent: `#FFC107` (Amber - for highlights and important actions)
-    *   Text (Primary): `#212121` (Dark Gray - for readability)
-    *   Text (Secondary): `#757575` (Medium Gray - for less important information)
-    *   Background: `#FFFFFF` (White - for a clean and minimalist look)
-    *   Error: `#F44336` (Red - to indicate errors and warnings)
-*   **Typography:**
-    *   Primary Font: Roboto (for its clean and modern look)
-    *   Font Weight: Regular (400) for body text, Medium (500) for headings, Bold (700) for emphasis
-    *   Font Sizes: Vary based on element type (e.g., 16sp for body, 20sp for headings)
-*   **Style:**
-    *   Minimalist and clean design
-    *   Focus on whitespace and clear typography
-    *   Rounded corners for buttons and cards
-    *   Subtle shadows to add depth
+**Text Button**
+- Background: Transparent
+- Text: #4A90E2, 15px medium
+- Padding: 8px 12px
+- Underline on hover
 
-### Screen Designs
+**Floating Action Button**
+- Size: 56px diameter
+- Background: Morning Breath gradient
+- Icon: White, 24px
+- Shadow: Level 2
+- Position: Bottom right, 16px margin
 
-#### 1. Login Screen
+### Input Fields
 
-*   **Layout:**
-    *   Full-screen layout
-    *   Logo at the top (centered)
-    *   Login form in the middle
-    *   "Sign Up" link at the bottom
-*   **Elements:**
-    *   Logo: App logo (a stylized checkmark or a simple leaf icon)
-    *   Email Text Field: Standard text field with "Email" as the placeholder.
-    *   Password Text Field: Standard text field with "Password" as the placeholder. Password should be masked.
-    *   Login Button: Primary button with the text "Login". Green color.
-    *   Sign Up Link: Text link with the text "Sign Up". Navigate to the sign-up screen.
-    *   "Forgot Password?" link: Text link, navigate to a password reset flow.
-*   **Features:**
-    *   Users can enter their email and password to log in.
-    *   The "Sign Up" link takes users to the registration screen.
-    *   The "Forgot Password?" link navigates to a password reset flow (email verification, new password input).
-*   **Transitions:**
-    *   On successful login, transition to the Home screen.
-    *   On tapping "Sign Up", transition to the Sign-Up screen.
+**Standard Input**
+- Height: 48px
+- Background: White
+- Border: 1px solid #E2E8F0
+- Border radius: 8px
+- Padding: 12px 16px
+- Focus: Border #4A90E2, shadow 0 0 0 3px rgba(74,144,226,0.1)
+- Error: Border #FC8181, helper text below
 
-#### 2. Home Screen
+**Text Area**
+- Min height: 96px
+- Same styling as standard input
+- Auto-expanding with max height 200px
 
-*   **Layout:**
-    *   Top app bar with the app title ("Habitual") and user profile icon on the right.
-    *   Date display below the app bar.
-    *   List of habits in the main content area.
-    *   Floating action button (FAB) at the bottom right for adding new habits.
-*   **Elements:**
-    *   App Title: "Habitual" (Roboto, Medium, 20sp)
-    *   User Profile Icon: Circular icon, navigates to the Profile screen.
-    *   Date Display: Current date (e.g., "Monday, October 28")
-    *   Habit List: A list of cards, each representing a habit.
-        *   Habit Name: The name of the habit.
-        *   Habit Status: A checkbox or toggle to mark the habit as completed.
-        *   Habit Time (Optional): The target time for the habit.
-    *   Floating Action Button (FAB): A circular button with a "+" icon. Opens the "Create New Habit" screen.
-*   **Features:**
-    *   Displays a list of the user's habits for the current day.
-    *   Users can mark habits as complete by tapping the checkbox/toggle.
-    *   The FAB allows users to add new habits.
-    *   Tapping the profile icon navigates to the Profile screen.
-*   **Transitions:**
-    *   Tapping the FAB transitions to the "Create New Habit" screen.
-    *   Tapping the profile icon transitions to the Profile screen.
+### Cards
 
-#### 3. Profile Screen
+**Content Card**
+- Background: White
+- Border radius: 12px
+- Shadow: Level 1
+- Padding: 16px
+- Margin bottom: 12px
 
-*   **Layout:**
-    *   Top app bar with a "Back" button.
-    *   User profile information at the top.
-    *   List of options below the profile information.
-*   **Elements:**
-    *   Back Button: Navigates back to the previous screen (Home screen).
-    *   Profile Picture: Circular image.
-    *   User Name: User's full name.
-    *   Email Address: User's email address.
-    *   Options List:
-        *   "Settings": Navigates to the Settings screen.
-        *   "Subscription": Navigates to the subscription management screen (if applicable).
-        *   "Data Export": Initiates data export.
-        *   "Logout": Logs the user out.
-*   **Features:**
-    *   Displays the user's profile information.
-    *   Allows users to navigate to Settings, manage their subscription, export data, and log out.
-*   **Transitions:**
-    *   Tapping the "Back" button navigates back to the Home screen.
-    *   Tapping "Settings" navigates to the Settings screen.
-    *   Tapping "Subscription" navigates to the subscription management screen.
-    *   Tapping "Data Export" initiates the data export process.
-    *   Tapping "Logout" logs the user out and navigates to the Login screen.
+**Feature Card**
+- Background: Linear gradient overlay on white
+- Border radius: 16px
+- Shadow: Level 2
+- Padding: 24px
+- Premium badge: Top right corner
 
-#### 4. Settings Screen
+### Navigation Components
 
-*   **Layout:**
-    *   Top app bar with a "Back" button.
-    *   List of settings options in the main content area.
-*   **Elements:**
-    *   Back Button: Navigates back to the previous screen (Profile screen).
-    *   Settings List:
-        *   "Notifications": Allows users to configure notification settings.
-        *   "Theme": Allows users to switch between light and dark mode.
-        *   "About": Displays information about the app.
-        *   "Help & Support": Navigates to a help/support page.
-*   **Features:**
-    *   Allows users to configure app settings.
-*   **Transitions:**
-    *   Tapping the "Back" button navigates back to the Profile screen.
-    *   Tapping each setting option navigates to the corresponding settings screen (e.g., Notification Settings, Theme Selection).
+**Tab Bar**
+- Height: 56px
+- Background: White with top border
+- 5 tabs maximum
+- Active: Icon #4A90E2, label visible
+- Inactive: Icon #718096, label hidden on scroll
+
+**Navigation Bar**
+- Height: 64px
+- Background: Blur effect over content
+- Title: Center aligned, 20px semibold
+- Actions: Icon buttons 44x44px touch target
+
+### Feedback Elements
+
+**Progress Indicators**
+- Circular: 4px stroke, animated gradient
+- Linear: 4px height, rounded ends
+- Skeleton screens for loading states
+
+**Toasts & Alerts**
+- Position: Top of screen, below nav bar
+- Background: White with colored left border
+- Auto-dismiss: 3 seconds
+- Swipe to dismiss gesture
+
+## Screen Specifications
+
+### 1. Login Screen
+
+**Layout Structure**
+- Status bar: System default
+- Logo placement: Center, 120px from top
+- Welcome message: 24px below logo
+- Form container: 48px below message
+- Social login: Bottom of screen
+
+**Components**
+- Logo: 80x80px, with app name below (24px semibold)
+- Welcome text: "Welcome to your calm space" (H2, #2D3748)
+- Email input: Standard input with email icon
+- Password input: Standard input with eye toggle
+- "Forgot Password?": Text button, right aligned
+- Login button: Primary button, full width
+- Divider: "Or continue with" (Caption, centered)
+- Social buttons: Google, Apple, Facebook (48px height, outlined)
+- Sign up prompt: "New here? Create account" (bottom safe area)
+
+**Animations**
+- Logo: Gentle breathing animation (scale 1.0 to 1.05, 4s loop)
+- Form: Slide up from bottom (0.3s ease-out)
+- Keyboard: Push content up smoothly
+
+**Validation**
+- Real-time email format validation
+- Password strength indicator
+- Error messages: Below fields, #FC8181
+- Success: Smooth transition to onboarding/home
+
+### 2. Home Screen
+
+**Layout Structure**
+- Navigation bar: "MindfulBreath" title, profile avatar right
+- Greeting section: Personalized message with time of day
+- Quick action cards: 2x2 grid
+- Current state widget: AI-detected mood/stress
+- Recommended sessions: Horizontal scroll
+- Daily affirmation: Expandable card
+- Bottom tab bar: 5 tabs
+
+**Components**
+
+*Greeting Section* (24px from top)
+- "Good [morning], [Name]" (H1, #2D3748)
+- "How are you feeling?" (Body, #718096)
+- Mood selector: 5 emoji options in a row
+
+*Quick Actions Grid* (32px below greeting)
+- Card size: (screen width - 48) / 2
+- Icons: 32px, centered
+- Labels: Caption, centered
+- Actions: "Quick Breathe", "Check Anxiety", "Daily Affirmation", "Sleep Mode"
+
+*Current State Widget* (24px below grid)
+- Full width card with gradient background
+- Heart rate visualization: Live waveform
+- Stress level: Visual meter with color coding
+- "Start Breathing" CTA: Secondary button
+
+*Recommended Sessions* (24px below state)
+- Section title: "Recommended for you" (H3)
+- Card width: 280px, height: 160px
+- Horizontal scroll with peek of next card
+- Each card: Image background, title, duration, difficulty
+
+*Daily Affirmation* (24px below sessions)
+- Collapsed: Shows first line with expand arrow
+- Expanded: Full text with share and save buttons
+- Background: Soft gradient
+- Typography: 18px medium, centered
+
+**Animations**
+- Mood selector: Bounce on selection
+- Quick action cards: Subtle lift on press
+- Heart rate: Continuous wave animation
+- Session cards: Parallax on scroll
+
+### 3. Profile Screen
+
+**Layout Structure**
+- Navigation bar: "Profile", edit button right
+- Profile header: Avatar, name, stats
+- Achievement section: Recent badges
+- Statistics dashboard: Weekly/monthly views
+- Subscription status: Current plan card
+- Settings shortcuts: List format
+- Bottom tab bar: Highlighted profile tab
+
+**Components**
+
+*Profile Header* (24px from top)
+- Avatar: 96px circle, center aligned
+- Edit overlay: Camera icon on avatar tap
+- Name: H2, centered
+- Member since: Caption, #718096
+- Stats row: 3 columns (Sessions, Streak, Minutes)
+
+*Achievements* (32px below header)
+- Section title: "Recent Achievements" (H3)
+- Badge size: 64px
+- Horizontal scroll, 5 max visible
+- Each badge: Icon, title below
+- "View all" link: Text button, right aligned
+
+*Statistics Dashboard* (24px below achievements)
+- Toggle: "Week" / "Month" segmented control
+- Chart: Line graph showing anxiety trends
+- Key metrics: Cards below chart
+  - Average anxiety level
+  - Total breathing minutes
+  - Improvement percentage
+- Export button: "Share with therapist"
+
+*Subscription Card* (24px below stats)
+- Current plan: "Free" or "Premium"
+- Benefits list: Checkmarks, 13px text
+- Upgrade CTA: Primary button if free user
+- Manage link: Text button if premium
+
+*Settings List* (24px below subscription)
+- Row height: 56px
+- Icons: 24px, #718096
+- Chevron: Right side, 16px
+- Options: Reminders, Privacy, Help, About, Logout
+
+**Interactions**
+- Pull to refresh: Updates statistics
+- Avatar tap: Photo picker
+- Stats tap: Detailed view modal
+- Achievement tap: Share modal
+
+### 4. Settings Screen
+
+**Layout Structure**
+- Navigation bar: Back arrow, "Settings" title
+- Grouped sections: Preferences, Account, Support, About
+- Toggle switches: Right aligned
+- Nested navigation: Chevrons for sub-screens
+
+**Components**
+
+*Preferences Section*
+- Notifications: Toggle with sub-options
+  - Breathing reminders
+  - Daily affirmations
+  - Achievement alerts
+  - Marketing messages
+- App appearance: Light/Dark/Auto selector
+- Sounds: Toggle with volume slider
+- Haptics: Toggle switch
+- Language: Current selection with chevron
+
+*Account Section*
+- Profile information: Email, name (chevron to edit)
+- Password: "Change password" with chevron
+- Subscription: Current plan with manage option
+- Connected devices: List of wearables
+- Data & Privacy: Export, delete options
+
+*Support Section*
+- Help center: Chevron navigation
+- Contact support: Email/chat options
+- FAQ: Chevron navigation
+- Community: Link to forums
+
+*About Section*
+- Version: App version number
+- Terms of service: Chevron navigation
+- Privacy policy: Chevron navigation
+- Licenses: Open source attributions
+- Rate app: Opens store rating
+
+**Visual Treatment**
+- Section headers: Caps, 11px, #718096, 24px padding top
+- Row separators: 1px, #E2E8F0, inset 16px
+- Toggle switches: #4A90E2 when on
+- Destructive actions: #FC8181 text (logout, delete)
+
+## User Flows
+
+### Onboarding Flow (First-time users)
+
+1. **Welcome Screen**
+   - Logo animation
+   - "Welcome to MindfulBreath" message
+   - "Get Started" primary button
+
+2. **Personal Goals**
+   - "What brings you here?" question
+   - Multi-select options: Reduce anxiety, Better sleep, Daily calm, Focus
+   - Progress indicator: 1 of 4
+
+3. **Experience Level**
+   - "Have you practiced breathing exercises?"
+   - Options: Beginner, Some experience, Regular practice
+   - Progress indicator: 2 of 4
+
+4. **Notification Preferences**
+   - "When should we check in?"
+   - Time picker for daily reminder
+   - Skip option available
+   - Progress indicator: 3 of 4
+
+5. **AI Permissions**
+   - Explain camera/microphone usage
+   - Optional permissions with benefits explained
+   - "Enable" or "Maybe later" options
+   - Progress indicator: 4 of 4
+
+6. **Completion**
+   - Celebration animation
+   - "You're all set!" message
+   - "Start first session" CTA
+
+### Daily Session Flow
+
+1. **Session Selection**
+   - Choose from recommended or browse all
+   - Filter by duration, difficulty, goal
+   - Preview with description and reviews
+
+2. **Pre-Session Check**
+   - "How are you feeling?" (1-10 scale)
+   - Optional: Camera-based heart rate check
+   - Session customization based on input
+
+3. **Active Session**
+   - Full-screen breathing visualization
+   - Timer and progress ring
+   - Pause/stop controls (swipe down)
+   - Haptic feedback on inhale/exhale
+
+4. **Post-Session**
+   - "How do you feel now?" (1-10 scale)
+   - Session summary: Duration, technique, improvement
+   - Save to favorites option
+   - Share achievement option
+
+5. **Insights**
+   - AI-generated insights about progress
+   - Recommendations for next session
+   - Option to schedule reminder
+
+### Premium Upgrade Flow
+
+1. **Trigger Points**
+   - Locked feature tap
+   - Profile subscription card
+   - Settings subscription menu
+
+2. **Premium Benefits Screen**
+   - Full-screen presentation
+   - Feature comparison table
+   - Testimonials carousel
+   - Pricing: Monthly vs Annual toggle
+
+3. **Payment**
+   - Apple Pay / Google Pay primary
+   - Credit card fallback
+   - Promo code field (collapsible)
+   - Terms and restore purchases links
+
+4. **Confirmation**
+   - Success animation
+   - Welcome to Premium message
+   - "Explore premium features" CTA
+
+### Emergency Anxiety Flow
+
+1. **Quick Access**
+   - 3D touch / long press app icon
+   - Home screen emergency button
+   - Shake gesture activation
+
+2. **Immediate Relief**
+   - Skip all setup questions
+   - Start with 4-7-8 breathing
+   - Large, clear visual guide
+   - Calming background animation
+
+3. **Stabilization**
+   - After 2 minutes, check-in prompt
+   - Option to continue or try different technique
+   - Access to crisis resources if needed
+
+4. **Follow-up**
+   - Log the episode (optional)
+   - Schedule check-in reminder
+   - Suggest preventive session for tomorrow
+
+## Animations & Transitions
+
+### Screen Transitions
+- **Push navigation**: 0.3s ease-in-out, slide from right
+- **Modal presentation**: 0.25s ease-out, slide from bottom
+- **Tab switches**: 0.2s ease-in-out, fade transition
+- **Pull to dismiss**: Interactive spring physics
+
+### Micro-interactions
+- **Button press**: Scale to 0.95, 0.1s
+- **Toggle switch**: 0.2s spring animation
+- **Card selection**:

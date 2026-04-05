@@ -1,0 +1,28 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Version control & editor metadata
+.git/
+.gitignore
+.claude/
+.DS_Store
+
+# Local secrets — never bake into the image
+.env
+
+# Dev/test artifacts
+tests/
+crewai_flow.html
+
+# Runtime-generated outputs (written fresh each run)
+app_roadmap.md
+app_design.md
+app_code.md
+src/mobile_app_shipping/static/app_mockup_*.png
