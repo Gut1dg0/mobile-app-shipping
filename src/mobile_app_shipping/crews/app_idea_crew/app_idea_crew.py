@@ -8,7 +8,7 @@ from crewai_tools import SerperDevTool, ScrapeWebsiteTool
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 groq_llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
+    model="groq/llama-3.1-8b-instant",
     temperature=0.7,
 )
 
