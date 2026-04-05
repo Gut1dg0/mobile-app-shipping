@@ -12,6 +12,11 @@ groq_llm = LLM(
     temperature=0.7,
 )
 
+gemini_llm = LLM(
+    model="gemini/gemini-3-flash-preview",
+    temperature=0.7,
+)
+
 @CrewBase
 class AppDesignCrew():
     """AppDesignCrew crew"""
@@ -30,7 +35,7 @@ class AppDesignCrew():
         return Agent(
             config=self.agents_config['business_analyst'], # type: ignore[index]
             verbose=True,
-            llm=groq_llm,
+            llm=gemini_llm,
         )
 
     @agent

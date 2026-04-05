@@ -13,7 +13,7 @@ groq_llm = LLM(
 )
 
 gemini_llm = LLM(
-    model="google/gemini-3.1-pro-preview",
+    model="gemini/gemini-3-flash-preview",
     temperature=0.7,
 )
 
@@ -38,7 +38,7 @@ class AppIdeaCrew():
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
             verbose=True,
-            llm=groq_llm,
+            llm=gemini_llm,
             tools=[search_tool, scrape_tool]
         )
 
