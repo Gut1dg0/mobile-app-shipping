@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Running AI Pipeline…</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --surface: #161922;
+      --border: #252a36;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --text: #e8eaf0;
+      --muted: #8891a4;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* spinner */
+    .spinner {
+      width: 56px;
+      height: 56px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      margin: 0 auto 28px;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    #status-msg {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      min-height: 48px;
+    }
+
+    /* step timeline */
+    .timeline {
+      margin: 36px 0 0;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 0;
+      position: relative;
+    }
+    .tl-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 38px;
+      width: 2px;
+      height: calc(100% - 14px);
+      background: var(--border);
+    }
+    .tl-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      margin-top: 2px;
+      transition: all 0.3s;
+    }
+    .tl-dot.done   { background: var(--accent2); border-color: var(--accent2); color: #000; }
+    .tl-dot.active { background: var(--accent);  border-color: var(--accent);  animation: pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(108,99,255,0.4); } 50% { box-shadow: 0 0 0 8px rgba(108,99,255,0); } }
+
+    .tl-label { font-size: 0.9rem; font-weight: 600; }
+    .tl-sub   { font-size: 0.78rem; color: var(--muted); }
+
+    /* error state */
+    .error-box {
+      display: none;
+      margin-top: 20px;
+      background: rgba(255,80,80,0.08);
+      border: 1px solid rgba(255,80,80,0.3);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 0.85rem;
+      color: #ff8080;
+      text-align: left;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="spinner" id="spinner"></div>
+    <h2 id="phase-title">AI Pipeline Running</h2>
+    <p id="status-msg">Initializing agents…</p>
+
+    <div class="timeline">
+      <div class="tl-item" id="step-ideas">
+        <div class="tl-dot" id="dot-ideas">1</div>
+        <div>
+          <div class="tl-label">Idea Research</div>
+          <div class="tl-sub">AppIdeaCrew · Gemini 2.0 Flash + Web Search</div>
+        </div>
+      </div>
+      <div class="tl-item" id="step-select">
+        <div class="tl-dot" id="dot-select">2</div>
+        <div>
+          <div class="tl-label">Human Selection</div>
+          <div class="tl-sub">You choose the concept to pursue</div>
+        </div>
+      </div>
+      <div class="tl-item" id="step-design">
+        <div class="tl-dot" id="dot-design">3</div>
+        <div>
+          <div class="tl-label">Design + Mockups</div>
+          <div class="tl-sub">AppDesignCrew · Stable Diffusion XL</div>
+        </div>
+      </div>
+      <div class="tl-item" id="step-dev">
+        <div class="tl-dot" id="dot-dev">4</div>
+        <div>
+          <div class="tl-label">Code + QA</div>
+          <div class="tl-sub">AppDevelopmentCrew · Claude Opus 4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-box" id="error-box"></div>
+  </div>
+
+  <script>
+    const POLL_MS = 2500;
+
+    const statusMap = {
+      generating_ideas:     { title: 'Researching App Ideas',       dot: 'ideas',  active: ['ideas'] },
+      awaiting_selection:   { title: 'Ready — Select a Concept',    dot: 'select', active: ['select'], done: ['ideas'] },
+      designing:            { title: 'Designing the App',           dot: 'design', active: ['design'], done: ['ideas', 'select'] },
+      developing:           { title: 'Writing & Reviewing Code',    dot: 'dev',    active: ['dev'],    done: ['ideas', 'select', 'design'] },
+      complete:             { title: 'Pipeline Complete!',          dot: null,     done: ['ideas', 'select', 'design', 'dev'] },
+      error:                { title: 'Something went wrong',        dot: null,     done: [] },
+    };
+
+    async function poll() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        applyState(data);
+
+        if (data.status === 'awaiting_selection') {
+          setTimeout(() => window.location.href = '/select', 800);
+          return;
+        }
+        if (data.status === 'complete') {
+          setTimeout(() => window.location.href = '/result', 800);
+          return;
+        }
+        if (data.status === 'error') return;
+
+        setTimeout(poll, POLL_MS);
+      } catch (e) {
+        setTimeout(poll, POLL_MS * 2);
+      }
+    }
+
+    function applyState(data) {
+      const cfg = statusMap[data.status] || {};
+
+      document.getElementById('phase-title').textContent = cfg.title || data.status;
+      document.getElementById('status-msg').textContent  = data.message || '';
+
+      const steps = ['ideas', 'select', 'design', 'dev'];
+      steps.forEach(s => {
+        const dot = document.getElementById('dot-' + s);
+        dot.classList.remove('done', 'active');
+        if ((cfg.done || []).includes(s)) {
+          dot.classList.add('done');
+          dot.textContent = '✓';
+        } else if ((cfg.active || []).includes(s)) {
+          dot.classList.add('active');
+        }
+      });
+
+      if (data.status === 'error') {
+        document.getElementById('spinner').style.display = 'none';
+        const eb = document.getElementById('error-box');
+        eb.style.display = 'block';
+        eb.textContent   = data.error || data.message;
+      }
+    }
+
+    poll();
+  </script>
+</body>
+</html>

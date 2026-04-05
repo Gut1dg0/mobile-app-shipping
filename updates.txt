@@ -1,0 +1,1 @@
+git checkout --orphan hf-deploy && git add -A && git commit -m "Deploy" && git push space hf-deploy:main --force && git checkout main && git branch -D hf-deploy

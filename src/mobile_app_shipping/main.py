@@ -1,181 +1,198 @@
 #!/usr/bin/env python
 import os
-import time
 import threading
-import webbrowser
 import re
 import json
-import ast
 from typing import List
-from flask import Flask, render_template, send_from_directory, request
-from pydantic import BaseModel, Field
+from flask import Flask, render_template, send_from_directory, request, jsonify, redirect, url_for
+from pydantic import BaseModel
 from crewai.flow import Flow, listen, start
 
-# === Import your Crews ===
 from mobile_app_shipping.crews.app_idea_crew.app_idea_crew import AppIdeaCrew
 from mobile_app_shipping.crews.app_design_crew.app_design_crew import AppDesignCrew
 from mobile_app_shipping.crews.app_development_crew.app_development_crew import AppDevelopmentCrew
 
 
 # ======================================
-# Flask setup for Human-in-the-Loop UI
+# Flask app + global flow state
 # ======================================
 app = Flask(__name__)
-concepts = []          # stores Crew 1 outputs
-selected_concept = ""  # stores user’s selected idea
-flow_instance = None   # reference to current Flow instance
 
+# Thread-safe state shared between Flask and the flow thread
+_lock = threading.Lock()
+_state = {
+    "status": "idle",   # idle | generating_ideas | awaiting_selection | designing | developing | complete | error
+    "message": "Ready. Click Launch to start.",
+    "concepts": [],
+    "selected_concept": None,
+    "error": None,
+}
+
+
+def _set_state(**kwargs):
+    with _lock:
+        _state.update(kwargs)
+
+
+def _get_state():
+    with _lock:
+        return dict(_state)
+
+
+# ======================================
+# CrewAI Flow (idea generation only)
+# ======================================
 class MobileAppConcepts(BaseModel):
-    concepts: List[str] = ['Flow Concept 1', 'Flow Concept 2', 'Flow Concept 3']  # default placeholder concepts
+    concepts: List[str] = []
 
 
 class MobileAppFlow(Flow[MobileAppConcepts]):
 
-
     @start()
     def kicking_off(self):
-        print("🚀 Generating Successful App Ideas...")
+        _set_state(status="generating_ideas", message="Agents are researching trending app ideas…")
 
     @listen(kicking_off)
     def kicking_off_idea_crew(self):
-        """Run Crew 1: App Idea Crew"""
-        print("🎨 Running App Idea Crew...")
+        result = AppIdeaCrew().crew().kickoff()
+        raw = result.raw if hasattr(result, "raw") else str(result)
 
-        app_idea_crew = AppIdeaCrew()
-        result = app_idea_crew.crew().kickoff()
-
-        # get the plain text from CrewOutput
-        raw_result = result.raw if hasattr(result, "raw") else str(result)
-        print("🧾 Raw LLM output from Crew 1:\n", raw_result[:500])
-
-        parsed_concepts: List[str] = []
+        parsed: List[str] = []
         try:
-            # Try to extract JSON block
-            match = re.search(r"\{[\s\S]*?\}", raw_result)
+            match = re.search(r"\{[\s\S]*?\}", raw)
             if not match:
-                raise ValueError("No JSON object found in output")
-
-            json_block = match.group(0)
-            data = json.loads(json_block)
-
+                raise ValueError("No JSON block found")
+            data = json.loads(match.group(0))
             if isinstance(data, dict) and "concepts" in data:
-                parsed_concepts = data["concepts"]
+                parsed = data["concepts"]
             else:
-                raise ValueError("JSON missing 'concepts' key")
+                raise ValueError("Missing 'concepts' key")
+        except Exception:
+            lines = [re.sub(r"^[\s\-•\*\d\.\)]+", "", l).strip() for l in raw.splitlines()]
+            parsed = [l for l in lines if len(l) > 10][:3]
 
-        except Exception as e:
-            print(f"⚠️ JSON parse failed: {e}\nFalling back to line-by-line concept parsing.")
-            lines = [re.sub(r"^[\s\-•\*\d\.\)]+", "", l).strip() for l in raw_result.splitlines()]
-            parsed_concepts = [l for l in lines if len(l) > 10][:3]  # crude filter for quality
+        self.state.concepts = parsed
+        _set_state(
+            status="awaiting_selection",
+            message="3 app concepts are ready — choose one to continue.",
+            concepts=parsed,
+        )
 
-        # Store parsed concepts
-        self.state.concepts = parsed_concepts
-        print(f"✅ Parsed {len(parsed_concepts)} concepts for web display.")
-        return self.state
 
-    def resume_after_selection(self, chosen_concept: str):
-        """Called by Flask when the human selects a concept."""
-        print(f"✅ Human selected: {chosen_concept}\n")
+def _run_design_and_dev(chosen_concept: str):
+    """Runs design + development crews in a background thread."""
+    try:
+        _set_state(
+            status="designing",
+            message="Designing app architecture, UX flows, and generating screen mockups…",
+            selected_concept=chosen_concept,
+        )
+        AppDesignCrew().crew().kickoff(inputs={"selected_concept": chosen_concept})
 
-        print("🧠 Running App Design Crew...")
-        design_crew = AppDesignCrew()
-        design_result = design_crew.crew().kickoff(inputs={"selected_concept": chosen_concept})
+        _set_state(status="developing", message="Writing Expo / React Native code and running QA review…")
+        AppDevelopmentCrew().crew().kickoff()
 
-        print("💻 Running App Development Crew...")
-        dev_crew = AppDevelopmentCrew()
-        dev_result = dev_crew.crew().kickoff()
+        _set_state(status="complete", message="Your app is ready!")
 
-        print("🎉 Workflow complete! Check the web interface for results.\n")
-        return design_result, dev_result
-
+    except Exception as exc:
+        _set_state(status="error", message=f"Pipeline error: {exc}", error=str(exc))
 
 
 # ======================================
 # Flask Routes
 # ======================================
-@app.route('/')
+
+@app.route("/")
 def index():
-    # Retrieve structured output from flow state
-    global concepts
-    if not concepts and flow_instance and flow_instance.state:
-        concepts = flow_instance.state.concepts
+    return render_template("index.html")
 
-    if not concepts:
-        return "<h2>No app ideas generated yet. Run the flow first.</h2>"
 
-    return render_template("select_concept.html", concepts=concepts)
+@app.route("/api/start", methods=["POST"])
+def api_start():
+    state = _get_state()
+    if state["status"] not in ("idle", "error", "complete"):
+        return jsonify({"error": "Flow is already running"}), 400
+
+    _set_state(
+        status="generating_ideas",
+        message="Starting AI agents…",
+        concepts=[],
+        selected_concept=None,
+        error=None,
+    )
+
+    def _run():
+        try:
+            MobileAppFlow().kickoff()
+        except Exception as exc:
+            _set_state(status="error", message=str(exc), error=str(exc))
+
+    threading.Thread(target=_run, daemon=True).start()
+    return jsonify({"status": "started"})
+
+
+@app.route("/api/status")
+def api_status():
+    return jsonify(_get_state())
+
+
+@app.route("/loading")
+def loading():
+    return render_template("loading.html")
+
+
+@app.route("/select", methods=["GET"])
+def select_page():
+    state = _get_state()
+    if state["status"] != "awaiting_selection":
+        return redirect(url_for("loading"))
+    return render_template("select_concept.html", concepts=state["concepts"])
 
 
 @app.route("/select", methods=["POST"])
 def select():
-    global selected_concept
-    choice_index = int(request.form["concept"])
-    selected_concept = concepts[choice_index]
+    state = _get_state()
+    concepts = state["concepts"]
+    chosen = concepts[int(request.form["concept"])]
+    threading.Thread(target=_run_design_and_dev, args=(chosen,), daemon=True).start()
+    return redirect(url_for("loading"))
 
-    design_result, dev_result = flow_instance.resume_after_selection(selected_concept)
-    return render_template(
-        "result.html",
-        concept=selected_concept,
-    )
 
-# Get absolute path to the real static folder
-STATIC_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), './static'))
+@app.route("/result")
+def result():
+    state = _get_state()
+    if state["status"] != "complete":
+        return redirect(url_for("loading"))
+    return render_template("result.html", concept=state["selected_concept"])
 
-# Serve images from ./src/static
-@app.route('/images/<path:filename>')
+
+# Static file helpers
+_STATIC = os.path.abspath(os.path.join(os.path.dirname(__file__), "static"))
+_PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+
+
+@app.route("/images/<path:filename>")
 def serve_image(filename):
-    return send_from_directory(STATIC_FOLDER, filename)
+    return send_from_directory(_STATIC, filename)
 
-# Absolute path to project root (go 2 levels up from current file)
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 
-# Serve markdown files from project root
-@app.route('/downloads/<path:filename>')
+@app.route("/downloads/<path:filename>")
 def serve_download(filename):
-    print(f"📥 Download requested: {filename}")  # Optional debug
-    return send_from_directory(PROJECT_ROOT, filename, as_attachment=True)
+    return send_from_directory(_PROJECT_ROOT, filename, as_attachment=True)
 
 
 # ======================================
 # Entry Points
 # ======================================
+
 def kickoff():
-    global flow_instance
-    flow_instance = MobileAppFlow()
-    flow_instance.kickoff()
-
-    # ✅ Start Flask server after Crew 1 finishes, in a background thread
-    port = int(os.environ.get("PORT", 5000))
-
-    def run_flask():
-        print(f"🌐 Starting Flask server on http://127.0.0.1:{port}")
-        app.run(host="0.0.0.0", port=port, debug=False)
-
-    flask_thread = threading.Thread(target=run_flask)
-    flask_thread.daemon = True
-    flask_thread.start()
-
-    # ✅ Give Flask a moment to boot before opening browser
-    time.sleep(2)
-
-    # Automatically open browser if not production
-    if os.environ.get("ENV") != "production":
-        try:
-            webbrowser.open(f"http://127.0.0.1:{port}")
-        except Exception as e:
-            print(f"⚠️ Could not open browser automatically: {e}")
-
-    print(f"✅ Flask server running — open http://127.0.0.1:{port} if it didn't open automatically.\n")
-
-    # Keep main thread alive (since CrewAI flow ended)
-    while True:
-        time.sleep(5)
-
+    port = int(os.environ.get("PORT", 7860))
+    print(f"🌐  Open http://0.0.0.0:{port} to launch the AI pipeline")
+    app.run(host="0.0.0.0", port=port, debug=False)
 
 
 def plot():
-    flow = MobileAppFlow()
-    flow.plot()
+    MobileAppFlow().plot()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Mobile App Generator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --surface: #161922;
+      --border: #252a36;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --text: #e8eaf0;
+      --muted: #8891a4;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Nav ── */
+    nav {
+      width: 100%;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.5px; }
+    .logo span { color: var(--accent); }
+    .badge {
+      font-size: 0.65rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 80px 24px 60px;
+      max-width: 720px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+    .hero h1 .highlight {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+
+    /* ── Pipeline diagram ── */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 0 auto 56px;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      width: 160px;
+    }
+    .step-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .step:nth-child(1) .step-icon { background: rgba(108,99,255,0.15); }
+    .step:nth-child(3) .step-icon { background: rgba(0,212,170,0.12); }
+    .step:nth-child(5) .step-icon { background: rgba(255,165,0,0.12); }
+    .step-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px; color: var(--muted); text-transform: uppercase; }
+    .step-name  { font-size: 0.95rem; font-weight: 600; text-align: center; }
+    .step-crew  { font-size: 0.72rem; color: var(--muted); text-align: center; }
+    .arrow {
+      font-size: 1.4rem;
+      color: var(--border);
+      padding: 0 8px;
+      flex-shrink: 0;
+    }
+
+    /* ── CTA ── */
+    #launch-btn {
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 16px 40px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      letter-spacing: 0.2px;
+    }
+    #launch-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    #launch-btn:active { transform: translateY(0); }
+    #launch-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ── Tech stack ── */
+    .stack {
+      margin-top: 72px;
+      width: 100%;
+      max-width: 760px;
+      padding: 0 24px 80px;
+    }
+    .stack h3 {
+      text-align: center;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .chip b { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">App<span>Forge</span> <small class="badge">AI</small></div>
+  </nav>
+
+  <section class="hero">
+    <h1>From idea to code — <br><span class="highlight">powered by AI agents</span></h1>
+    <p>
+      Three specialized AI crews collaborate autonomously to research trends, design your app, generate screen mockups,
+      and write production-ready Expo&nbsp;React&nbsp;Native code — all in one click.
+    </p>
+
+    <div class="pipeline">
+      <div class="step">
+        <div class="step-icon">&#128161;</div>
+        <div class="step-label">Step 1</div>
+        <div class="step-name">Idea Research</div>
+        <div class="step-crew">AppIdeaCrew · Gemini</div>
+      </div>
+      <div class="arrow">&#8594;</div>
+      <div class="step">
+        <div class="step-icon">&#127775;</div>
+        <div class="step-label">Step 2</div>
+        <div class="step-name">Design + Mockups</div>
+        <div class="step-crew">AppDesignCrew · Stable Diffusion</div>
+      </div>
+      <div class="arrow">&#8594;</div>
+      <div class="step">
+        <div class="step-icon">&#128187;</div>
+        <div class="step-label">Step 3</div>
+        <div class="step-name">Code + QA</div>
+        <div class="step-crew">AppDevCrew · Claude Opus</div>
+      </div>
+    </div>
+
+    <button id="launch-btn" onclick="launchPipeline()">&#9654; Launch AI Pipeline</button>
+  </section>
+
+  <div class="stack">
+    <h3>Built with</h3>
+    <div class="chips">
+      <div class="chip"><b>CrewAI</b> multi-agent framework</div>
+      <div class="chip"><b>Gemini 2.0 Flash</b> research &amp; design</div>
+      <div class="chip"><b>Claude Opus 4</b> code generation</div>
+      <div class="chip"><b>Stable Diffusion XL</b> mockups</div>
+      <div class="chip"><b>Serper</b> web research</div>
+      <div class="chip"><b>Flask</b> web server</div>
+      <div class="chip"><b>Expo / React Native</b> output</div>
+      <div class="chip"><b>Hugging Face</b> deployment</div>
+    </div>
+  </div>
+
+  <script>
+    async function launchPipeline() {
+      const btn = document.getElementById('launch-btn');
+      btn.disabled = true;
+      btn.textContent = 'Starting…';
+
+      try {
+        const res = await fetch('/api/start', { method: 'POST' });
+        const data = await res.json();
+        if (data.error) {
+          alert(data.error);
+          btn.disabled = false;
+          btn.innerHTML = '&#9654; Launch AI Pipeline';
+          return;
+        }
+        window.location.href = '/loading';
+      } catch (e) {
+        alert('Could not start the pipeline. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = '&#9654; Launch AI Pipeline';
+      }
+    }
+  </script>
+</body>
+</html>
