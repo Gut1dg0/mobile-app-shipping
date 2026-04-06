@@ -1,282 +1,332 @@
-# GameHub Mobile App — UX/UI Design Document
+The image generation tool has failed twice. I will now proceed to deliver the complete written design document as the final answer, since the core deliverable is the written UX/UI design document and the tool is unavailable.
 
 ---
 
-## Overview
+# PuzzlePal – UX/UI Design Document
 
-This document provides a complete UX/UI design specification for **GameHub**, a one-stop offline puzzle gaming platform. It covers visual design, layout structure, interaction patterns, transitions, and screen-by-screen breakdowns for the Home, Login, Profile, and Settings screens. This document is intended to guide the mobile developer through the full implementation of the app's front-end experience.
+**Prepared by:** Senior UX/UI Designer
+**App:** PuzzlePal – A Comprehensive Puzzle Game Mobile App
+**Platform:** iOS & Android (Flutter)
+**Version:** 1.0 – MVP Design Spec
 
 ---
 
-## 1. VISUALS
+## Table of Contents
 
-### 1.1 Color Palette
+1. [Design Philosophy](#design-philosophy)
+2. [Visuals](#visuals)
+   - Color Palette
+   - Typography
+   - Iconography
+   - Layout System
+   - Component Library (Buttons, Cards, Inputs, Navigation)
+   - Animations & Transitions
+3. [Screen Designs](#screen-designs)
+   - Login Screen
+   - Home Screen
+   - Profile Screen
+   - Settings Screen
+4. [Features & Interaction Design](#features--interaction-design)
+   - Navigation Flow
+   - Login & Onboarding Flow
+   - Puzzle Interaction Flow
+   - Removing / Managing Elements
+   - Notifications & Feedback
 
-GameHub's visual identity is built around a **dark, immersive gaming aesthetic** with vivid accent colors that evoke intelligence, energy, and fun — while remaining accessible and easy on the eyes during extended play sessions.
+---
+
+## 1. Design Philosophy
+
+PuzzlePal is designed around three core UX principles:
+
+- **Playful Clarity** – The interface should feel fun and engaging without sacrificing readability or ease of use. Every screen should be immediately understandable to a 10-year-old and a 55-year-old alike.
+- **Offline-First Confidence** – The UI must clearly communicate what is available offline versus online, so users always feel in control, especially in low-connectivity environments.
+- **Progressive Depth** – Casual users should feel welcomed by a simple surface layer, while puzzle enthusiasts can discover deeper features (stats, custom puzzles, leaderboards) through natural exploration.
+
+The visual language draws from **modern mobile gaming aesthetics** combined with **clean productivity app principles** — vibrant enough to feel like a game, structured enough to feel trustworthy and easy to navigate.
+
+---
+
+## 2. Visuals
+
+### 2.1 Color Palette
+
+The PuzzlePal color system uses a **dark-first design** with a rich, jewel-toned palette that evokes intelligence, creativity, and playfulness. A light mode alternative is fully supported.
+
+#### Primary Colors
 
 | Role | Color Name | Hex Code | Usage |
 |---|---|---|---|
-| **Primary Background** | Deep Space Navy | `#0D1117` | Main app background |
-| **Secondary Background** | Midnight Slate | `#161B22` | Cards, modals, bottom sheets |
-| **Surface / Card** | Graphite Ash | `#21262D` | Puzzle cards, list items, containers |
-| **Primary Accent** | Electric Violet | `#7C3AED` | CTAs, active states, highlights |
-| **Secondary Accent** | Neon Cyan | `#22D3EE` | Streaks, badges, progress bars |
-| **Tertiary Accent** | Amber Glow | `#F59E0B` | XP indicators, daily challenge highlights |
-| **Success** | Emerald Pulse | `#10B981` | Completion states, correct answers |
-| **Error / Destructive** | Crimson Alert | `#EF4444` | Errors, delete actions, wrong answers |
-| **Text Primary** | Snow White | `#F0F6FC` | Headings, primary body text |
-| **Text Secondary** | Silver Mist | `#8B949E` | Subtitles, labels, hints |
-| **Divider / Border** | Steel Edge | `#30363D` | Card borders, separators |
-| **Overlay / Scrim** | Black Veil | `#000000` at 60% opacity | Modal backgrounds, bottom sheets |
+| Primary Brand | Deep Indigo | `#3D2B8E` | Primary buttons, headers, brand elements |
+| Primary Accent | Electric Violet | `#7B4FD4` | Highlighted cards, active states, gradients |
+| Secondary Accent | Teal Glow | `#00C9B1` | Success states, streak indicators, CTA highlights |
+| Warm Accent | Amber Spark | `#FFB830` | Achievement badges, hints, premium indicators |
+
+#### Background Colors (Dark Mode)
+
+| Role | Color Name | Hex Code | Usage |
+|---|---|---|---|
+| App Background | Deep Space | `#0F0E1A` | Main screen background |
+| Surface / Card | Midnight Card | `#1C1A2E` | Cards, bottom sheets, modals |
+| Elevated Surface | Soft Slate | `#252340` | Input fields, secondary cards |
+| Divider / Border | Ghost Line | `#2E2B4A` | Separators, borders |
+
+#### Background Colors (Light Mode)
+
+| Role | Color Name | Hex Code | Usage |
+|---|---|---|---|
+| App Background | Soft Lavender White | `#F4F2FF` | Main screen background |
+| Surface / Card | Pure White | `#FFFFFF` | Cards, modals |
+| Elevated Surface | Light Gray | `#EDEBF8` | Input fields, secondary cards |
+| Divider / Border | Pale Violet | `#D5D0F0` | Separators, borders |
+
+#### Semantic Colors
+
+| Role | Hex Code | Usage |
+|---|---|---|
+| Success | `#00C9B1` | Puzzle complete, correct answers |
+| Warning | `#FFB830` | Hint usage, time running low |
+| Error / Danger | `#FF4F6E` | Wrong answer feedback, error states |
+| Info | `#5BB8FF` | Tooltips, informational banners |
+| Premium Gold | `#F5C518` | Premium badge, subscription CTA |
 
 #### Gradient Definitions
 
-- **Hero Gradient:** `linear-gradient(135deg, #7C3AED 0%, #22D3EE 100%)` — Used on featured cards, onboarding screens, and premium CTAs.
-- **XP Bar Gradient:** `linear-gradient(90deg, #7C3AED 0%, #F59E0B 100%)` — Used on the experience progress bar in the profile.
-- **Daily Challenge Gradient:** `linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)` — Used on the daily challenge card.
-- **Streak Gradient:** `linear-gradient(135deg, #22D3EE 0%, #10B981 100%)` — Used on streak indicators and badges.
-
-#### Colorblind-Friendly Mode
-
-When enabled in Settings, the app replaces red/green states with:
-- **Success:** `#0077BB` (Blue) replacing Emerald Pulse
-- **Error:** `#EE7733` (Orange) replacing Crimson Alert
-- All iconography is paired with text labels to avoid color-only communication.
+- **Hero Gradient (used on splash, login header):** `linear-gradient(135deg, #3D2B8E → #7B4FD4 → #00C9B1)`
+- **Card Accent Gradient:** `linear-gradient(120deg, #3D2B8E → #5C3DBF)`
+- **Premium CTA Gradient:** `linear-gradient(135deg, #F5C518 → #FFB830)`
 
 ---
 
-### 1.2 Typography
+### 2.2 Typography
 
-GameHub uses a dual-font system — one for display/branding and one for body readability.
+PuzzlePal uses a dual-typeface system: one for display/headings and one for body/UI text.
 
-| Role | Font Family | Weight | Size | Line Height |
-|---|---|---|---|---|
-| **App Logo / Brand** | Orbitron | 700 (Bold) | 28sp | 36sp |
-| **Screen Title (H1)** | Orbitron | 600 (SemiBold) | 24sp | 32sp |
-| **Section Header (H2)** | Orbitron | 600 (SemiBold) | 18sp | 26sp |
-| **Card Title (H3)** | Inter | 600 (SemiBold) | 16sp | 22sp |
-| **Body Text** | Inter | 400 (Regular) | 14sp | 20sp |
-| **Caption / Label** | Inter | 400 (Regular) | 12sp | 16sp |
-| **Button Text** | Inter | 600 (SemiBold) | 15sp | 20sp |
-| **Badge / Chip Text** | Inter | 700 (Bold) | 11sp | 14sp |
+#### Typefaces
 
-- **Minimum font size:** 12sp (never below, for accessibility)
-- **Adjustable font scale:** Users can set 1x, 1.25x, or 1.5x scale in Settings, which multiplies all `sp` values proportionally.
-
----
-
-### 1.3 Iconography
-
-- **Icon Library:** Material Symbols (Rounded style) for system icons, supplemented by custom SVG icons for puzzle categories.
-- **Icon Size:** 24dp standard; 20dp in dense lists; 32dp for feature highlights.
-- **Icon Color:** Defaults to Text Secondary (`#8B949E`); active/selected state switches to Primary Accent (`#7C3AED`).
-- **Puzzle Category Icons:** Custom-illustrated SVG icons per puzzle type (sudoku grid, crossword, jigsaw piece, maze path, etc.) rendered with `flutter_svg`.
-
----
-
-### 1.4 Spacing & Layout Grid
-
-- **Base Spacing Unit:** 8dp
-- **Horizontal Screen Padding:** 16dp (left and right)
-- **Card Internal Padding:** 16dp all sides
-- **Section Vertical Spacing:** 24dp between major sections
-- **Component Vertical Spacing:** 12dp between items in a list
-- **Border Radius:**
-  - Small (chips, badges): 8dp
-  - Medium (cards, inputs): 12dp
-  - Large (bottom sheets, featured cards): 20dp
-  - Full (buttons, pills, avatars): 50dp (fully rounded)
-
----
-
-### 1.5 Elevation & Shadows
-
-Since the app uses a dark theme, elevation is communicated through **surface color lightening** rather than drop shadows:
-
-| Elevation Level | Surface Color | Usage |
-|---|---|---|
-| Level 0 | `#0D1117` | Base background |
-| Level 1 | `#161B22` | Sheets, drawers |
-| Level 2 | `#21262D` | Cards, list items |
-| Level 3 | `#2D333B` | Floating buttons, dropdowns |
-| Level 4 | `#373E47` | Tooltips, snackbars |
-
-Subtle `box-shadow: 0px 4px 12px rgba(0,0,0,0.4)` is applied to floating elements like the FAB and bottom navigation bar.
-
----
-
-### 1.6 Buttons
-
-#### Primary Button (CTA)
-- **Background:** Electric Violet `#7C3AED`
-- **Text:** Snow White `#F0F6FC`, Inter SemiBold 15sp
-- **Border Radius:** 50dp (pill shape)
-- **Height:** 52dp
-- **Padding:** 16dp horizontal
-- **Pressed State:** Background darkens to `#6D28D9`, scale animates to 0.97
-- **Disabled State:** Background `#30363D`, text `#8B949E`
-- **Shadow:** `0px 4px 16px rgba(124, 58, 237, 0.4)` (violet glow)
-
-#### Secondary Button (Outlined)
-- **Background:** Transparent
-- **Border:** 1.5dp stroke, Electric Violet `#7C3AED`
-- **Text:** Electric Violet `#7C3AED`, Inter SemiBold 15sp
-- **Border Radius:** 50dp
-- **Height:** 52dp
-- **Pressed State:** Background fills to `rgba(124, 58, 237, 0.12)`
-
-#### Ghost / Text Button
-- **Background:** Transparent
-- **Text:** Silver Mist `#8B949E`, Inter SemiBold 14sp
-- **Pressed State:** Text brightens to Snow White, subtle underline appears
-
-#### Icon Button (Circular)
-- **Size:** 44dp × 44dp
-- **Background:** Graphite Ash `#21262D`
-- **Icon:** 22dp, Silver Mist `#8B949E`
-- **Active State:** Background Electric Violet `#7C3AED`, icon Snow White
-- **Border Radius:** 50dp
-
-#### Danger Button (Destructive)
-- **Background:** Crimson Alert `#EF4444`
-- **Text:** Snow White, Inter SemiBold 15sp
-- **Border Radius:** 50dp
-- **Height:** 52dp
-- **Pressed State:** Background darkens to `#DC2626`
-
----
-
-### 1.7 Input Fields
-
-- **Background:** Graphite Ash `#21262D`
-- **Border:** 1dp Steel Edge `#30363D` at rest; 2dp Electric Violet `#7C3AED` on focus
-- **Border Radius:** 12dp
-- **Height:** 56dp
-- **Text Color:** Snow White `#F0F6FC`, Inter Regular 14sp
-- **Placeholder Color:** Silver Mist `#8B949E`
-- **Label (floating):** Inter SemiBold 12sp, Electric Violet `#7C3AED` when focused
-- **Error State:** Border Crimson Alert `#EF4444`, error message in 12sp below field
-- **Leading Icon:** 20dp, Silver Mist (e.g., lock icon for password, envelope for email)
-- **Trailing Icon:** Visibility toggle for password fields (eye icon)
-
----
-
-### 1.8 Cards
-
-#### Standard Puzzle Card
-- **Size:** Full-width minus 32dp horizontal padding; height 100dp
-- **Background:** Graphite Ash `#21262D`
-- **Border Radius:** 12dp
-- **Layout:** Horizontal — 56dp×56dp puzzle category icon on left (with gradient background circle), title + subtitle in center, difficulty badge on right
-- **Difficulty Badge:** Pill-shaped chip; Beginner = Emerald Pulse, Intermediate = Amber Glow, Expert = Crimson Alert, Master = Electric Violet
-- **Pressed State:** Background lightens to `#2D333B`, scale animates to 0.98
-
-#### Featured / Hero Card
-- **Size:** Full-width minus 32dp; height 180dp
-- **Background:** Hero Gradient overlay on a blurred puzzle screenshot
-- **Border Radius:** 20dp
-- **Content:** Large title, subtitle, "Play Now" pill button at bottom-left
-- **Badge:** "FEATURED" or "DAILY PICK" label at top-left, Amber Glow background
-
-#### Stat Card (Profile)
-- **Size:** (Screen width − 48dp) / 2 (two-column grid)
-- **Height:** 100dp
-- **Background:** Graphite Ash `#21262D`
-- **Border Radius:** 12dp
-- **Content:** Large number (H2 Orbitron), label caption below, small icon top-right
-
----
-
-### 1.9 Bottom Navigation Bar
-
-- **Background:** Midnight Slate `#161B22`
-- **Height:** 64dp + safe area inset
-- **Border Top:** 1dp Steel Edge `#30363D`
-- **Items:** 4 tabs — Home, Explore, Challenges, Profile
-- **Active Tab:** Icon Electric Violet `#7C3AED` + label Electric Violet, subtle pill indicator above icon
-- **Inactive Tab:** Icon and label Silver Mist `#8B949E`
-- **Tab Icons:** Home (house), Explore (compass), Challenges (trophy), Profile (person)
-- **Animation:** Active indicator slides horizontally between tabs with a spring animation (300ms)
-
----
-
-### 1.10 Animations & Transitions
-
-| Transition Type | Duration | Easing | Usage |
+| Role | Font | Weight | Notes |
 |---|---|---|---|
-| **Screen Push (forward)** | 350ms | Cubic ease-out | Navigate to new screen, slides in from right |
-| **Screen Pop (back)** | 300ms | Cubic ease-in | Back navigation, slides out to right |
-| **Modal / Bottom Sheet** | 400ms | Spring (damping 0.8) | Settings, filter panels slide up from bottom |
-| **Tab Switch** | 250ms | Ease-in-out | Switching bottom nav tabs, fade + slight slide |
-| **Card Press** | 100ms | Ease-out | Scale down to 0.97 on press, spring back on release |
-| **Button Press** | 80ms | Ease-out | Scale to 0.97, darken background |
-| **Achievement Unlock** | 600ms | Spring bounce | Badge scales from 0 to 1.1 then settles at 1.0 |
-| **Streak Counter** | 500ms | Ease-out | Number rolls up with a slot-machine animation |
-| **Progress Bar Fill** | 800ms | Ease-out | Bar fills from current to new value on screen load |
-| **Puzzle Complete** | 1200ms | Custom spring | Confetti Lottie animation + card expands then collapses |
-| **Shimmer Loading** | Loop, 1500ms | Linear | Skeleton placeholders while content loads |
-| **Page Hero Transition** | 400ms | Ease-in-out | Shared element transition from card to puzzle screen |
+| Display / Headings | **Nunito** | 700, 800 (ExtraBold) | Rounded, friendly, highly legible |
+| Body / UI Text | **Inter** | 400, 500, 600 | Clean, neutral, excellent screen rendering |
+| Monospace (Scores/Stats) | **Roboto Mono** | 500 | Used for timers, scores, puzzle numbers |
+
+#### Type Scale
+
+| Level | Font | Size | Weight | Line Height | Usage |
+|---|---|---|---|---|---|
+| H1 | Nunito | 32sp | 800 | 40sp | Screen titles (Login, Profile) |
+| H2 | Nunito | 24sp | 700 | 32sp | Section headers |
+| H3 | Nunito | 20sp | 700 | 28sp | Card titles |
+| Body Large | Inter | 16sp | 400 | 24sp | Main body text |
+| Body Medium | Inter | 14sp | 400 | 22sp | Secondary descriptions |
+| Caption | Inter | 12sp | 400 | 18sp | Labels, timestamps, hints |
+| Button | Inter | 15sp | 600 | 20sp | All button labels |
+| Score/Timer | Roboto Mono | 18sp | 500 | 24sp | In-game timers, scores |
 
 ---
 
-## 2. SCREEN DESIGNS
+### 2.3 Iconography
+
+- **Icon Library:** Phosphor Icons (rounded variant) — chosen for their playful, consistent weight and excellent legibility at small sizes.
+- **Icon Size Standards:**
+  - Navigation bar icons: 24×24dp
+  - In-card action icons: 20×20dp
+  - Feature/category icons: 40×40dp (with colored background pill)
+  - Achievement badge icons: 48×48dp
+- **Icon Color:** Icons inherit the color of their context (white on dark backgrounds, `#3D2B8E` on light backgrounds, `#00C9B1` for active/success states).
+- **Custom Puzzle Category Icons:** Each puzzle category (Car, Photo, Classic, Logic, Brain, Sliding, Color) has a custom illustrated icon in a rounded-square container with a unique gradient background per category.
+
+#### Category Icon Color Codes
+
+| Category | Background Gradient | Icon Color |
+|---|---|---|
+| Car Puzzles | `#FF6B35 → #FF4F6E` | White |
+| Photo Puzzles | `#5BB8FF → #3D2B8E` | White |
+| Classic Puzzles | `#7B4FD4 → #3D2B8E` | White |
+| Logic Puzzles | `#00C9B1 → #0097A7` | White |
+| Brain Teasers | `#FFB830 → #FF6B35` | White |
+| Sliding Puzzles | `#F5C518 → #FFB830` | Deep Indigo |
+| Color Puzzles | `#FF4F6E → #C2185B` | White |
+| Daily Challenge | `#3D2B8E → #7B4FD4` | Amber Spark |
 
 ---
 
-### 2.1 Login Screen
+### 2.4 Layout System
 
-#### Layout Structure
+- **Grid:** 4-column grid on mobile (375dp base width), 8dp base spacing unit.
+- **Margins:** 16dp horizontal screen margins.
+- **Gutter:** 12dp between grid columns.
+- **Card Radius:** 16dp (standard cards), 24dp (hero cards, modal sheets), 12dp (small chips/badges), 100dp (pills/buttons).
+- **Safe Areas:** All content respects iOS safe area insets (top notch, bottom home indicator) and Android status bar/navigation bar.
+- **Bottom Navigation Bar Height:** 64dp (plus bottom safe area).
+- **Top App Bar Height:** 56dp.
+- **Touch Target Minimum:** 48×48dp for all interactive elements (WCAG AA compliance).
 
-The Login screen is the first screen new users see after the splash/onboarding. It follows a **single-scroll, centered layout** with a dark immersive background.
+#### Elevation & Shadow System (Dark Mode)
 
-**Background:**
-A subtle animated particle field (slow-moving geometric puzzle piece shapes in `rgba(124, 58, 237, 0.08)`) overlaid on the Deep Space Navy background. This is implemented using a lightweight canvas animation — not video — to preserve battery and offline capability.
+| Level | Shadow | Usage |
+|---|---|---|
+| Level 0 | None | Flat backgrounds |
+| Level 1 | `0 2px 8px rgba(0,0,0,0.4)` | Standard cards |
+| Level 2 | `0 4px 16px rgba(61,43,142,0.35)` | Elevated cards, active states |
+| Level 3 | `0 8px 32px rgba(61,43,142,0.5)` | Modals, bottom sheets |
+| Glow (Accent) | `0 0 20px rgba(123,79,212,0.6)` | Active puzzle tile, CTA buttons |
 
-**Top Section — Branding (from top, ~30% of screen height):**
-- Centered GameHub logo: custom SVG puzzle-piece-shaped icon (interlocking G and H letters) in Electric Violet, 72dp × 72dp, with a soft violet glow effect (`box-shadow: 0 0 32px rgba(124,58,237,0.5)`)
-- App name "GAMEHUB" in Orbitron Bold 28sp, Snow White, centered, 12dp below icon
-- Tagline: "100+ Puzzles. Zero Internet Required." in Inter Regular 14sp, Silver Mist, centered, 8dp below app name
+---
 
-**Middle Section — Auth Form (~40% of screen height):**
+### 2.5 Component Library
 
-Displayed in a card container with Midnight Slate `#161B22` background, 20dp border radius, 24dp internal padding, positioned 32dp below the tagline:
+#### Buttons
 
-- **Email Input Field** (full-width)
-  - Leading icon: envelope (20dp, Silver Mist)
-  - Placeholder: "Enter your email"
-  - Keyboard type: email
+**Primary Button (Filled)**
+- Background: Electric Violet `#7B4FD4` (default) or Hero Gradient on key CTAs
+- Text: White, Inter 600, 15sp
+- Height: 52dp
+- Corner Radius: 100dp (fully rounded pill)
+- Padding: 16dp horizontal
+- Shadow: Level 2 with violet glow
+- Pressed State: Scale down to 96%, darken background by 10%, haptic feedback (medium impact)
+- Disabled State: Background `#2E2B4A`, text `#6B6880`, no shadow
 
-- **12dp gap**
+**Secondary Button (Outlined)**
+- Background: Transparent
+- Border: 1.5dp, Electric Violet `#7B4FD4`
+- Text: Electric Violet `#7B4FD4`, Inter 600, 15sp
+- Height: 52dp
+- Corner Radius: 100dp
+- Pressed State: Background fills to `rgba(123,79,212,0.12)`, scale 96%
 
-- **Password Input Field** (full-width)
-  - Leading icon: lock (20dp, Silver Mist)
-  - Trailing icon: eye toggle for show/hide
-  - Placeholder: "Enter your password"
+**Ghost / Text Button**
+- Background: Transparent, no border
+- Text: Teal Glow `#00C9B1`, Inter 600, 14sp
+- Used for: "Skip", "Cancel", "See All" links
+- Pressed State: Opacity drops to 60%
 
-- **"Forgot Password?" text button** — right-aligned, 8dp below password field, Ghost style, "Forgot Password?" in Silver Mist 13sp
+**Premium CTA Button**
+- Background: Premium Gold Gradient `#F5C518 → #FFB830`
+- Text: Deep Indigo `#3D2B8E`, Inter 700, 15sp
+- Height: 52dp
+- Corner Radius: 100dp
+- Shadow: `0 4px 20px rgba(245,197,24,0.5)`
+- Has a small crown icon (👑) to the left of the label
 
-- **16dp gap**
+**Icon Button (Circular)**
+- Size: 44×44dp
+- Background: Midnight Card `#1C1A2E` (dark mode) / White (light mode)
+- Border: 1dp Ghost Line
+- Icon: 20×20dp
+- Corner Radius: 100dp
+- Used for: Back navigation, favorite/bookmark, share
 
-- **"Sign In" Primary Button** — full-width, Electric Violet, pill shape, "Sign In" in Snow White Inter SemiBold 15sp
+**Floating Action Button (FAB)**
+- Size: 56×56dp
+- Background: Hero Gradient
+- Icon: 24×24dp white
+- Shadow: Level 3 with violet glow
+- Used on: Home screen (Create Custom Puzzle shortcut)
 
-- **16dp gap**
+---
 
-- **Divider with label:** Thin Steel Edge lines on each side of "OR" text in Silver Mist 12sp
+#### Cards
 
-- **16dp gap**
+**Standard Puzzle Card**
+- Size: Full width (minus 32dp margins) or 2-column grid (half width minus 20dp)
+- Background: Midnight Card `#1C1A2E` with subtle gradient overlay
+- Corner Radius: 16dp
+- Padding: 16dp
+- Contains: Category icon (40dp), puzzle title (H3), difficulty badge, completion percentage bar, offline indicator dot
+- Shadow: Level 1
+- Active/Pressed: Scale 97%, Level 2 shadow with glow
 
-- **"Continue with Google" Secondary Button** — full-width, outlined, leading Google logo SVG 20dp, "Continue with Google" text in Snow White 15sp
+**Hero Feature Card**
+- Size: Full width, height 180dp
+- Background: Category gradient as full bleed background image with dark overlay `rgba(0,0,0,0.45)`
+- Corner Radius: 24dp
+- Contains: Large category icon, puzzle pack title (H2 white), subtitle, CTA button
 
-- **12dp gap**
+**Daily Challenge Card**
+- Size: Full width, height 120dp
+- Background: `linear-gradient(135deg, #3D2B8E → #7B4FD4)`
+- Animated: Subtle pulsing glow border in Amber Spark
+- Contains: Flame streak icon, "Day X Streak" label, puzzle title, "Play Now" button
 
-- **"Continue with Apple" Secondary Button** — same style, Apple logo SVG (Snow White), "Continue with Apple" text
+**Achievement Badge Card**
+- Size: 80×80dp
+- Shape: Hexagonal clip (using custom path) with gradient background
+- Contains: Icon (32dp), locked state shows grayscale with lock icon overlay
 
-**Bottom Section — Registration CTA (~10% of screen height):**
-- Centered text: "New to GameHub? " + tappable "Create Account" in Electric Violet SemiBold 14sp
-- 16dp above the bottom safe area
+---
 
-#### Interaction Behaviors
+#### Input Fields
 
-- **Form Validation:** Real-time validation triggers on field blur (when user leaves the field). Error messages appear with a subtle shake animation (3 oscillations, 300ms) below the field in Crimson Alert 12sp.
-- **Sign In Loading State:** On tap of "Sign In", the button text is replaced by a small circular progress indicator (Snow White, 20dp) and the button is disabled. This lasts until the auth response returns.
-- **Success
+- Height: 56dp
+- Background: Soft Slate `#252340` (dark) / `#EDEBF8` (light)
+- Border: 1dp Ghost Line (default), 2dp Electric Violet (focused), 2dp Error Red (error)
+- Corner Radius: 12dp
+- Label: Floating label animation (moves up on focus, Inter 12sp caption)
+- Text: Inter 400, 16sp, white (dark) / Deep Indigo (light)
+- Placeholder: 50% opacity of text color
+- Trailing icons: Eye toggle (password), clear button (X), validation checkmark
+
+---
+
+#### Bottom Navigation Bar
+
+- Height: 64dp + safe area
+- Background: Midnight Card `#1C1A2E` with top border `1dp Ghost Line`
+- Blur Effect: `backdrop-filter: blur(20px)` with slight transparency
+- 5 tabs: Home, Explore, Daily, Leaderboard, Profile
+- Active Tab: Icon in Electric Violet + Teal Glow dot indicator below + label visible
+- Inactive Tab: Icon in `#6B6880`, no label
+- Transition: Icon scales from 1.0 to 1.2 with spring animation on selection
+
+#### Tab Icons
+| Tab | Icon (Phosphor) |
+|---|---|
+| Home | `House` |
+| Explore | `MagnifyingGlass` |
+| Daily | `Lightning` |
+| Leaderboard | `Trophy` |
+| Profile | `UserCircle` |
+
+---
+
+#### Chips & Badges
+
+**Difficulty Badge**
+- Height: 24dp, auto width
+- Corner Radius: 100dp
+- Padding: 6dp × 12dp
+- Colors: Easy `#00C9B1`, Medium `#FFB830`, Hard `#FF6B35`, Expert `#FF4F6E`
+- Text: Inter 600, 11sp, white
+
+**Offline Available Badge**
+- Small green dot (8dp) + "Offline" label in Inter 11sp `#00C9B1`
+- Appears on puzzle cards when pack is downloaded
+
+**Premium Badge**
+- Small crown icon + "PRO" text in Amber Spark
+- Appears on locked premium content
+
+**New Badge**
+- Bright Electric Violet pill with "NEW" text
+- Animated: subtle scale pulse for 3 days after content launch
+
+---
+
+### 2.6 Animations & Transitions
+
+#### Screen Transitions
+
+| Transition Type | Animation | Duration | Easing |
+|---|---|---|---|
+| Push (navigate forward) | Slide in from right + fade | 280ms | `cubic-bezier(0.4, 0, 0.2, 1)` |
+| Pop (navigate back) | Slide out to right + fade | 250ms | `cubic-bezier(0.4, 0, 0.2, 1)` |
+| Modal / Bottom Sheet | Slide up from bottom | 320ms | Spring (damping 0.8) |
+| Tab Switch | Crossfade + icon spring | 200ms | Spring |
+| Splash → Login | Zoom out + fade | 400ms | `ease-out` |
+
+#### Micro-interactions
+
+- **Button Press:** Scale 96% + haptic (medium) — 100ms spring return
+- **Card Press:** Scale 97% + glow elevation increase —

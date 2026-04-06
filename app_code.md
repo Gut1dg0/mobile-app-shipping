@@ -1,482 +1,424 @@
-# MindfulBreath Mobile App - Complete Expo Project Code
 
-## Project Structure
-```
-mindfulbreath/
-├── App.js
-├── package.json
-├── app.json
-├── babel.config.js
-├── assets/
-│   └── fonts/
-│       ├── Inter-Regular.ttf
-│       ├── Inter-Medium.ttf
-│       ├── Inter-SemiBold.ttf
-│       └── Inter-Bold.ttf
-├── components/
-│   ├── ErrorBoundary.js
-│   ├── NetworkStatus.js
-│   └── LoadingOverlay.js
-├── context/
-│   ├── AuthContext.js
-│   └── ThemeContext.js
-├── navigation/
-│   └── MainTabNavigator.js
-├── screens/
-│   ├── LoginScreen.js
-│   ├── OnboardingFlow.js
-│   ├── HomeScreen.js
-│   ├── ProfileScreen.js
-│   ├── SettingsScreen.js
-│   ├── SessionScreen.js
-│   └── PremiumScreen.js
-└── utils/
-    ├── validators.js
-    └── constants.js
-```
 
-## package.json
-```json
-{
-  "name": "mindfulbreath",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "dependencies": {
-    "expo": "~49.0.0",
-    "expo-status-bar": "~1.6.0",
-    "react": "18.2.0",
-    "react-native": "0.72.6",
-    "@react-navigation/native": "^6.1.9",
-    "@react-navigation/bottom-tabs": "^6.5.11",
-    "@react-navigation/stack": "^6.3.20",
-    "react-native-screens": "~3.22.0",
-    "react-native-safe-area-context": "4.6.3",
-    "expo-linear-gradient": "~12.3.0",
-    "expo-haptics": "~12.4.0",
-    "expo-av": "~13.4.1",
-    "react-native-gesture-handler": "~2.12.0",
-    "react-native-reanimated": "~3.3.0",
-    "@react-native-async-storage/async-storage": "1.18.2",
-    "react-native-svg": "13.9.0",
-    "expo-font": "~11.4.0",
-    "@expo/vector-icons": "^13.0.0",
-    "@react-native-community/netinfo": "9.3.10"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0"
-  },
-  "private": true
+=== FILE: pubspec.yaml ===
+name: puzzle_pal
+description: PuzzlePal - A Comprehensive Puzzle Game Mobile App
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.1
+  go_router: ^14.2.0
+  shared_preferences: ^2.2.2
+  google_fonts: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+=== END FILE ===
+
+=== FILE: lib/main.dart ===
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:puzzle_pal/providers/theme_provider.dart';
+import 'package:puzzle_pal/providers/auth_provider.dart';
+import 'package:puzzle_pal/router.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: const PuzzlePalApp(),
+    ),
+  );
 }
-```
 
-## app.json
-```json
-{
-  "expo": {
-    "name": "MindfulBreath",
-    "slug": "mindfulbreath",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#4A90E2"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.mindfulbreath.app"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#4A90E2"
-      },
-      "package": "com.mindfulbreath.app"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+class PuzzlePalApp extends StatelessWidget {
+  const PuzzlePalApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    return MaterialApp.router(
+      title: 'PuzzlePal',
+      debugShowCheckedModeBanner: false,
+      theme: themeProvider.lightTheme,
+      darkTheme: themeProvider.darkTheme,
+      themeMode: themeProvider.themeMode,
+      routerConfig: appRouter(context.read<AuthProvider>()),
+    );
   }
 }
-```
+=== END FILE ===
 
-## babel.config.js
-```javascript
-module.exports = function(api) {
-  api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-    plugins: ['react-native-reanimated/plugin'],
-  };
-};
-```
+=== FILE: lib/router.dart ===
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:puzzle_pal/providers/auth_provider.dart';
+import 'package:puzzle_pal/screens/login_screen.dart';
+import 'package:puzzle_pal/screens/shell_screen.dart';
+import 'package:puzzle_pal/screens/home_screen.dart';
+import 'package:puzzle_pal/screens/explore_screen.dart';
+import 'package:puzzle_pal/screens/daily_screen.dart';
+import 'package:puzzle_pal/screens/leaderboard_screen.dart';
+import 'package:puzzle_pal/screens/profile_screen.dart';
+import 'package:puzzle_pal/screens/settings_screen.dart';
 
-## App.js
-```javascript
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { StatusBar } from 'expo-status-bar';
-import * as Font from 'expo-font';
-import { View, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import NetInfo from '@react-native-community/netinfo';
+GoRouter appRouter(AuthProvider authProvider) {
+  return GoRouter(
+    initialLocation: '/login',
+    refreshListenable: authProvider,
+    redirect: (BuildContext context, GoRouterState state) {
+      final isLoggedIn = authProvider.isLoggedIn;
+      final isLoggingIn = state.matchedLocation == '/login';
 
-// Import screens
-import LoginScreen from './screens/LoginScreen';
-import OnboardingFlow from './screens/OnboardingFlow';
-import MainTabNavigator from './navigation/MainTabNavigator';
-import SettingsScreen from './screens/SettingsScreen';
-import SessionScreen from './screens/SessionScreen';
-import PremiumScreen from './screens/PremiumScreen';
-
-// Import context and components
-import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
-import ErrorBoundary from './components/ErrorBoundary';
-import NetworkStatus from './components/NetworkStatus';
-import { STORAGE_KEYS } from './utils/constants';
-
-const Stack = createStackNavigator();
-
-export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isFirstLaunch, setIsFirstLaunch] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isConnected, setIsConnected] = useState(true);
-
-  useEffect(() => {
-    let unsubscribe;
-
-    async function loadApp() {
-      try {
-        // Load fonts with fallback
-        try {
-          await Font.loadAsync({
-            'Inter-Regular': require('./assets/fonts/Inter-Regular.ttf'),
-            'Inter-Medium': require('./assets/fonts/Inter-Medium.ttf'),
-            'Inter-SemiBold': require('./assets/fonts/Inter-SemiBold.ttf'),
-            'Inter-Bold': require('./assets/fonts/Inter-Bold.ttf'),
-          });
-        } catch (fontError) {
-          console.warn('Using system fonts as fallback');
-        }
-
-        // Check if first launch
-        const hasLaunched = await AsyncStorage.getItem(STORAGE_KEYS.HAS_LAUNCHED);
-        if (hasLaunched === null) {
-          setIsFirstLaunch(true);
-        }
-
-        // Check authentication
-        const token = await AsyncStorage.getItem(STORAGE_KEYS.USER_TOKEN);
-        if (token) {
-          setIsAuthenticated(true);
-        }
-
-        // Setup network monitoring
-        unsubscribe = NetInfo.addEventListener(state => {
-          setIsConnected(state.isConnected ?? true);
-        });
-      } catch (error) {
-        console.error('Error loading app:', error);
-      } finally {
-        setIsLoading(false);
+      if (!isLoggedIn && !isLoggingIn) {
+        return '/login';
       }
-    }
-
-    loadApp();
-
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
+      if (isLoggedIn && isLoggingIn) {
+        return '/home';
       }
-    };
-  }, []);
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) => ShellScreen(child: child),
+        routes: [
+          GoRoute(
+            path: '/home',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: HomeScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/explore',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: ExploreScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/daily',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: DailyScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/leaderboard',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: LeaderboardScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/profile',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: ProfileScreen(),
+            ),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+    ],
+  );
+}
+=== END FILE ===
 
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F7FAFC' }}>
-        <ActivityIndicator size="large" color="#4A90E2" />
-      </View>
+=== FILE: lib/theme/app_colors.dart ===
+import 'package:flutter/material.dart';
+
+class AppColors {
+  static const Color deepIndigo = Color(0xFF3D2B8E);
+  static const Color electricViolet = Color(0xFF7B4FD4);
+  static const Color tealGlow = Color(0xFF00C9B1);
+  static const Color amberSpark = Color(0xFFFFB830);
+
+  static const Color deepSpace = Color(0xFF0F0E1A);
+  static const Color midnightCard = Color(0xFF1C1A2E);
+  static const Color softSlate = Color(0xFF252340);
+  static const Color ghostLine = Color(0xFF2E2B4A);
+
+  static const Color softLavenderWhite = Color(0xFFF4F2FF);
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color lightGray = Color(0xFFEDEBF8);
+  static const Color paleViolet = Color(0xFFD5D0F0);
+
+  static const Color success = Color(0xFF00C9B1);
+  static const Color warning = Color(0xFFFFB830);
+  static const Color error = Color(0xFFFF4F6E);
+  static const Color info = Color(0xFF5BB8FF);
+  static const Color premiumGold = Color(0xFFF5C518);
+
+  static const Color inactive = Color(0xFF6B6880);
+
+  static const Color deepIndigoLight = Color(0xB33D2B8E);
+  static const Color deepIndigoMedium = Color(0x803D2B8E);
+
+  static const LinearGradient heroGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [deepIndigo, electricViolet, tealGlow],
+  );
+
+  static const LinearGradient cardAccentGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [deepIndigo, Color(0xFF5C3DBF)],
+  );
+
+  static const LinearGradient premiumGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [premiumGold, amberSpark],
+  );
+
+  static const LinearGradient dailyChallengeGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [deepIndigo, electricViolet],
+  );
+}
+=== END FILE ===
+
+=== FILE: lib/providers/theme_provider.dart ===
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:puzzle_pal/theme/app_colors.dart';
+
+class ThemeProvider extends ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.dark;
+
+  ThemeMode get themeMode => _themeMode;
+
+  bool get isDark => _themeMode == ThemeMode.dark;
+
+  ThemeProvider() {
+    _loadTheme();
+  }
+
+  Future<void> _loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isDarkMode = prefs.getBool('isDarkMode') ?? true;
+    _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
+
+  Future<void> toggleTheme() async {
+    _themeMode = isDark ? ThemeMode.light : ThemeMode.dark;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', isDark);
+    notifyListeners();
+  }
+
+  ThemeData get darkTheme {
+    return ThemeData(
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppColors.deepSpace,
+      primaryColor: AppColors.deepIndigo,
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.electricViolet,
+        secondary: AppColors.tealGlow,
+        surface: AppColors.midnightCard,
+        error: AppColors.error,
+      ),
+      cardColor: AppColors.midnightCard,
+      dividerColor: AppColors.ghostLine,
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.deepSpace,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: GoogleFonts.nunito(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      textTheme: TextTheme(
+        headlineLarge: GoogleFonts.nunito(
+          fontSize: 32,
+          fontWeight: FontWeight.w800,
+          color: Colors.white,
+        ),
+        headlineMedium: GoogleFonts.nunito(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+        headlineSmall: GoogleFonts.nunito(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+        bodyLarge: GoogleFonts.inter(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
+        bodyMedium: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.white70,
+        ),
+        labelSmall: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: Colors.white54,
+        ),
+        labelLarge: GoogleFonts.inter(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.softSlate,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.ghostLine),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.ghostLine),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.electricViolet, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.error, width: 2),
+        ),
+        labelStyle: GoogleFonts.inter(
+          fontSize: 14,
+          color: AppColors.inactive,
+        ),
+        hintStyle: GoogleFonts.inter(
+          fontSize: 16,
+          color: Colors.white38,
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.electricViolet,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 52),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          textStyle: GoogleFonts.inter(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+          elevation: 4,
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.electricViolet,
+          minimumSize: const Size(double.infinity, 52),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          side: const BorderSide(color: AppColors.electricViolet, width: 1.5),
+          textStyle: GoogleFonts.inter(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: AppColors.midnightCard,
+        selectedItemColor: AppColors.electricViolet,
+        unselectedItemColor: AppColors.inactive,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+      ),
     );
   }
 
-  return (
-    <ErrorBoundary>
-      <ThemeProvider>
-        <AuthProvider>
-          <NavigationContainer>
-            <StatusBar style="auto" />
-            {!isConnected && <NetworkStatus />}
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              {isFirstLaunch && !isAuthenticated ? (
-                <Stack.Screen name="Onboarding" component={OnboardingFlow} />
-              ) : !isAuthenticated ? (
-                <>
-                  <Stack.Screen name="Login" component={LoginScreen} />
-                  <Stack.Screen name="Onboarding" component={OnboardingFlow} />
-                </>
-              ) : (
-                <>
-                  <Stack.Screen name="Main" component={MainTabNavigator} />
-                  <Stack.Screen name="Settings" component={SettingsScreen} />
-                  <Stack.Screen name="Session" component={SessionScreen} />
-                  <Stack.Screen name="Premium" component={PremiumScreen} />
-                </>
-              )}
-            </Stack.Navigator>
-          </NavigationContainer>
-        </AuthProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-```
-
-## utils/constants.js
-```javascript
-export const STORAGE_KEYS = {
-  HAS_LAUNCHED: '@MindfulBreath:hasLaunched',
-  USER_TOKEN: '@MindfulBreath:userToken',
-  USER_DATA: '@MindfulBreath:userData',
-  SETTINGS: '@MindfulBreath:settings',
-  SESSION_HISTORY: '@MindfulBreath:sessionHistory',
-};
-
-export const BREATHING_EXERCISES = {
-  BOX: {
-    id: 'box',
-    name: 'Box Breathing',
-    duration: 240,
-    inhale: 4,
-    hold1: 4,
-    exhale: 4,
-    hold2: 4,
-  },
-  CALM: {
-    id: 'calm',
-    name: '4-7-8 Breathing',
-    duration: 180,
-    inhale: 4,
-    hold1: 7,
-    exhale: 8,
-    hold2: 0,
-  },
-  ENERGIZE: {
-    id: 'energize',
-    name: 'Energizing Breath',
-    duration: 120,
-    inhale: 6,
-    hold1: 0,
-    exhale: 2,
-    hold2: 0,
-  },
-};
-```
-
-## utils/validators.js
-```javascript
-export const validateEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-export const validatePassword = (password) => {
-  return {
-    isValid: password.length >= 8,
-    hasMinLength: password.length >= 8,
-    hasUpperCase: /[A-Z]/.test(password),
-    hasLowerCase: /[a-z]/.test(password),
-    hasNumber: /[0-9]/.test(password),
-    hasSpecialChar: /[!@#$%^&*]/.test(password),
-  };
-};
-
-export const sanitizeInput = (input) => {
-  return input.trim().replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-};
-```
-
-## components/ErrorBoundary.js
-```javascript
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
-  }
-
-  handleReset = () => {
-    this.setState({ hasError: false, error: null });
-  };
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <View style={styles.container}>
-          <Ionicons name="warning-outline" size={64} color="#FC8181" />
-          <Text style={styles.title}>Oops! Something went wrong</Text>
-          <Text style={styles.message}>
-            We're sorry for the inconvenience. Please try restarting the app.
-          </Text>
-          <TouchableOpacity 
-            style={styles.button} 
-            onPress={this.handleReset}
-            accessible={true}
-            accessibilityLabel="Try again button"
-            accessibilityHint="Tap to reload the app"
-            accessibilityRole="button"
-          >
-            <Text style={styles.buttonText}>Try Again</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-
-    return this.props.children;
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#F7FAFC',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2D3748',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  message: {
-    fontSize: 16,
-    color: '#718096',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  button: {
-    backgroundColor: '#4A90E2',
-    paddingHorizontal: 32,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
-
-export default ErrorBoundary;
-```
-
-## components/NetworkStatus.js
-```javascript
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-
-const NetworkStatus = () => {
-  const slideAnim = useRef(new Animated.Value(-100)).current;
-
-  useEffect(() => {
-    Animated.spring(slideAnim, {
-      toValue: 0,
-      useNativeDriver: true,
-      tension: 50,
-      friction: 8,
-    }).start();
-  }, []);
-
-  return (
-    <Animated.View 
-      style={[
-        styles.container,
-        { transform: [{ translateY: slideAnim }] }
-      ]}
-    >
-      <Ionicons name="wifi-outline" size={20} color="#FFF" />
-      <Text style={styles.text}>No Internet Connection</Text>
-    </Animated.View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#FC8181',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 50,
-    paddingBottom: 10,
-    zIndex: 1000,
-  },
-  text: {
-    color: '#FFF',
-    fontSize: 14,
-    fontWeight: '500',
-    marginLeft: 8,
-  },
-});
-
-export default NetworkStatus;
-```
-
-## components/LoadingOverlay.js
-```javascript
-import React from 'react';
-import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
-
-const LoadingOverlay = ({ message = 'Loading...' }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <ActivityIndicator size="large" color="#4A90E2" />
-        <Text style={styles.text}>{message}</Text>
-      </View>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 9999,
-  },
-  content: {
-    backgroundColor: 'white',
-    
+  ThemeData get lightTheme {
+    return ThemeData(
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: AppColors.softLavenderWhite,
+      primaryColor: AppColors.deepIndigo,
+      colorScheme: const ColorScheme.light(
+        primary: AppColors.electricViolet,
+        secondary: AppColors.tealGlow,
+        surface: AppColors.pureWhite,
+        error: AppColors.error,
+      ),
+      cardColor: AppColors.pureWhite,
+      dividerColor: AppColors.paleViolet,
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.softLavenderWhite,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: GoogleFonts.nunito(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: AppColors.deepIndigo,
+        ),
+        iconTheme: const IconThemeData(color: AppColors.deepIndigo),
+      ),
+      textTheme: TextTheme(
+        headlineLarge: GoogleFonts.nunito(
+          fontSize: 32,
+          fontWeight: FontWeight.w800,
+          color: AppColors.deepIndigo,
+        ),
+        headlineMedium: GoogleFonts.nunito(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: AppColors.deepIndigo,
+        ),
+        headlineSmall: GoogleFonts.nunito(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: AppColors.deepIndigo,
+        ),
+        bodyLarge: GoogleFonts.inter(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: AppColors.deepIndigo,
+        ),
+        bodyMedium: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: AppColors.deepIndigoLight,
+        ),
+        labelSmall: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: AppColors.deepIndigoMedium,
+        ),
+        labelLarge: GoogleFonts.inter(
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: AppColors.deepIndigo,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.lightGray,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical
